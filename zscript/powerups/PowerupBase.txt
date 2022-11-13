@@ -1,0 +1,176 @@
+//Powerup main base
+class TBPowerupBase : CustomInventory
+{
+	Default
+	{
+		Inventory.MaxAmount 0;
+		Renderstyle 'Add';
+		Inventory.UseSound "";
+		+FLOATBOB
+		+COUNTITEM
+		+INVENTORY.ALWAYSPICKUP
+		+INVENTORY.AUTOACTIVATE
+		+INVENTORY.FANCYPICKUPSOUND
+	}
+
+	Int User_Count;
+}
+
+//Powerup portable base
+class TBPowerupPortableBase : TBPowerupBase 
+{
+	Default
+	{
+		Inventory.Amount 1;
+		Inventory.MaxAmount 3;
+		Inventory.InterHubAmount 3;
+		-INVENTORY.AUTOACTIVATE
+		+INVENTORY.INVBAR
+	}
+}
+
+//Fade base
+class TBFadeBase : Actor
+{
+	Default
+	{
+		Renderstyle 'Add';
+		+NOINTERACTION
+		+NOTONAUTOMAP
+		+NOTIMEFREEZE
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 0;
+	Fade:
+		"####" "#" 1 {
+			A_FadeOut(0.12);
+			A_SetScale(Scale.X + 0.02);
+		}
+		Loop;
+	}
+}
+
+//Particle base
+class TBItemParticle : Actor
+{
+	Default
+	{
+		Alpha 0.99;
+		Renderstyle 'Add';
+		+NOINTERACTION
+		+FORCEXYBILLBOARD
+		+NOTONAUTOMAP
+		+NOTIMEFREEZE
+	}
+
+	States
+	{
+	Spawn:
+		TNT1 A 0;
+	SetScale:
+		"####" "#" 0 A_SetScale(0.05);
+	Main:
+		"####" "#" 1 Bright {
+			A_FadeOut(frandom(0.02,0.04));
+			A_ChangeVelocity(0,0,frandom(-0.1,0.15),CVF_RELATIVE);
+			A_SetScale(Scale.X - frandom(0.0025,0.005));
+			Return A_JumpIf(Scale.X <= 0,"Null");
+		}
+		Loop;
+	}
+}
+
+//Shock base
+class TBPowerupEffect : Actor
+{
+	Default
+	{
+		Projectile;
+		+NOINTERACTION
+		//+NOTIMEFREEZE;
+	}
+
+	int User_Counter;
+
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay
+		{
+			for(User_Counter = 0; User_Counter < 6; User_Counter = User_Counter + 1)
+			{
+				A_SetAngle(frandom(0.0,360.0));
+				A_SpawnItemEx("TBPowerupPart",0,0,0,0,0,0,0,
+				SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS);
+			}
+			
+			//This is an extra length of existence for a GLDEF to work.
+			
+			Invoker.User_Counter = 40;
+		}
+	Loop2:
+		TNT1 A 1 {
+			A_Warp(AAPTR_TARGET,0,0,0,0,WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE);
+			User_Counter = User_Counter - 1;
+		}
+		TNT1 A 0 A_JumpIf(User_Counter > 0, "Loop2");
+		Stop;
+	}
+}
+		
+class TBPowerupPart : Actor
+{
+	Default
+	{
+		Projectile;
+		Renderstyle 'Add';
+		Alpha 0;
+		+FLATSPRITE
+		+ROLLSPRITE
+		+ROLLCENTER
+		+DONTFLIP
+		+SPRITEANGLE
+		+NOINTERACTION
+		+NOTIMEFREEZE
+	}
+
+	float User_PosX;
+	float User_PosY;
+	float User_PosZ;
+	float User_Angle;
+	float User_Scale;
+	float User_Fade;
+
+	States
+	{
+	Spawn:
+		TNT1 A 0; //TEH SPROITE.
+	Setup:
+		"####" "#" 0
+		{
+			A_SetSpriteAngle(frandom(0.0,360.0));
+			A_SetScale(frandom(0.2,0.5));
+			A_FadeIn(frandom(0.6,0.99));
+			A_SetPitch(frandom(-90.0,90.0));
+			
+			User_PosX = frandom(15.0,-15.0);
+			User_PosY = frandom(15.0,-15.0);
+			User_PosZ = frandom(15.0,-15.0);
+			User_Angle = frandom(0.0,360.0);
+			User_Scale = frandom(0.05,0.2);
+			User_Fade = frandom(0.02,0.05);
+		}
+	Main:
+		"####" "#" 1 Bright {
+			A_SetScale(Scale.X + User_Scale);
+			A_FadeOut(User_Fade);
+			A_Warp(AAPTR_TARGET, User_PosX, User_PosY, 35.0 + User_PosZ, User_Angle,
+			WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE|WARPF_WARPINTERPOLATION|
+			WARPF_ABSOLUTEANGLE|WARPF_ABSOLUTEOFFSET);
+			A_SetSpriteRotation(Angle + frandom(20.0,15.0));
+		}
+		Loop;
+	}
+}

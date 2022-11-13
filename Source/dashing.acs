@@ -1,0 +1,132 @@
+#library "sidedash"
+#include "zspecial.acs"
+#include "zdefs.acs"
+
+/*	New Trailblazer dashing script written by KeksDose
+	
+	13 / June / 2019
+	
+	It's like the old one but it's a little more sightly code and there's a
+	setting so you have to hold shift in order to dash.
+	
+	You can reuse this file and edit the scripts as you like, but I want you to
+    ship the .acs source file with your mod if you use it (even if you edited it,
+    and keep the header intact above everything else) and give due credit.
+    Tell all your friends about Trailblazer and how cool ACS is. And most importantly
+    - remember to praise Mima!
+
+*/
+
+// You can edit these to whatever you like.
+#define DASH_HOR_SPEED		9.0
+#define DASH_VER_SPEED		10.0
+#define DASH_GROUND_SPEED	20.0
+
+#define KEY_UP		BT_FORWARD
+#define KEY_DOWN	BT_BACK
+#define KEY_LEFT	BT_MOVELEFT		//| BT_LEFT
+#define KEY_RIGHT	BT_MOVERIGHT	//| BT_RIGHT
+
+// And you probably don't wanna edit these.
+#define KEY_ANY		KEY_UP | KEY_DOWN | KEY_LEFT | KEY_RIGHT
+
+script "The Trailblazer's Brother" enter {
+	bool is_selected	= false;
+	bool perform_dash	= false;
+	int select_tics		= 0;
+	int press_prev		= 0;
+	int player			= PlayerNumber();
+	
+	while(true) {
+		
+		// You don't wanna corpse dash even if it's funny.
+		if(GetActorProperty(0, APROP_HEALTH) <= 0) {
+			select_tics		= 0;
+			press_prev		= 0;
+			is_selected		= false;
+			perform_dash	= false;
+			Delay(const:1);
+			continue;
+		}
+		
+		bool must_hold_speed	= GetUserCvar(player, "tb_dashholdspeed");
+		int user_confirm_tics	= GetUserCvar(player, "tb_dashframes");
+		int user_cooldown_tics	= GetUserCvar(player, "tb_dashcooldown");
+		
+		int bt			= GetPlayerInput(-1, INPUT_BUTTONS);
+		int old_bt		= GetPlayerInput(-1, INPUT_OLDBUTTONS);
+		int press_dir	= (bt & ~old_bt) & KEY_ANY;
+		
+		if(must_hold_speed && !(bt & BT_SPEED)) {
+			press_dir	= 0;
+			press_prev	= 0;
+		}
+		
+		// Pressing a new direction will start the double tap timer.
+		if(press_dir != 0 && !(press_dir & press_prev)) {
+			// Consume the input here. We're not gonna need it later if this
+			// is the first press, after all.
+			press_prev	= press_dir;
+			press_dir	= 0;
+			is_selected	= true;
+			select_tics	= user_confirm_tics;
+		}
+		
+		// Check if we tap the same direction(s).
+		if(0 < select_tics) {
+			select_tics--;
+			
+			if(press_dir & press_prev) {
+				perform_dash	= true;
+				is_selected		= false;
+				select_tics		= 0;
+			}
+		}
+		
+		else {
+			press_prev = 0;
+		}
+		
+		if(perform_dash) {
+			int angle = GetActorAngle(0);
+			
+			// You might press two keys on the same frame. This gives any one
+			// of them precedence.
+			if		(press_dir & KEY_UP)	angle += 0;
+			else if	(press_dir & KEY_LEFT)	angle += 0.25;
+			else if	(press_dir & KEY_DOWN)	angle += 0.5;
+			else if	(press_dir & KEY_RIGHT)	angle += 0.75;
+			
+			int dash_speed	= DASH_HOR_SPEED;
+			int vel_z		= DASH_VER_SPEED - GetActorVelZ(0);
+			
+			if(GetActorZ(0) - GetActorFloorZ(0) <= 0) {
+				dash_speed	= DASH_GROUND_SPEED;
+				vel_z		= 0;
+			}
+			
+			SetActorVelocity(
+				const:0,
+				FixedMul(cos(angle), dash_speed),
+				FixedMul(sin(angle), dash_speed),
+				vel_z,
+				true,
+				false);
+			PlaySound(const:0, "Trailblazer/Dash", CHAN_BODY, 1.0);
+			GiveInventory("DashMaster",1); // I AM INVINCABRU.
+			
+			Delay(user_cooldown_tics);
+			
+			// Also wait till we're done falling (or you bump your head).
+			while(GetActorVelZ(0) != 0) {
+				Delay(const:1);
+			}
+			
+			// Done dashing, so we reset for the next.
+			press_prev		= 0;
+			perform_dash	= false;
+		}
+		
+		Delay(const:1);
+	}
+}

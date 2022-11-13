@@ -1,0 +1,21 @@
+addkeysection "Trailblazer" TrailblazerKeybinds
+addmenukey "Machete Quick-Toss" +Gimbostratus
+addmenukey "Spikebomb Quick-Toss" BobsBrainBestExplosiveEver
+addmenukey "Nightvision Goggles" Vision
+addmenukey "Hazmat Suit" Rubberfruit
+addmenukey "Whiskey" UbermenschUnlimited
+addmenukey "Jetpack" +FlyingDumbass
+addmenukey "Blastsphere" SpontaneousExplosion
+
+alias +Gimbostratus "use MacheteIn"
+alias -Gimbostratus "use MacheteOut"
+
+alias BobsBrainBestExplosiveEver "use PipeQuickToss"
+
+alias UbermenschUnlimited "use Whiskey"
+alias Rubberfruit "use Hazmatsuit"
+alias Vision "use FisherPrice"
+alias SpontaneousExplosion "use BlastspherePortable"
+
+alias +FlyingDumbass "use Jetpack"
+alias -FlyingDumbass "use Jetpack2"

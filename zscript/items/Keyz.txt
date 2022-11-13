@@ -1,0 +1,465 @@
+////////////////////////////////////////////////////////////////////////////////
+////////////////////// GC Universal Key system /////////////////////////////////
+////////////////////////// by Dinosaur Nerd ////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//																			  //
+// This system is a workaround for custom pretty keys for doom or whatever 	  //
+// gathers data from the key actor, and mimics it here.						  //
+// This is instrumental in overriding the broken by design lockdefs system	  //
+// embedded in GZD, which will break for maps if custom keys are applied in   //
+// a gameplay mod. This workaround simply hands out all keys with the 		  //
+// appropriate specials on collecting a relevant key.						  //
+//																			  //
+// If you want to use any part of this code you are required to contact me	  //
+// directly. Absolutely no re-use or copying of any part of this without my   //
+// permission.																  //
+// -Dino																	  //
+//																			  //
+////////////////////////////////////////////////////////////////////////////////
+
+// Zhs2 was here for general cleanup, maintenance, and things Dino might not
+// have known how to do. All above clauses still apply.
+
+Class TB_UniversalKey : Inventory
+{
+	Default
+	{
+		+NOTONAUTOMAP;
+		inventory.pickupsound "";
+	}
+	
+	Key OurKey;
+	Class<Key> KeyClass;
+	Class<Inventory> AlsoGiveKey;
+	string this_pickup_msg;
+	string all_pickup_msg;
+	string keytag;
+	int max_frames;
+	Array<int> tics_by_frame;
+	
+	// The big boy, sets up all of our key info
+	Override Void PostBeginPlay()
+	{
+		// If the key somehow doesn't exist, abort
+		if(!OurKey)
+		{
+			// Why does this somehow print when a key is picked up???
+			//console.printf("Key at %d, %d, %d doesn't exist, setup failt", pos.x, pos.y, pos.z);
+			return;
+		}
+		
+		Super.PostBeginPlay();
+		
+		// sure woulda been nice to do this all on the actor wouldn't it?
+		SpawnAngle 	= OurKey.SpawnAngle;
+		Angle		= OurKey.Angle;
+		Pitch		= OurKey.Pitch;
+		Roll		= OurKey.Roll;
+		Scale		= OurKey.Scale;
+		SpawnPoint 	= OurKey.pos;
+		special    	= OurKey.special;
+		args[0]    	= OurKey.args[0];
+		args[1]    	= OurKey.args[1];
+		args[2]    	= OurKey.args[2];
+		args[3]    	= OurKey.args[3];
+		args[4]    	= OurKey.args[4];
+		special1   	= OurKey.special1;
+		special2   	= OurKey.special2;
+		SpawnFlags 	= OurKey.SpawnFlags & ~MTF_SECRET;	// MTF_SECRET needs special treatment to avoid incrementing the secret counter twice. It had already been processed for the spawner itself.
+		// lolgzd
+		HandleSpawnFlags();
+		SpawnFlags = OurKey.SpawnFlags;
+		bCountSecret = OurKey.SpawnFlags & MTF_SECRET;	// "Transfer" count secret flag to spawned actor
+		ChangeTid(OurKey.tid);
+		Vel			= OurKey.Vel;
+		// I dunno why anyone would ever put this on a key... but I'll be god damned
+		// if I ever need to come back and do this shit again because of some
+		// vapid unforseen hack...
+		// -Dino
+		CopyFriendliness(OurKey, false);
+		// This handles things such as projectiles with the MF4_SPECTRAL flag that have
+		// a health set to -2 after spawning, for internal reasons.
+		if (OurKey.health != OurKey.SpawnHealth()) { health = OurKey.health; }
+		if (!OurKey.bDropped) { bDropped = false; }
+		// Handle special altitude flags
+		if (OurKey.bSpawnCeiling)
+		{
+			SetZ(ceilingz - Height - pos.Z);
+		}
+		else if (bSpawnFloat) 
+		{
+			double space = ceilingz - Height - floorz;
+			if (space > 48)
+			{
+				space -= 40;
+				SetZ((space * random[whatever]()) / 256 + floorz + 40);
+			}
+			AddZ(pos.Z);
+		}	
+		KeyClass = OurKey.GetClassName();
+		this_pickup_msg = OurKey.PickupMessage();
+		// Niceness for Target Spy and the like
+		SetTag(OurKey.GetTag());
+		
+		/* Dino's fancy tick setup, which is more work than displaying the base key
+		Sprite = OurKey.sprite;
+		// do a first frame
+		tics_by_frame.Push(OurKey.CurState.tics);
+		if(OurKey.CurState.tics >= 0) { OurKey.SetState(OurKey.CurState.NextState); }
+		max_frames++;
+		// If we have additional frames, keep going
+		While((OurKey.frame != 0) && (OurKey.CurState.tics >= 0))
+		{
+			tics_by_frame.Push(OurKey.CurState.tics);
+			OurKey.SetState(OurKey.CurState.NextState);
+			max_frames++;
+		}
+		tics = tics_by_frame[0];
+		
+		// Do special shit if we're playing DEWM. -Dino
+		if(gameinfo.gametype == Game_DOOM)
+		{
+			max_frames = 2;
+			tics_by_frame.Clear();
+			tics_by_frame.Push(10);
+			tics_by_frame.Push(10);
+			tics = tics_by_frame[0];
+		}
+		*/
+		
+		// Setup AlsoGiveKey, which gives tokens based on whether you collected
+		// something that is associated with a default key.
+		// First, by species.
+		if(OurKey.Species)
+		{
+			// Doom keys.
+			if(OurKey.Species == 'RedCard')
+			{
+				AlsoGiveKey = 'TB_RedCard';
+			}
+			if(OurKey.Species == 'YellowCard')
+			{
+				AlsoGiveKey = 'TB_YellowCard';
+			}
+			if(OurKey.Species == 'BlueCard')
+			{
+				AlsoGiveKey = 'TB_BlueCard';
+			}
+			if(OurKey.Species == 'RedSkull')
+			{
+				AlsoGiveKey = 'TB_RedSkull';
+			}
+			if(OurKey.Species == 'YellowSkull')
+			{
+				AlsoGiveKey = 'TB_YellowSkull';
+			}
+			if(OurKey.Species == 'BlueSkull')
+			{
+				AlsoGiveKey = 'TB_BlueSkull';
+			}
+			// Heretic keys.
+			if(OurKey.Species == 'KeyYellow')
+			{
+				AlsoGiveKey = 'KeyYellow';
+			}
+			if(OurKey.Species == 'KeyGreen')
+			{
+				AlsoGiveKey = 'KeyGreen';
+			}
+			if(OurKey.Species == 'KeyBlue')
+			{
+				AlsoGiveKey = 'KeyBlue';
+			}
+		}
+		// Next, by replacement.
+		Class<Actor> KeyReplace;
+		if(GetReplacee(KeyClass) != 'Key' || GetReplacee(KeyClass) != null)
+		{
+			KeyReplace = GetReplacee(KeyClass);
+		}
+		if(KeyReplace)
+		{
+			// Doom keys.
+			if(KeyReplace == 'RedCard')
+			{
+				AlsoGiveKey = 'TB_RedCard';
+			}
+			if(KeyReplace == 'YellowCard')
+			{
+				AlsoGiveKey = 'TB_YellowCard';
+			}
+			if(KeyReplace == 'BlueCard')
+			{
+				AlsoGiveKey = 'TB_BlueCard';
+			}
+			if(KeyReplace == 'RedSkull')
+			{
+				AlsoGiveKey = 'TB_RedSkull';
+			}
+			if(KeyReplace == 'YellowSkull')
+			{
+				AlsoGiveKey = 'TB_YellowSkull';
+			}
+			if(KeyReplace == 'BlueSkull')
+			{
+				AlsoGiveKey = 'TB_BlueSkull';
+			}
+			// Heretic keys.
+			if(KeyReplace == 'KeyYellow')
+			{
+				AlsoGiveKey = 'KeyYellow';
+			}
+			if(KeyReplace == 'KeyGreen')
+			{
+				AlsoGiveKey = 'KeyGreen';
+			}
+			if(KeyReplace == 'KeyBlue')
+			{
+				AlsoGiveKey = 'KeyBlue';
+			}
+		}
+		
+		// Fancy text coloration for default keys!
+		// Also for giving the default key stuff away.
+		switch(KeyClass.GetClassName())
+		{
+			// Doom keys. These also set this actor's sprite specially.
+			case 'RedCard':
+				keytag = "\c[Red]Red Cardkey\c-";
+				sprite = GetSpriteIndex("RCRD");
+				AlsoGiveKey = 'TB_RedCard';
+				break;
+			case 'YellowCard':
+				keytag = "\c[Yellow]Yellow Cardkey\c-";
+				sprite = GetSpriteIndex("YCRD");
+				AlsoGiveKey = 'TB_YellowCard';
+				break;
+			case 'BlueCard':
+				keytag = "\c[Blue]Blue Cardkey\c-";
+				sprite = GetSpriteIndex("BCRD");
+				AlsoGiveKey = 'TB_BlueCard';
+				break;
+			case 'RedSkull':
+				keytag = "\c[Brick]Red Skullkey\c-";
+				sprite = GetSpriteIndex("RSKL");
+				AlsoGiveKey = 'TB_RedSkull';
+				break;
+			case 'YellowSkull':
+				keytag = "\c[Gold]Yellow Skullkey\c-";
+				sprite = GetSpriteIndex("YSKL");
+				AlsoGiveKey = 'TB_YellowSkull';
+				break;
+			case 'BlueSkull':
+				keytag = "\c[LightBlue]Blue Skullkey\c-";
+				sprite = GetSpriteIndex("BSKL");
+				AlsoGiveKey = 'TB_BlueSkull';
+				break;
+			
+			// Heretic keys.
+			case 'KeyYellow':
+				keytag = "\c[Yellow]Yellow Gemkey\c-";
+				break;
+			case 'KeyGreen':
+				keytag = "\c[Green]Green Gemkey\c-";
+				break;
+			case 'KeyBlue':
+				keytag = "\c[Blue]Blue Gemkey\c-";
+				break;
+			
+			// Hexen keys.
+			case 'KeyAxe':
+				keytag = "\c[Brown]Axe Key\c-";
+				break;
+			case 'KeyCastle':
+				keytag = "\c[Gold]Castle Key\c-";
+				break;
+			case 'KeyCave':
+				keytag = "\c[DarkBrown]Cave Key\c-";
+				break;
+			case 'KeyDungeon':
+				keytag = "\c[Grey]Dungeon Key\c-";
+				break;
+			case 'KeyEmerald':
+				keytag = "\c[Green]Emerald Key\c-";
+				break;
+			case 'KeyFire':
+				keytag = "\c[Red]Fire Key\c-";
+				break;
+			case 'KeyHorn':
+				keytag = "\c[Olive]Horn Key\c-";
+				break;
+			case 'KeyRusted':
+				keytag = "\c[Tan]Rusted Key\c-";
+				break;
+			case 'KeySilver':
+				keytag = "\c[White]Silver Key\c-";
+				break;
+			case 'KeySteel':
+				keytag = "\c[DarkGrey]Steel Key\c-";
+				break;
+			case 'KeySwamp':
+				keytag = "\c[DarkGreen]Swamp Key\c-";
+				break;
+			
+			// Default case for plebby custom keys.
+			// Too much effort to colorize for them, and they can
+			// add their own nametags...
+			default:
+				keytag = String.Format("\c[GCOrange]%s", OurKey.GetTag());
+				break;
+		}
+		
+		// Setup pickup message.
+		this_pickup_msg = OurKey.PickupMsg;
+		all_pickup_msg = String.Format("acquired the %s\c[white]!", keytag);
+		
+		// Actor pointers get handled dead last.
+		target 		= OurKey.target;
+		tracer 		= OurKey.tracer;
+		master		= OurKey.master;	// For things such as DamageMaster/DamageChildren, transfer mastery.
+		
+		// Display this key if its sprite has been changed.
+		// This takes effect for base Doom keys.
+		if(Sprite != GetSpriteIndex('TNT1'))
+		{
+			OurKey.PickupFlash = null;
+			OurKey.A_SetRenderStyle(0.0,STYLE_None);
+		}
+		else
+		{
+			A_SetRenderStyle(0.0, STYLE_None);
+		}
+		
+		// Disallow players from picking up the actual key.
+		OurKey.bSpecial = false;
+		
+		// lastly account for bad map design.
+		if(pos.z > ceilingz)	{ SetZ(CeilingZ - Height); 	}
+		if(pos.z < FloorZ) 		{ SetZ(floorz); 			}
+		
+		return;
+	}
+	
+	// Set in PostBeginPlay
+	Override String PickupMessage ()
+	{
+		Return this_pickup_msg;
+	}
+	
+	// Handles giving the base key, any GC tokens, and keysharing in multiplayer
+	override bool TryPickup (in out Actor toucher)
+	{
+		string this_player_name;
+		
+		// Always pick up keys in single player, but not the same key again
+		// in multiplayer.
+		if(toucher && toucher.Inv && !(multiplayer && toucher.FindInventory(KeyClass))) {	
+			if(toucher.player) {
+				let dergboi = toucher.player;
+				this_player_name = dergboi.GetUserName();
+			}
+			string this_Sound = "KeyCard/Pickup";
+			if(GetDefaultByType(KeyClass).special1 > 3) { this_Sound = "SkullKey/Pickup"; }
+			toucher.A_StartSound(this_Sound,123,0,1.0,ATTN_NONE);
+			if(multiplayer) {
+				if(TB_KeyShare) {
+					for(int i = 0; i < MAXPLAYERS; i++)
+					{
+						if(!playeringame[i]) { Continue; }
+						players[i].mo.GiveInventoryType(KeyClass);
+						if(gameinfo.gametype == Game_DOOM) { 
+							players[i].mo.GiveInventoryType(AlsoGiveKey); 
+						}
+						if(i == toucher.PlayerNumber()) { 
+							players[i].mo.A_Print(String.Format("\c[white]You have %s",all_pickup_msg));
+						}
+						else {
+							players[i].mo.A_Print(String.Format("%s \c[white]has %s",this_player_name,all_pickup_msg));
+						}
+					}
+				}
+				else {
+					toucher.GiveInventoryType(KeyClass);
+					if(AlsoGiveKey) { toucher.GiveInventoryType(AlsoGiveKey); }
+				}
+			}
+			else {
+				toucher.GiveInventoryType(KeyClass);
+				if(AlsoGiveKey) { toucher.GiveInventoryType(AlsoGiveKey); }
+				OurKey.GoAwayAndDie();
+				OurKey.Destroy();
+			}
+			// This is probably still needed to call specials, idk
+			Super.TryPickup(Toucher);
+			Return TRUE;
+		}
+		Return False;
+	}
+
+	// Always stay in multiplayer.
+	override bool ShouldStay ()
+	{
+		return !!multiplayer;
+	}
+	
+	// Never be placed in an inventory.
+	override void AttachToOwner(Actor other)
+	{
+		return;
+	}
+	
+	Override Void Tick()
+	{
+		if(OurKey)
+		{
+			/* more fun Dino animation stealing stuff
+			if(pos.z > floorz) { 
+				vel.z -= GetGravity(); 
+				AddZ(vel.z);
+			}
+			else { SetZ(Floorz); }
+			tics--;
+			if(tics <= 0) {
+				frame++;
+				if(frame >= max_frames) { frame = 0; }
+				// console.printf("my frame is %i, %f %f %f",frame,pos.x,pos.y,pos.z);
+				tics = tics_by_frame[frame];
+			}
+			*/
+			
+			// Stick to the base key's movements no matter what.
+			Warp(OurKey);
+		}
+		// In case the game doesn't remove it...
+		else
+		{
+			GoAwayAndDie();
+			Destroy();
+		}
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 10;
+		TNT1 B 10 Bright;
+		loop;
+	Dummy:
+		RCRD A 0;
+		BCRD A 0;
+		YCRD A 0;
+		RSKL A 0;
+		BSKL A 0;
+		YSKL A 0;
+		Stop;
+	}
+}
+
+// We will now be using tokens for these.
+Class GenericToken : Inventory { Default { Inventory.MaxAmount 1; Inventory.InterHubAmount 0; } }
+Class TB_RedCard : GenericToken {}
+Class TB_BlueCard : GenericToken {}
+Class TB_YellowCard : GenericToken {}
+Class TB_RedSkull : GenericToken {}
+Class TB_BlueSkull : GenericToken {}
+Class TB_YellowSkull : GenericToken {}

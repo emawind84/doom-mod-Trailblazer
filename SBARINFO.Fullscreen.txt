@@ -1,0 +1,677 @@
+monospacefonts true, "0";
+interpolatehealth true;
+interpolatearmor true;
+
+statusbar fullscreen, fullscreenoffsets
+{
+		//Health and Armor
+		drawimage "HPSYMB", 25, -20;
+		drawimage "ARMSYMB", 25, -41;
+		
+		drawnumber 3, BIGFONT, Untranslated, health, 91, -21, Red, 25, Gold, 101;
+
+		InInventory WearsSecurityVest
+		{
+			drawnumber 3, BIGFONT, Green, armor, 91, -41, Red, 25;
+		}
+		InInventory WearsBodyArmor || WearsMegasphereArmor2
+		{
+			drawnumber 3, BIGFONT, Blue, armor, 91, -41, Red, 25;
+		}
+		InInventory WearsTacticalSet
+		{
+			drawnumber 3, BIGFONT, TBTacticalRed, armor, 91, -41, Red, 50;
+		}
+		InInventory WearsArmorBonus2 || WearsLuckie || WearsSomeArmor
+		{
+			drawnumber 3, BIGFONT, Untranslated, armor, 91, -41, Red, 25;
+		}
+
+		//Keys
+		drawswitchableimage KeyYellow, "TNT1A0", "YKEYICON", 6, -30;
+		drawswitchableimage KeyGreen, "TNT1A0", "GKEYICON", 6, -40;
+		drawswitchableimage KeyBlue, "TNT1A0", "BKEYICON", 6, -50;
+		
+		drawswitchableimage TB_YellowCard && TB_YellowSkull, "nullimage", "STKEYS1", "STKEYS4", "STKEYS7", 20, -62;
+		drawswitchableimage TB_RedCard && TB_RedSkull, "nullimage", "STKEYS2", "STKEYS5", "STKEYS8", 30, -62;
+		drawswitchableimage TB_BlueCard && TB_BlueSkull, "nullimage", "STKEYS0", "STKEYS3", "STKEYS6", 40, -62;
+
+		//Cooldowns
+		InInventory PipeTossTimer
+		{	
+			drawbar "PIPETIME", "PIPETIM2", PipeTossTimer, vertical, interpolate(2), 240, -12;
+		}
+		InInventory GloryShotTimer
+		{	
+			drawbar "GLRYCUN2", "GLRYCUNT", GloryShotTimer, vertical, interpolate(2), 253, -12;
+		}
+		
+		//Scores
+		IfCVarInt TB_Scores, 1, equal
+		{
+			drawstring SMALLFONT, Untranslated, "K:", 19, 2;
+			drawnumber 4, SMALLFONT, Untranslated, kills,  Alignment(right), 49, 2;
+			drawstring SMALLFONT, Untranslated, "/", 58, 2;
+			drawnumber 4, SMALLFONT, Untranslated, monsters, Alignment(left), 60, 2;
+			
+			drawstring SMALLFONT, Untranslated, "S:", 19, 13;
+			drawnumber 4, SMALLFONT, Untranslated, secrets,  Alignment(right), 49, 13;
+			drawstring SMALLFONT, Untranslated, "/", 58, 13;
+			drawnumber 4, SMALLFONT, Untranslated, totalsecrets, Alignment(left), 60, 13;
+			
+			drawstring SMALLFONT, Untranslated, "I:", 19, 24;
+			drawnumber 4, SMALLFONT, Untranslated, items,  Alignment(right), 49, 24;
+			drawstring SMALLFONT, Untranslated, "/", 58, 24;
+			drawnumber 4, SMALLFONT, Untranslated, totalitems, Alignment(left), 60, 24;
+		}
+		
+		//General Inventory
+		drawselectedinventory SMALLFONT, 113, -51, 141, -12, Untranslated, 1;
+
+		//Spikebombs
+		IsSelected SpikebombWeapon
+		{
+			InInventory RiftbombActive
+			{
+				drawimage "SPBMRIFT", -94, -31;
+			}
+			InInventory PipeMode
+			{
+				drawimage "SPBMIMPL", -94, -31;
+			}
+			
+			drawimage ammoicon1, -94, -31, center;
+			
+			InInventory Not PipeUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", PipeUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, PipeUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity PipeUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//Macheterang
+		IsSelected Macheterang
+		{
+			InInventory Not MacheteUpgrade
+			{
+				drawimage "MCHGX0", -94, -31, center;
+			}
+			Else
+			{
+				drawimage "MCHGY0", -94, -31, center;
+			}
+
+			InInventory Not MacheteUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", MacheteUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, MacheteUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity MacheteUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -161, -21;
+		}
+		
+		//Colts
+		IsSelected Colts
+		{
+			drawimage "COLTX0", -94, -31, center;
+			
+			InInventory ColtBurstshot
+			{
+				drawimage "trishot", -74, -15, center;
+			}
+			
+			InInventory Not ColtsUpgrade
+			{ 
+				drawbar "upgbar2", "upgbar1", ColtsUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, ColtsUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity ColtsUpgradeCounter, Alignment(Left), -92, -14;
+				drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+				drawnumber 6, BIGFONT, Untranslated, ammo2, -126, -39;
+			}
+			else
+			{
+				drawimage "tbinfnty", -161, -21;
+			}
+		}
+		
+		//Sidekick
+		IsSelected Sidekick
+		{
+			InInventory UraniumShot
+			{
+				drawimage "uranus", -74, -15, center; //I AM SO MATURE.
+			}
+			
+			InInventory Not SideUpgrade
+			{
+				drawimage "SDKGX0", -94, -31, center;
+			}
+			else
+			{
+				drawimage "SD2GX0", -85, -31, center;
+			}
+			
+			InInventory Not SideUpgrade
+			{ 
+				drawbar "upgbar2", "upgbar1", SideUpgradeCounter, horizontal, interpolate(4), -116, -14;					//Bar.
+				drawnumber 3, SMALLFONT, Untranslated, SideUpgradeCounter, -104, -14;										//Currently added.
+				drawimage "tbslash", -103, -14;															 					//Slash.
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity SideUpgradeCounter, Alignment(Left), -92, -14;			//Needed.
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//Fleshrend
+		IsSelected Fleshrend
+		{
+			InInventory TricorneShot
+			{
+				drawimage "tricorne", -74, -13, center;
+			}
+			
+			InInventory Not RendUpgrade
+			{
+				drawimage "RNDGX0", -94, -31, center;
+				InInventory FleshrendPickupCounter, 2
+				{
+					drawimage "RNDGX0", -82, -25, center;
+				}
+			}
+			Else
+			{
+				drawimage "RN3GX0", -94, -31, center;
+				InInventory FleshrendPickupCounter, 2
+				{
+					drawimage "RN3GX0", -82, -25, center;
+				}
+			}
+			
+			InInventory Not RendUpgrade
+			{ 
+				drawbar "upgbar2", "upgbar1", RendUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, RendUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity RendUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//Chrome Justice
+		IsSelected ChromeJustice
+		{
+			InInventory JusticeStriploader
+			{
+				drawimage "fastldr", -74, -13, center;
+			}
+
+			InInventory Not ChromeUpgrade
+			{
+				drawimage "PCFGX0", -94, -31, center;
+			}
+			Else
+			{
+				drawimage "SPSGX0", -94, -31, center;
+			}
+			
+			InInventory Not ChromeUpgrade
+			{ // Gun is not upgraded
+				drawbar "upgbar2", "upgbar1", ChromeUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, ChromeUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity ChromeUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//FMG
+		IsSelected FMG
+		{
+			Alpha 0.2
+			{
+				InInventory FMGUpgrade
+				{
+					drawimage "fmgcross", -74, -15, center;
+				}
+			}
+			InInventory FMGSniperMode
+			{
+				drawimage "fmgcross", -74, -15, center;
+			}
+			
+			InInventory Not FMGUpgrade
+			{
+				drawimage "FMGGX0", -94, -32, center;
+			}
+			else
+			{
+				drawimage "2MGGX0", -94, -32, center;
+			}
+			
+			InInventory HeavyMachinegun
+			{
+				drawimage "FHGGX0", -94, -32, center;
+			}
+			
+			
+			InInventory Not FMGUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", FMGUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, FMGUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity FMGUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//Leadspitter
+		IsSelected Leadspitter
+		{
+			InInventory SpontaneousFreedom
+			{
+				drawimage "frdmmisl", -72, -15, center;
+			}
+			
+			InInventory Not LeadUpgrade
+			{
+				drawimage "UZIGX0", -94, -31, center;
+				InInventory LeadspitPickupCounter, 2
+				{
+					drawimage "UZIGX0", -82, -25, center;
+				}
+			}
+			Else
+			{
+				drawimage "TIKGX0", -93, -26, center;
+				InInventory LeadspitPickupCounter, 2
+				{
+					drawimage "TIKGX0", -81, -20, center;
+				}
+			}
+			
+			InInventory Not LeadUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", LeadUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, LeadUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity LeadUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+			InInventory LeadspitPickupCounter, 2
+			{
+				drawnumber 6, BIGFONT, Untranslated, UziClipLeft, -126, -39;
+			}
+		}
+		
+		//Patriarch
+		IsSelected Patriarch
+		{
+			Alpha 0.2
+			{
+				InInventory PatriarchToggler
+				{
+					drawimage "ptgshot", -74, -15, center;
+				}
+			}
+			
+			InInventory HomingGrenades
+			{
+				drawimage "ptgshot", -74, -15, center;
+			}
+			
+			InInventory Not PattyUpgrade
+			{
+				drawimage "PTRGX0", -94, -31, center;
+			}
+			Else
+			{
+				drawimage "PTUGX0", -94, -32, center;
+			}
+			
+			InInventory Not PattyUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", PattyUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, PattyUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity PattyUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//Bitchmaker
+		IsSelected Bitchmaker//, Bitchmaker2
+		{
+			InInventory KeepShooting
+			{
+				drawimage "keepshot", -74, -15, center;
+			}
+			
+			InInventory Not BitchUpgrade
+			{
+				drawimage "BITGX0", -94, -31, center;
+			}
+			Else
+			{
+				drawimage "BUTGX0", -94, -31, center;
+			}
+			
+			InInventory Not BitchUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", BitchUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, BitchUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity BitchUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//Skullthrottle
+		IsSelected Skullthrottle
+		{
+			InInventory ThrottleInstaspin
+			{
+				drawimage "revup", -74, -15, center;
+			}
+			
+			// The rare instance where this shit is always present.
+			drawimage "CHNGX0", -94, -31, center;
+			
+			InInventory ThrottleUpgrade
+			{
+				drawimage "BRWGX0", -154, -31, center;
+			}
+			
+			InInventory Not ThrottleUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", ThrottleUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, ThrottleUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity ThrottleUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			InInventory Not HexenCounter
+			{
+				drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+			}
+			InInventory HexenCounter
+			{
+				drawnumber 6, BIGFONT, Untranslated, ammo2, -126, -39;
+			}
+		}
+		
+		//Paintrain
+		IsSelected Paintrain//, Paintrain2
+		{
+			drawimage "RAIGX0", -93, -34, center;
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+		}
+		
+		//Nutcracker
+		IsSelected Nutcracker
+		{
+			InInventory NutForceOne
+			{
+				drawimage "nutforce", -74, -15, center;
+			}
+			
+			InInventory Not NutterUpgrade
+			{
+				drawimage "NTCGX0", -94, -31, center;
+			}
+			Else
+			{
+				drawimage "NTFGX0", -94, -31, center;
+			}
+			
+			InInventory Not NutterUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", NutterUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, NutterUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity NutterUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+			InInventory HexenCounter
+			{
+				drawnumber 6, BIGFONT, Untranslated, ammo2, -126, -39;
+			}
+		}
+		
+		//Eliminator
+		IsSelected Eliminator
+		{
+			drawimage "LEVGX0", -93, -34, center;
+			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+			
+			InInventory UraniumShot
+			{
+				drawimage "uranus", -74, -15, center; //I AM SO MATURE.
+			}
+			
+			InInventory Not EliminatorUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", EliminatorUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, EliminatorUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity EliminatorUpgradeCounter, Alignment(Left), -92, -14;
+			}
+		}
+		
+		//Double Deuce
+		IsSelected DoubleDeuce
+		{
+			drawimage "DEUGX0", -94, -31, center;
+			
+			InInventory Not DeuceUpgrade
+			{
+				drawbar "upgbar2", "upgbar1", DeuceUpgradeCounter, horizontal, interpolate(4), -116, -14;
+				drawnumber 3, SMALLFONT, Untranslated, DeuceUpgradeCounter, -104, -14;
+				drawimage "tbslash", -103, -14;
+				drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity DeuceUpgradeCounter, Alignment(Left), -92, -14;
+			}
+			
+			InInventory Not HexenCounter
+			{
+				drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
+			}
+			
+			InInventory HexenCounter
+			{
+				drawnumber 6, BIGFONT, Untranslated, DoubleDeuceClip, -126, -21;
+			}
+		}
+		
+		InInventory HexenCounter
+		{
+			/*drawbar "PAINAMMO", "PAINAMM2", RailgunAmmo, vertical, interpolate(4), -23, -74;
+			drawnumber 6, SMALLFONT, Black, RailgunAmmo, alignment(right), -35, -80;
+			WeaponAmmo "RailgunAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("RailgunAmmo"), Alignment(right), -35, -80;
+				}
+			}*/
+		
+			drawbar "PIPEAMMO", "PIPEAMM2", SpikebombAmmo, vertical, interpolate(4), -23, -54;
+			drawnumber 6, SMALLFONT, Black, SpikebombAmmo, alignment(right), -35, -60;
+			WeaponAmmo "SpikebombAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("SpikebombAmmo"), Alignment(right), -35, -60;
+				}
+			}
+		
+			weaponammo BlueMana
+			{
+				DrawNumber 6, SMALLFONT, Untranslated, Ammo("BlueMana"), Alignment(right), -35, -20;
+				drawimage "MANABRT1", -30, -22;
+			}
+			else
+			{
+				drawnumber 6, SMALLFONT, Black, Ammo("BlueMana"), alignment(right), -35, -20;
+				drawimage "MANADIM1",  -30, -22;
+			}
+			
+			weaponammo GreenMana
+			{
+				DrawNumber 6, SMALLFONT, Untranslated, Ammo("GreenMana"), Alignment(right), -35, -40;
+				drawimage "MANABRT2",  -30, -42;
+			}
+			else
+			{
+				DrawNumber 6, SMALLFONT, Black, Ammo("GreenMana"), Alignment(right), -35, -40;
+				drawimage "MANADIM2",  -30, -42;
+			}
+		}
+		
+		InInventory Not HexenCounter
+		{
+			// Ammo counter stuff
+			drawbar "BULLAMMO", "BULLAMM2", BulletAmmo, vertical, interpolate(4), -20, -9;
+			drawbar "SHOTAMMO", "SHOTAMM2", ShellsAmmo, vertical, interpolate(4), -20, -18;
+			drawbar "DSHTAMMO", "DSHTAMM2", DemShellsAmmo, vertical, interpolate(4), -20, -28;
+			drawbar "GRNDAMMO", "GRNDAMM2", GrenadeAmmo, vertical, interpolate(4), -20, -37;
+			drawbar "MAGNAMMO", "MAGNAMM2", HellraiserAmmo, vertical, interpolate(4), -20, -46;
+			drawbar "MINGAMMO", "MINGAMM2", ThrottleAmmo, vertical, interpolate(4), -20, -55;
+			drawbar "2BORAMMO", "2BORAMM2", TwoBoreAmmo, vertical, interpolate(4), -20, -64;
+			drawbar "PIPEAMMO", "PIPEAMM2", SpikebombAmmo, vertical, interpolate(4), -20, -73;
+			drawbar "PAINAMMO", "PAINAMM2", RailgunAmmo, vertical, interpolate(4), -20, -83;
+				
+			drawnumber 6, SMALLFONT, Black, BulletAmmo, alignment(right), -30, -15;
+			drawnumber 6, SMALLFONT, Black, ShellsAmmo, alignment(right), -30, -24;
+			drawnumber 6, SMALLFONT, Black, DemShellsAmmo, alignment(right), -30, -33;
+			drawnumber 6, SMALLFONT, Black, GrenadeAmmo, alignment(right), -30, -42;
+			drawnumber 6, SMALLFONT, Black, HellraiserAmmo, alignment(right), -30, -51;
+			drawnumber 6, SMALLFONT, Black, ThrottleAmmo, alignment(right), -30, -60;
+			drawnumber 6, SMALLFONT, Black, TwoBoreAmmo, alignment(right), -30, -69;
+			drawnumber 6, SMALLFONT, Black, SpikebombAmmo, alignment(right), -30, -78;
+			drawnumber 6, SMALLFONT, Black, RailgunAmmo, alignment(right), -30, -87;
+				
+			//Ammo-in-use highlight
+			WeaponAmmo "BulletAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("BulletAmmo"), Alignment(right), -30, -15;
+				}
+			}
+			WeaponAmmo "ShellsAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("ShellsAmmo"), Alignment(right), -30, -24;
+				}
+			}
+			WeaponAmmo "DemShellsAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("DemShellsAmmo"), Alignment(right), -30, -33;
+				}
+			}
+			WeaponAmmo "GrenadeAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("GrenadeAmmo"), Alignment(right), -30, -42;
+				}
+			}
+			WeaponAmmo "HellraiserAmmo" { UsesAmmo
+				{
+			DrawNumber 6, SMALLFONT, Untranslated, Ammo("HellraiserAmmo"), Alignment(right), -30, -51;
+				}
+			}
+			WeaponAmmo "ThrottleAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("ThrottleAmmo"), Alignment(right), -30, -60;
+				}
+			}
+			WeaponAmmo "TwoBoreAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("TwoBoreAmmo"), Alignment(right), -30, -69;
+				}
+			}
+			WeaponAmmo "SpikebombAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("SpikebombAmmo"), Alignment(right), -30, -78;
+				}
+			}
+			WeaponAmmo "RailgunAmmo" { UsesAmmo
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("RailgunAmmo"), Alignment(right), -30, -87;
+				}
+			}
+			
+			IsSelected Conqueror
+			{
+				drawimage "CNQGZ0", -94, -31, center;
+				
+				InInventory Not ConquerorUpgrade
+				{
+					drawbar "upgbar2", "upgbar1", ConquerorUpgradeCounter, horizontal, interpolate(4), -116, -14;
+					drawnumber 3, SMALLFONT, Untranslated, ConquerorUpgradeCounter, -104, -14;
+					drawimage "tbslash", -103, -14;
+					drawnumber 3, SMALLFONT, Untranslated, AmmoCapacity ConquerorUpgradeCounter, Alignment(Left), -92, -14;
+				}
+				
+				drawnumber 6, BIGFONT, Untranslated, ConquerorAmmo, -126, -21;
+				
+				//Ammo highlights.
+				InInventory HexenCounter
+				{
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("BlueMana"), Alignment(right), -35, -20;
+					drawimage "MANABRT1", -30, -22;
+					
+					DrawNumber 6, SMALLFONT, Untranslated, Ammo("GreenMana"), Alignment(right), -35, -40;
+					drawimage "MANABRT2",  -30, -42;
+				}
+				
+				InInventory Not HexenCounter
+				{
+					InInventory ConquerorUpgrade
+					{
+						DrawNumber 6, SMALLFONT, Untranslated, Ammo("ThrottleAmmo"), Alignment(right), -30, -60;
+					}
+					
+					InInventory ConquerorMode
+					{
+						DrawNumber 6, SMALLFONT, Untranslated, Ammo("BulletAmmo"), Alignment(right), -30, -15;
+						DrawNumber 6, SMALLFONT, Untranslated, Ammo("DemShellsAmmo"), Alignment(right), -30, -33;
+						DrawNumber 6, SMALLFONT, Untranslated, Ammo("HellraiserAmmo"), Alignment(right), -30, -51;
+					}
+					Else
+					{
+						DrawNumber 6, SMALLFONT, Untranslated, Ammo("BulletAmmo"), Alignment(right), -30, -15;
+						DrawNumber 6, SMALLFONT, Untranslated, Ammo("ShellsAmmo"), Alignment(right), -30, -24;
+						DrawNumber 6, SMALLFONT, Untranslated, Ammo("GrenadeAmmo"), Alignment(right), -30, -42;
+					}
+				}
+			}
+		}
+	}
+}
+
+/*
+statusbar inventoryfullscreen, forcescaled
+{
+	InInventory Not HereticCounter, 1
+	{
+		drawinventorybar Doom, translucent, 6, INDEXFONT, 70, 165;
+	}
+	Else
+	{
+		drawinventorybar Heretic, translucent, 6, INDEXFONT, 70, 165;
+	}
+}*/
+
+
+createpopup keys, 200, 200, slideinbottom, 20;
+
+statusbar popupkeys
+{
+	DrawKeyBar 12, horizontal, auto, 0, 20, 0, 6, 4;
+}

@@ -1,0 +1,986 @@
+class FMGSelected : Inventory { Default { Inventory.MaxAmount 1; } }
+class FMGUpgrade : FMGSelected {}
+class FMGSniperMode : FMGSelected {}
+class FMGFireToken : FMGSelected {}
+class FMGEmptiedToken : FMGSelected {}
+class FMGZoomed : FMGSelected {}
+class FMGZoomReload : FMGSelected {}
+
+class FMGClip : Ammo
+{
+	Default {
+		Inventory.MaxAmount 70;
+		Inventory.Icon "FMGGX0";
+		+INVENTORY.IGNORESKILL
+	}
+}
+
+//You know what's also fucked in this gun?
+
+
+//THE FUCKING CODE.
+
+
+//Maybe will rewrite it from scratch. Maybe. Someday.
+
+class FMG : Weapon
+{
+	Default
+	{
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 0;
+		Weapon.AmmoGive2 70;
+		Weapon.AmmoType "FMGClip";
+		Weapon.AmmoType2 "BulletAmmo";
+		Weapon.SlotNumber 4;
+		Weapon.SelectionOrder 3;
+		Weapon.UpSound "FMG/Up";
+		Weapon.Kickback 50;
+		Inventory.PickupSound "misc/w_pkup";
+		Inventory.PickupMessage "Nabbed a rather shiny FMG! A Fucking MachineGun! (4)";
+		Obituary "%o was sworn to death by %k's FMG.";
+		Weapon.BobStyle "InverseSmooth";
+		Weapon.BobSpeed 2.0;
+		Weapon.BobRangeY 0.4;
+		Weapon.BobRangeX 0.7;
+		+WEAPON.AMMO_CHECKBOTH
+		+WEAPON.NOALERT
+		//+WEAPON.NOAUTOAIM
+	}
+	
+	//Hexen handling.
+	override Void AttachToOwner (actor user) {
+		if(gameinfo.gametype == Game_HEXEN) {
+			AmmoGive2 = 70;
+			AmmoType2 = "BlueMana";
+		}
+		Super.AttachToOwner(user);
+	}
+	
+	States
+	{
+	Ready:
+		2HGU A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGU A 0;
+		"####" ABCDEF 1;
+	ReadyMain:
+		2HGG A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGG A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGG A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGG A 0;
+		"####" A 0 A_JumpIfInventory("FMGZoomed",1,"ZoomedReady");
+		"####" A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"),"CaberToss");
+		"####" A 0 A_SetCrosshair(0);
+		"####" A 1 A_WeaponReady(WRF_ALLOWRELOAD|WRF_ALLOWZOOM);
+		Loop;
+		
+	AltFire:
+		2HIU A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHIU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MIU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMIU A 0;
+		"####" A 0 A_PlaySound("Sights/Weapon",5,0.8);
+		"####" A 0 A_JumpIfInventory("FMGZoomed",1,"UnZoom");
+		"####" A 0 A_ZoomFactor(2.5);
+		"####" A 0 A_SetCrosshair(77);
+		"####" ABCDEF 1;
+		2MIG A 0 A_JumpIfInventory("FMGUpgrade",1,2);
+		FMIG A 0;
+		"####" A 15 {
+			A_GiveInventory("FMGZoomed",1);
+			A_WeaponReady(WRF_NOSECONDARY|WRF_ALLOWRELOAD|WRF_ALLOWZOOM);
+		}
+		Goto ZoomedReady;
+		
+	UnZoom:
+		2HIU A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHIU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MIU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMIU A 0;
+		"####" A 0 A_ZoomFactor(1.0);
+		"####" FEDCBA 1;
+		2HGG A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGG A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGG A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGG A 0;
+		"####" A 15 {
+			A_SetCrosshair(0);
+			A_TakeInventory("FMGZoomed",1);
+			A_WeaponReady(WRF_NOSECONDARY|WRF_ALLOWRELOAD|WRF_ALLOWZOOM);
+		}
+		Goto ReadyMain;
+		
+	ZoomedReady:
+		2MIG A 0 A_JumpIfInventory("FMGUpgrade",1,2);
+		FMIG A 0;
+		"####" A 1 A_WeaponReady(WRF_ALLOWRELOAD|WRF_ALLOWZOOM);
+		Goto ReadyMain;
+		
+	SniperMode:
+		"####" A 0 A_JumpIfInventory("FMGUpgrade",1,1);
+		Goto ReadyMain;
+		"####" A 0 A_PlaySound("Tinker/Tink",4,0.7);
+		"####" A 0 A_JumpIfInventory("FMGSniperMode",1,4);
+		"####" A 0 A_Print("\c[white]FMG Sniper Mode\n\c[green]Engaged.",1);
+		"####" A 0 A_GiveInventory("FMGSniperMode",1);
+		"####" A 20 A_WeaponReady(WRF_ALLOWRELOAD);
+		Goto ZoomedReady;
+		"####" A 0 A_Print("\c[white]FMG Sniper Mode\n\c[red]Disengaged.",1);
+		"####" A 0 A_TakeInventory("FMGSniperMode",1);
+		"####" A 20 A_WeaponReady(WRF_ALLOWRELOAD);
+		Goto ZoomedReady;
+		
+	DryFire:
+		"####" A 0 A_JumpIf(GetCvar("TB_ReloadMode"),"AutoReload");
+		"####" A 0 A_JumpIfInventory("FMGFireToken",1,"Gundown");
+		"####" A 0 A_PlaySound("FMG/Dry",4,0.7);
+		2HGD A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGD A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGD A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGD A 0;
+		"####" ABCBA 1;
+		Goto ReadyMain;
+	AutoReload:
+		"####" A 0 A_JumpIfInventory("BulletAmmo",1,"Reload");
+		Goto DryFire+2;
+	ZoomedDryFire:
+		"####" A 0 A_JumpIf(GetCvar("TB_ReloadMode"),"ZoomedAutoReload");
+		"####" A 0 A_JumpIfInventory("FMGFireToken",1,"GundownZoom");
+		"####" A 0 A_PlaySound("FMG/Dry",4,0.9); //Louder in ironsights. DETAILS!
+		
+		2MID A 0 A_JumpIfInventory("FMGUpgrade",1,2);
+		FMID A 0;
+		"####" ABCBA 1;
+		Goto ReadyMain;
+	ZoomedAutoReload:
+		"####" A 0 A_JumpIfInventory("BulletAmmo",1,"ZoomedReload");
+		Goto ZoomedDryFire+2;
+		
+	Gundown: //to make it not jump into ready state all of a sudden, as it looks ugly as fuck.
+		"####" A 0 A_TakeInventory("FMGFireToken",1);
+		2HGF A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGF A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGF A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGF A 0;
+		"####" DE 1;
+		Goto ReadyMain;
+		
+	GundownZoom:
+		"####" A 0 A_TakeInventory("FMGFireToken",1);
+		2MIG A 0 A_JumpIfInventory("FMGUpgrade",1,2);
+		FMIG A 0;
+		"####" A 2;
+		Goto ReadyMain;
+		
+	Deselect:
+		"####" A 0 {
+			A_TakeInventory("FMGSelected");
+			A_TakeInventory("PowerCrafterTimer");
+			A_TakeInventory("FMGFireToken",1);
+			A_ZoomFactor(1.0);
+			A_SetCrosshair(0);
+		}
+		"####" A 0 A_JumpIfInventory("FMGZoomed",1,"UnZoom");
+		2HGU A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGU A 0;
+		"####" FEDCBA 1;
+		TNT1 A 0 SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
+		TNT1 A 0 A_Lower(18);
+		Wait;
+		
+	Select:
+		TNT1 A 0 {
+			A_TakeInventory("FMGZoomed");
+			A_GiveInventory("FMGSelected");
+			A_ZoomFactor(1.0);
+		}
+		TNT1 A 0 SetPlayerProperty(0, 1, PROP_INSTANTWEAPONSWITCH);
+		TNT1 A 1 A_Raise(12);
+		Wait;
+	
+	Fire:
+		"####" A 0 A_JumpIfInventory("FMGZoomed",1,"ZoomedFire");
+		"####" A 0 A_JumpIfInventory("FMGClip",1,1);
+		Goto DryFire;
+		/*
+		 This thing here is something totally not worth bothering,
+		 but my OCD doesn't feel right, when you empty the BulletAmmo,
+		 and the weapon goes into ready state like some brick.
+		 Sooo I had to smooth it out. Also, it helps with the kaczink state.
+		 What the hell is kaczink? Well, I guess one can figure that one out
+		 by oneself. :P
+		*/
+		"####" A 0 A_GiveInventory("FMGFireToken",1);
+		"####" A 0 {
+			A_PlaySound("FMG/Fire",1,0.8);
+			A_FireProjectile("GunsmokeSpawner_Small_MG",0,0,7,-5,FPF_NOAUTOAIM);
+			A_AlertMonsters();
+			A_GunFlash();
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+				A_SetBlend("Blue",0.05,5);
+			}
+		}
+		
+		"####" A 0 A_JumpIfInventory("FMGUpgrade",1,"PowerFire");
+		
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(1.5, 0.5, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-8,9);
+			}
+			else
+			{
+				A_FireBullets(1.5, 0.5, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" A 0 A_Jump(256,"FireMain");
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(1.5, 0.5, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-8,9);
+			}
+			else
+			{
+				A_FireBullets(1.5, 0.5, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+		Goto FireMain;
+	PowerFire:
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(1.5, 0.5, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-8,9);
+			}
+			else
+			{
+				A_FireBullets(1.5, 0.5, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" A 0 A_Jump(256,2);
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(1.5, 0.5, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-8,9);
+			}
+			else
+			{
+				A_FireBullets(1.5, 0.5, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+	FireMain:
+		2HGF A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGF A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGF A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGF A 0;
+		"####" A 1 Bright A_SetPitch(pitch-0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" B 1 Bright A_SetPitch(pitch-0.15 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_FireProjectile("BuellerCasingSpawner",0,0,4,-5,FPF_NOAUTOAIM);
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" A 0 A_Jump(256,2);
+		"####" A 0 A_FireProjectile("BuellerCasingSpawner",0,0,4,-5,FPF_NOAUTOAIM);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),3);
+		"####" A 0 A_Jump(128,2);
+		"####" C 1;
+		"####" A 0 A_ReFire();
+		"####" A 0 A_TakeInventory("FMGFireToken",1);
+		"####" DE 1;
+		Goto ReadyMain;
+	
+	ZoomedFire:
+		"####" A 0 A_JumpIfInventory("FMGSniperMode",1,"ZoomedSniperFire");
+		
+		2HGF A 0 A_JumpIfInventory("HeavyMachinegun",1,2);
+		2MGF A 0;
+		
+		"####" A 0 A_JumpIfInventory("FMGClip",1,1);
+		Goto ZoomedDryFire;
+		
+		"####" A 0 {
+			A_GiveInventory("FMGFireToken",1);
+			A_PlaySound("FMG/Fire",1,0.9);
+			A_AlertMonsters();
+			A_GunFlash();
+			A_FireProjectile("GunsmokeSpawner_Small_MG",0,0,0,-2,FPF_NOAUTOAIM);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+				A_SetBlend("Blue",0.05,5);
+			}
+		}
+		"####" A 0 A_JumpIfInventory("FMGUpgrade",1,"PowerZoomedFire");
+		
+		//Precision!
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(0.375, 0.125, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-5);
+			}
+			else
+			{
+				A_FireBullets(0.375, 0.125, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+		
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" A 0 A_Jump(256,"ZoomedFireMain");
+		
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(0.375, 0.125, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-5);
+			}
+			else
+			{
+				A_FireBullets(0.375, 0.125, 1, 7, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+		Goto ZoomedFireMain;
+		
+	PowerZoomedFire:
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(0.375, 0.125, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-5);
+			}
+			else
+			{
+				A_FireBullets(0.375, 0.125, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" A 0 A_Jump(256,2);
+		"####" A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(0.375, 0.125, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192,"FMGBullet",-5);
+			}
+			else
+			{
+				A_FireBullets(0.375, 0.125, 1, 9, "ChainsmokerPuff",FBF_USEAMMO,8192);
+			}
+		}
+		
+	ZoomedFireMain:
+		2MIF A 0 A_JumpIfInventory("FMGUpgrade",1,2);
+		FMIF A 0;
+		
+		"####" A 1 Bright A_SetPitch(pitch-0.075 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.48); } }
+		"####" B 1 Bright A_SetPitch(pitch-0.075 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.49); } }
+		"####" A 0 A_FireProjectile("BuellerCasingSpawner",0,0,4,-5,FPF_NOAUTOAIM);
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" A 0 A_Jump(256,2);
+		"####" A 0 A_FireProjectile("BuellerCasingSpawner",0,0,4,-5,FPF_NOAUTOAIM);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),4);
+		"####" A 0 A_Jump(128,3);
+		"####" A 1 A_SetPitch(pitch+0.15 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_ZoomFactor(2.5);
+		"####" A 0 A_ReFire();
+		
+		2MIG A 0 A_JumpIfInventory("FMGUpgrade",1,2);
+		FMIG A 0;
+		
+		"####" A 2 A_TakeInventory("FMGFireToken",1);
+		Goto ReadyMain;
+		
+	ZoomedSniperFire:
+		2MIF A 0 A_JumpIfInventory("FMGClip",10,1);
+		Goto ZoomedDryFire;
+		2MIF A 0 A_GiveInventory("FMGFireToken",1);
+		2MIF A 0 A_PlaySound("FMG/SniperFire",1,0.9);
+		2MIF A 0 A_TakeInventory("FMGClip",10,TIF_NOTAKEINFINITE);
+		2MIF A 0 {
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+				A_SetBlend("Blue",0.15,20);
+			}
+		}
+		2MIF AAAAAAAAA 0 A_FireBullets(0.375, 0.125, 1, 13, "ChainsmokerPuff", 0); //InvisPuff
+		2MIF A 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_FireBullets(0.375, 0.125, 1, 13, "ChainsmokerPuff",0,8192,"FMGSniperBullet",-5);
+			}
+			else
+			{
+				A_FireBullets(0.375, 0.125, 1, 13, "ChainsmokerPuff",0,8192);
+			}
+		}
+		2MIF A 0 A_AlertMonsters();
+		2MIF A 0 A_GunFlash();
+		2MIF A 0 A_SetBlend("Yellow",0.1,10);
+		2MIF A 0 A_FireProjectile("GunsmokeSpawner_Small_MG",0,0,0,-2,FPF_NOAUTOAIM);
+		2MIF A 1 Bright A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		2MIF A 0 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.49); } }
+		2MIF A 0 A_FireProjectile("GunsmokeSpawner_Small_MG",0,0,0,-2,FPF_NOAUTOAIM);
+		2MIF B 1 Bright A_SetPitch(pitch-0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		2MIF A 0 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.46); } }
+		2MIF A 0 A_FireProjectile("GunsmokeSpawner_Small_MG",0,0,0,-2,FPF_NOAUTOAIM);
+		2MIF A 0 A_SetPitch(pitch-0.1 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		2MID C 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.45); } }
+		2MID B 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.46); } }
+		2MID A 0 A_SetPitch(pitch+0.1 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		2MID A 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.47); } }
+		2MID A 0 { if(GetCvar("TB_ZoomRecoil")) { A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE); } }
+		2MIG A 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.48); } }
+		2MID A 0 A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		2MIG A 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(2.49); } }
+		2MID A 0 A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		2MIG A 1 A_ZoomFactor(2.5);
+		
+		//Lower
+		2MIG A 0 A_ZoomFactor(1.0);
+		
+		2HIU A 0 A_JumpIfInventory("HeavyMachinegun",1,2);
+		2MIU A 0;
+		
+		"####" F 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" ED 1;
+		"####" C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" BA 1;
+		
+		2HGG A 0 A_JumpIfInventory("HeavyMachinegun",1,2);
+		2MGG A 0;
+		
+		"####" A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" AA 1;
+		
+		//Kaczink
+		2HGP A 0 A_JumpIfInventory("HeavyMachinegun",1,2);
+		2MGP A 0;
+		
+		"####" AB 1;
+		"####" C 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" DE 1;
+		"####" FG 1;
+		"####" I 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" KL 1;
+		"####" M 1;
+		"####" N 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" OPQ 1;
+		"####" AAAAAAAAAA 0 A_FireProjectile("BuellerCasingSpawner",0,0,4,-5,FPF_NOAUTOAIM);
+		"####" R 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" QPO 1 A_ReFire("Quickscope");
+		"####" N 1 { A_ReFire("Quickscope"); return A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2); }
+		"####" MLK 1 A_ReFire("Quickscope");
+		"####" J 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" HFD 1 A_ReFire("Quickscope");
+		"####" B 1 { A_ReFire("Quickscope"); return A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1); }
+		"####" A 1 A_ReFire("Quickscope");
+		
+	Quickscope:
+		//Raise back
+		2HIU A 0 A_JumpIfInventory("HeavyMachinegun",1,2);
+		2MIU A 0;
+
+		"####" A 0 A_ZoomFactor(2.5);
+		"####" A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" BC 1;
+		"####" C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" DE 1;
+		"####" F 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		
+		2MIG AA 1;
+		2MIG A 0 A_ReFire();
+		Goto ReadyMain;
+	
+	ZoomedReload:
+		2HIU A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHIU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MIU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMIU A 0;
+		"####" A 0 A_PlaySound("Sights/Weapon",5,0.8);
+		"####" A 0 A_ZoomFactor(1.0);
+		"####" F 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" ED 1;
+		"####" C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" BA 1;
+		2HGG A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGG A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGG A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGG A 0;
+		"####" A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" AA 1;
+		"####" A 1 A_TakeInventory("FMGZoomed",1);
+		"####" A 0 A_GiveInventory("FMGZoomReload",1);
+	Reload:
+		"####" A 0 A_JumpIfInventory("FMGZoomed",1,"ZoomedReload");
+		"####" A 0 A_JumpIfInventory("FMGClip",0,"ReadyMain");
+		"####" A 0 A_JumpIfInventory("HexenCounter",1,2);
+		"####" A 0 A_JumpIfInventory("BulletAmmo",1,2);
+		Goto ReadyMain;
+		"####" A 0 A_JumpIfInventory("BlueMana",1,1);
+		Goto ReadyMain;
+		
+	ReloadCheckForDry:
+		"####" A 0 A_JumpIfInventory("FMGClip",1,2);
+		"####" A 0 A_GiveInventory("FMGEmptiedToken",1);
+	ReloadMain:
+		2HGH A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGH A 0 A_Jump(256,3);
+		2MGH A 0 A_Jump(256,2);
+		FMGH A 0;
+		
+		"####" AC 1;
+		"####" E 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		"####" FG 1;
+		"####" H 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" IJ 1;
+
+		2HGC A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGC A 0 A_Jump(256,3);
+		2MGC A 0 A_Jump(256,2);
+		FMGC A 0;
+		
+		"####" A 1;
+		"####" B 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" CDE 1;
+		"####" F 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" H 1;
+		"####" H 0 A_PlaySound("FMG/Out",5);
+
+		"####" IJ 1;
+		"####" K 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" LNO 1;
+		"####" P 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" QR 1;
+		"####" T 0 {
+			if(CountInv("HeavyMachinegun"))
+			{
+				A_SpawnItemEx("SuperFMGClipDrop",0,0,20);
+			}
+			else
+			{
+				A_SpawnItemEx("FMGClipDrop",0,0,20);
+			}
+		}
+		"####" T 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" T 2;
+		"####" T 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" T 2;
+		"####" T 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" T 2;
+		"####" T 2 A_WeaponReady(WRF_NOFIRE|WRF_NOBOB|WRF_ALLOWZOOM);
+		
+		2HGI A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGI A 0 A_Jump(256,3);
+		2MGI A 0 A_Jump(256,2);
+		FMGI A 0;
+		
+		"####" BCDFGHI 1 A_SetAngle(angle-0.2, SPF_INTERPOLATE);
+		
+	ReloadWorking:
+		"####" A 0 A_JumpIfInventory("HexenCounter",1,"HexenReloadWorking");
+		"####" A 0 A_TakeInventory("BulletAmmo",1,TIF_NOTAKEINFINITE);
+		"####" A 0 A_GiveInventory("FMGClip", 1);
+		"####" A 0 A_JumpIfInventory("FMGClip",0,2);
+		"####" A 0 A_JumpIfInventory("BulletAmmo",1,2);
+		"####" A 0;
+		Goto ReloadFinish;
+		"####" A 0;
+		Goto ReloadWorking;
+		
+	HexenReloadWorking:
+		"####" A 0 A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE);
+		"####" A 0 A_GiveInventory("FMGClip", 1);
+		"####" A 0 A_JumpIfInventory("FMGClip",0,2);
+		"####" A 0 A_JumpIfInventory("BlueMana",1,2);
+		"####" A 0;
+		Goto ReloadFinish;
+		"####" A 0;
+		Goto HexenReloadWorking;
+		
+	ReloadFinish:
+		2HGI A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGI A 0 A_Jump(256,3);
+		2MGI A 0 A_Jump(256,2);
+		FMGI A 0;
+		
+		"####" A 0 A_PlaySound("FMG/In",5,0.7);
+		"####" A 0 A_SetAngle(angle - 1.0, SPF_INTERPOLATE);
+		"####" J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" KL 1;
+		"####" M 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" NO 1;
+		"####" P 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" QRR 1;
+		
+		2HGH A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGH A 0 A_Jump(256,3);
+		2MGH A 0 A_Jump(256,2);
+		FMGH A 0;
+		
+		"####" H 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" GFE 1;
+		"####" D 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" CBA 1;
+		"####" A 0 A_JumpIfInventory("FMGEmptiedToken",1,"Kaczink");
+		
+		2HGG A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGG A 0 A_Jump(256,3);
+		2MGG A 0 A_Jump(256,2);
+		FMGG A 0;
+		
+		"####" A 2;
+		"####" A 0 A_JumpifInventory("FMGZoomReload",1,"Derp");
+		Goto ReadyMain;
+	Kaczink:
+		2HGP A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGP A 0 A_Jump(256,3);
+		2MGP A 0 A_Jump(256,2);
+		FMGP A 0;
+
+		"####" A 0 A_TakeInventory("FMGEmptiedToken",1);
+		"####" AB 1;
+		"####" C 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" DE 1;
+		"####" FG 1;
+		"####" I 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" KL 1;
+		"####" A 0 A_PlaySound("FMG/Cock",5,0.7);
+		"####" M 1;
+		"####" N 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" OPQ 1;
+		"####" R 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" QPO 1;
+		"####" N 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" MLK 1;
+		"####" J 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" HFD 1;
+		"####" B 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		"####" A 1;
+		"####" A 0 A_JumpifInventory("FMGZoomReload",1,"Derp");
+		Goto ReadyMain;
+		
+	Derp:
+		"####" A 0 A_TakeInventory("FMGZoomReload",1);
+		"####" A 0 A_JumpIf(GetCvar("TB_SightsReturn"),"ReadyMain");
+		Goto AltFire;
+		
+	Flash:
+		TNT1 A 5 A_Light2;
+		TNT1 A 6 A_Light1;
+		TNT1 A 0 A_Light0;
+		Stop;
+		
+	Zoom:
+		"####" A 0 A_JumpIfInventory("FMGZoomed",1,"SniperMode");
+		
+		2HGH A 0 {
+			if(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"))
+			{
+				Return A_Jump(256,4);
+			}
+			else if(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,1);
+			}
+			else if(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"))
+			{
+				Return A_Jump(256,2);
+			}
+			Else
+			{
+				Return A_Jump(256,3);
+			}
+			Return A_Jump(256,3);
+		}
+		FHGH A 0 A_Jump(256,3);
+		2MGH A 0 A_Jump(256,2);
+		FMGH A 0;
+		
+		"####" ACFJ 1;
+	PunchFuck:
+		"####" A 0 {
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		QML1 A 0 A_Overlay(2,"PunchFlash");
+		QML1 A 0 A_JumpIfInventory("PowerStrength2",1,2);
+		QML1 A 0 A_Jump(256,3);
+		FML1 A 0 A_SetBlend("Orange",0.05,10);
+		FML1 A 0 A_PlaySound("Melee/Firepunch",5);
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" B 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" C 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" D 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 {
+			If(CountInv("PowerStrength2")) {
+				A_CustomPunch(90, 1, 0, "FlamePunchCracker", 150 + (CountInv("KineticFist") ? 200 : 0),0.06);
+			} Else {
+				A_CustomPunch(30, 1, 0, "PunchCracker", 100 + (CountInv("KineticFist") ? 200 : 0));
+			}
+		}
+	PunchContinue:
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" E 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" F 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" G 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" H 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" I 1;
+		"####" J 1;
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" K 1;
+		TNT1 A 5;
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "PunchFuck");
+		2HGH A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGH A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGH A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGH A 0;
+		"####" HGDA 1;
+		Goto ReadyMain;
+	PunchFlash:
+		2HGM A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGM A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGM A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGM A 0;
+		"####" A 1 A_PlaySound("Punch/Swing",6,1.0);
+		"####" B 1;
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
+		"####" CD 1;
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" GH 1;
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" IA 1;
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" AA 1;
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" AA 1;
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" AAAA 1;
+		Stop;
+	CaberToss:
+		"####" A 0 A_JumpIfInventory("MacheteAmmo",1,1);
+		Goto ReadyMain;
+		2HGU A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGU A 0;
+		"####" ECA 1;
+	CaberMain:
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 0 {
+			A_PlaySound("Machete1/Slash",1,0.9);
+			A_PlaySound("Machete2/Slash",5,0.2);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1;
+		TNT1 A 0 {
+			A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE);
+			If(CountInv("PowerStrength2")) {
+				If(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			} Else {
+				If(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			}
+		}
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		MCHT E 1;
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		MCHT G 1;
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		MCHT I 1;
+		TNT1 A 3;
+		TNT1 A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo") , "CaberMain");
+		2HGU A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
+		FHGU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
+		2MGU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
+		FMGU A 0;
+		"####" BDF 1;
+		Goto ReadyMain;
+	Spawn:
+		FMGG X -1;
+		Stop;
+	}
+}
+
+//Used for tracer effect in upgraded FMG.
+class FMGBullet : FastProjectile
+{
+	Default
+	{
+		Radius 7;
+		Height 5;
+		MissileHeight 8;
+		Speed 200;
+		Damage 0;
+		Projectile;
+		Renderstyle "Add";
+		Scale 0.35;
+		//Decal "BulletChip2";
+		+NOGRAVITY
+	}
+	
+	States
+	{
+	Spawn:
+		TRAC A 1 Bright A_ChangeVelocity(0, 0, -0.25, CVF_RELATIVE);
+		Loop;
+	Death:
+		TNT1 A 1; //A_SpawnItemEx("BuellerPuff");
+		Stop;
+	XDeath:
+		TNT1 A 0;
+		Stop;
+	}
+}
+
+class FMGSniperBullet : FMGBullet
+{
+	Default
+	{
+		MissileType "ThrottleTrail";
+	}
+}

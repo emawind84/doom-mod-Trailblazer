@@ -1,0 +1,163 @@
+
+//Weapons
+Actor GauntletsSpawner : RandomSpawner replaces Gauntlets
+{
+	DropItem "Colts"
+}
+
+Actor CrossbowSpawner : RandomSpawner replaces Crossbow
+{
+	DropItem "Shotgun_Spawner" 255 3
+	DropItem "EliminatorPickup" 255 1
+	DropItem "ChromeJustice" 255 1
+}
+
+Actor BlasterSpawner : RandomSpawner replaces Blaster
+{
+	Dropitem "FMG_Spawner"
+	Dropitem "LeadspitterPickup"
+}
+
+Actor PhoenixRodSpawner : RocketLauncher_SpawnerDummy replaces PhoenixRod {}
+
+//Skullrod and Skullthrottle... well, that fits.
+Actor SkullRodSpawner : RandomSpawner replaces SkullRod
+{
+	DropItem "Skullthrottle"
+}
+
+Actor MaceSpawner2 : BFG_SpawnerDummy replaces Mace {}
+
+//Wand ammo
+Actor GoldWandAmmoSpawner : Clip_Spawner replaces GoldWandAmmo {}
+Actor GoldWandHeftySpawner : ClipBox_Spawner replaces GoldWandHefty {}
+
+//Crossbow ammo
+Actor CrossbowAmmoSpawner : Shell_Spawner replaces CrossbowAmmo {}
+Actor CrossbowHeftySpawner : ShellBox_Spawner replaces CrossbowHefty {}
+
+//Claw ammo
+Actor BlasterAmmoSpawner : Clip_Spawner replaces BlasterAmmo {}
+Actor BlasterHeftySpawner : ClipBox_Spawner replaces BlasterHefty {}
+
+//Phoenix ammo
+Actor PhoenixRodAmmoSpawner : Rocket_Spawner replaces PhoenixRodAmmo {}
+Actor PhoenixRodHeftySpawner : RocketBox_Spawner replaces PhoenixRodHefty {}
+
+//Skullrod ammo
+/* moved to zs to spawn railgun ammo.
+Actor SkullRodAmmoSpawner : RandomSpawner replaces SkullRodAmmo
+{
+	DropItem "ThrottleAmmo" 255 3
+	DropItem "Rocket_JunkSpawner" 255 1
+}
+
+Actor SkullRodHeftySpawner : RandomSpawner replaces SkullRodHefty
+{
+	DropItem "ThrottleBox" 255 3
+	DropItem "RocketBox_JunkSpawner" 255 1
+}*/
+
+//Plunger ammo
+Actor MaceAmmoSpawner : RandomSpawner replaces MaceAmmo
+{
+	DropItem "TwoBoreAmmo" 255 3
+	DropItem "Cell_JunkSpawner" 255 1
+}
+
+Actor MaceHeftySpawner : RandomSpawner replaces MaceHefty
+{
+	DropItem "TwoBoreBox" 255 3
+	DropItem "CellPack_JunkSpawner" 255 1
+}
+
+//Health
+Actor CrystalVialSpawner : RandomSpawner replaces CrystalVial
+{
+	DropItem "Stimpack2"
+}
+
+Actor ArtiHealthSpawner : RandomSpawner replaces ArtiHealth
+{
+	DropItem "MedikitRaven"
+}
+ 
+//Armors
+Actor SilverShieldSpawner : RandomSpawnerWithRadsuit replaces SilverShield // I should've just moved this to zs, but... my lazy ass dictates otherwise.
+{
+    DropItem "SecurityVest"
+}
+
+Actor EnchantedShieldSpawner : RandomSpawnerWithRadsuit replaces EnchantedShield
+{
+    DropItem "BlueArmorSpawner"
+}
+
+//Backpack
+Actor BagofHoldingSpawner : RandomSpawner replaces BagOfHolding
+{
+    DropItem "Backpack2"
+}
+
+//Torch
+Actor ArtiTorchSpawner : Infrared_Spawner replaces ArtiTorch
+{
+}
+
+//Time bombs
+Actor ArtiTimeBombSpawner : RandomSpawner replaces ArtiTimeBomb
+{
+	DropItem "SpikebombAmmo"
+}
+
+//Chaos device
+Actor ArtiTeleportSpawner : RandomSpawner replaces ArtiTeleport
+{
+	DropItem "BlueprintSpawner"
+}
+
+//Ovum
+Actor ArtiEggSpawner : RandomSpawner replaces ArtiEgg
+{
+	DropItem "Berserk"
+	DropItem "BlursphereSpawner"
+}
+
+//Tome of Power
+Actor ArtiTomeOfPowerSpawner replaces ArtiTomeOfPower
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnItemEx("BlursphereSpawner")
+		TNT1 A 0 { if(!GetCvar("TB_NoCrafting")) { A_DropItem("BlueprintSpawner",1,205); } }
+		Stop
+	}
+}
+
+//Map
+Actor SuperMapSpawner : RandomSpawner replaces SuperMap
+{
+	DropItem "Fullmap"
+}
+
+//Invul ring
+Actor ArtiInvulnerabilitySpawner : RandomSpawner replaces ArtiInvulnerability
+{
+	DropItem "InvulsphereItem"
+}
+
+//Shadow sphere
+Actor ArtiInvisibilitySpawner : RandomSpawner replaces ArtiInvisibility
+{
+	DropItem "MacheteAmmo"
+}
+
+//Urn
+Actor ArtiSuperHealthSpawner : RandomSpawner replaces ArtiSuperHealth
+{
+	DropItem "Whiskey" 255 5
+	DropItem "SoulsphereItem" 255 5
+	DropItem "MegasphereItem" 255 2
+	DropItem "Cigbox" 255 1
+}

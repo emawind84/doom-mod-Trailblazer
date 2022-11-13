@@ -1,0 +1,12 @@
+//Iwad-detection tokens
+Actor DoomCounter : 	Inventory { Inventory.MaxAmount 1 }
+Actor HereticCounter :	Inventory { Inventory.MaxAmount 1 }
+Actor HexenCounter : 	Inventory { Inventory.MaxAmount 1 }
+Actor StrifeCounter :	Inventory { Inventory.MaxAmount 1 } // I'm not crazy enough to use this, are you?
+Actor ChexCounter : 	Inventory { Inventory.MaxAmount 1 }
+
+Actor RightCycle : 		Inventory { Inventory.MaxAmount 1 }
+Actor LeftCycle : 		Inventory { Inventory.MaxAmount 1 }
+
+//Used by the random cig-butt simulator 20XX
+ACTOR SmokingDummy : Inventory { Inventory.MaxAmount 1 }

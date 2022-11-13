@@ -1,0 +1,169 @@
+// Jump jets! Just like I'm not doing for a certain mech mod that I thought I might get around to! Haha! Kill me now.
+// By Zhs2.
+
+#library "PillowIsStealingAllTheGoodIdeasButThatIsForTheBestBecauseThisScriptAuthorIsALazyFuckingSod"
+#include "zcommon.acs"
+
+script "JetTracker" ENTER // Count for a while, then thrust! Just so they don't kick in immediately, that is. I'll save that for a mech.
+{
+	int jetcounter; // had less use than I anticipated
+	int todefuel; // or not defuel, that is the question (refuel instead if not!)
+	int refuelcounter, defuelcounter; // checks the delays for fueling
+	int playmovex = 0, playmovey = 0, playmovez = 0; // Player movement
+	int thrustx, thrusty; // The total thrust in a given direction
+	int angle = GetActorAngle(0); // less typing
+	int gravityamount; // Depends on the class
+	int playerx, playery, playerz; // for spawning effects
+	bool hovermode, unhoverswitch; // for aerial attacks
+	
+	playerx = GetActorX(0);
+	playery = GetActorY(0);
+	playerz = GetActorZ(0); // if this isn't at the player's feet then I hate everything
+	gravityamount = 0.5;
+	
+	if(ClassifyActor(0) & ACTOR_DEAD || (GetActorProperty(0, APROP_Waterlevel) > 1))
+	{
+		jetcounter = 0; // Dying resets the counter and the need to start charging jump jets again
+		SetActorProperty(0, APROP_Gravity, 1.0); // le default
+		todefuel = 0; // do it faggot
+		StopSound(0, 7); // Just in case the player doesn't stop holding jump
+		hovermode = false; // reset hovermode
+		delay(1); // And wait until the player's dumb ass gets un-dead
+		// 5/25/16: Also the jetpack shouldn't work underwater. That doesn't make sense (and wastes fuel).
+		restart;
+	}
+	
+	if(GetPlayerInput(-1, MODINPUT_BUTTONS) & BT_JUMP) // We are currently holding jump.
+	{
+		if(GetPlayerInput(-1, MODINPUT_OLDBUTTONS) & BT_JUMP) // The player keeps holding jump
+		{
+			jetcounter++;
+			if(jetcounter > 10 && (CheckInventory("Jetpack") || CheckInventory("Jetpack2"))) // Fly!
+			{
+				if (!todefuel) { SetActorVelocity(0, 0, 0, 2.2, 1, 0); } // Initial thrust
+				todefuel = 1; // Big Amerikan Spender hier
+				if(hovermode)
+				{
+					SetActorProperty(0, APROP_Gravity, 0.0); // For staying level
+				}
+				else
+				{
+					SetActorProperty(0, APROP_Gravity, gravityamount); // For ease of movement
+				}
+				if (GetPlayerInput(-1, INPUT_FORWARDMOVE) >= 6000) { playmovex = 1; } // No modularity in this solution ;(
+				else if (GetPlayerInput(-1, INPUT_FORWARDMOVE) <= -6000) { playmovex = -1; } // RIP in piece my dignity
+				if (GetPlayerInput(-1, INPUT_SIDEMOVE) >= 6000) { playmovey = 1; } // I hate life
+				else if (GetPlayerInput(-1, INPUT_SIDEMOVE) <= -6000) { playmovey = -1; } // Just trust me on this one
+				if(hovermode)
+				{
+					playmovez = 0;
+					if (GetPlayerInput(-1, INPUT_BUTTONS) & BT_MOVEUP) { playmovez += 2.0; }
+					if (GetPlayerInput(-1, INPUT_BUTTONS) & BT_MOVEDOWN) { playmovez -= 2.0; }
+					
+					SetActorVelocity(0, GetActorVelX(0), GetActorVelY(0), playmovez, false, false); // Reset the player's Z velocity but let him keep moving horizontally
+					// And also adjust the hover levelling with the fly up/down keys
+				}
+				else
+				{
+					SetActorVelocity(0, 0, 0, (jetcounter - 10) * 0.2, true, false); // I thought I'd use this for horizontal velocities too until a kind soul mentioned...
+				}
+				ThrustThing((angle>>8),playmovex,0,0); // So yeah, fuck SAV
+				ThrustThing((angle>>8)+192,playmovey,0,0); // But I still wish for a compromise
+				SpawnForced("JetpackActive", playerx, playery, playerz, 0, 0); // Effects spawn here
+				PlaySound(0, "Jetpack/Active", 7, 1.0, 1, ATTN_NORM); // Play the sound
+			}
+		}
+		else // Release for one frame to no longer be effected
+		{
+			if(jetcounter > 10)
+			{
+				jetcounter = 10;
+				// Hold jump again to continue flying if the counter's already been built
+				// If you touch ground again in that time, i.e. fuck around with the jump holding too much then nope
+				// Theoretically this lets you build off falls
+
+				if(hovermode)
+				{
+					hovermode = false;
+					unhoverswitch = false;
+				}
+				else
+				{
+					hovermode = true;
+					unhoverswitch = true;
+				}
+				// Toggles hovermode, which keeps the script running but keeps the player at his current height instead.
+				// Release and press jump again to revert to flight mode.
+			}
+		}
+	}
+	else if(jetcounter>=10) // While we're still airborne
+	{
+		if((CheckInventory("Jetpack") || CheckInventory("Jetpack2"))) // An improvement for movement while still mid-air
+		{
+			if (GetPlayerInput(-1, INPUT_FORWARDMOVE) >= 6000) { playmovex = 1; } // See above for how ugly this is
+			else if (GetPlayerInput(-1, INPUT_FORWARDMOVE) <= -6000) { playmovex = -1; }
+			if (GetPlayerInput(-1, INPUT_SIDEMOVE) >= 6000) { playmovey = 1; }
+			else if (GetPlayerInput(-1, INPUT_SIDEMOVE) <= -6000) { playmovey = -1; }
+			ThrustThing((angle>>8),playmovex,0,0); // No thrust, but still add some sideways movement
+			ThrustThing((angle>>8)+192,playmovey,0,0);
+			SpawnForced("JetpackActive2", playerx, playery, playerz, 0, 0); // Alternative effect, not spawned if empty
+		}
+		StopSound(0, 7); // go away bibels
+		if(unhoverswitch) // If the player is still afloat, thrust him down *once* to get gravity to affect him again.
+		{
+			SetActorProperty(0, APROP_Gravity, gravityamount); // Gravity effects you again
+			SetActorVelocity(0, 0, 0, -0.01, true, false); // We all fall down
+			unhoverswitch = false;
+		}
+	}
+	
+	/* Fun old (funnelled) debug stuff
+	hudmessage(i:playmovex; HUDMSG_PLAIN, 9001, CR_GREEN, 0.2, 0.2, 0.1);
+	hudmessage(i:playmovey; HUDMSG_PLAIN, 9002, CR_GREEN, 0.2, 0.25, 0.1);
+	hudmessage(f:angle; HUDMSG_PLAIN, 9005, CR_GREEN, 0.2, 0.3, 0.1);
+	*/
+	
+	if(jetcounter > 13) { jetcounter = 13; } // Clamping
+	if(GetActorZ(0)==GetActorFloorZ(0))
+	{
+		jetcounter = 0; // Touching ground resets the counter and the need to start charging jump jets again
+		SetActorProperty(0, APROP_Gravity, 1.0); // le default
+		todefuel = 0; // do it faggot
+		StopSound(0, 7); // Just in case the player doesn't stop holding jump
+		hovermode = false; // reset hovermode
+	}
+	
+	// Here we grant the player eternal life or suffering depending on which he currently wants
+	if(todefuel)
+	{
+		refuelcounter = 0; // Reset!
+		defuelcounter++;
+		if(defuelcounter>=(35*2)) // two seconds
+		{
+			if(CheckInventory("HexenCounter"))
+			{
+				TakeInventory("Jetpack2", 1); // Not even in Hexen.
+			}
+			else
+			{
+				TakeInventory("Jetpack", 1); // No free-flying zone!
+			}
+			defuelcounter = 0;
+		}
+	}
+	//PILLOW: Gonna come handy in case of Hexen support, I bet my ass. Because why not make the player take it along, and make it refuel itself?
+	else if(!todefuel && CheckInventory("HexenRefuelCounter"))
+	{
+		defuelcounter = 0; // Can't be having that disgusting thing stealing your jets faster!
+		refuelcounter++;
+		if(refuelcounter>=(15)) // refueling is less of an issue here
+		{
+			GiveInventory("Jetpack2", 1); // Thanks doc!
+			refuelcounter = 0;
+		}
+	}
+	
+	delay(1); // I wonder about whether I should not use such a fine delay for the sake of ease, hmm, too late
+	restart;
+}

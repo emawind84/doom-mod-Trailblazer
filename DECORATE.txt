@@ -1,0 +1,68 @@
+#include "Decorate/Blazer.txt"
+#include "Decorate/CheatersBlessing.txt"
+#include "Decorate/Casings.txt"
+#include "Decorate/Clips.txt"
+#include "Decorate/Puffs.txt"
+#include "Decorate/BlazeItPunch.txt"
+#include "Decorate/Gunsmoke.txt"
+#include "Decorate/Quicktoss.txt"
+#include "Decorate/Spawners.txt"
+#include "Decorate/Munnition.txt"
+
+//Items
+//#include "Decorate/Items/Keys.txt"
+//#include "Decorate/Items/PowerupBase.txt"
+#include "Decorate/Items/Tinker.txt"
+#include "Decorate/Items/Blueprints.txt"
+#include "Decorate/Items/Crafter.txt"
+#include "Decorate/Items/Health.txt"
+#include "Decorate/Items/Armor.txt"
+#include "Decorate/Items/Berserk.txt"
+#include "Decorate/Items/Whiskey.txt"
+#include "Decorate/Items/Cigbox.txt"
+#include "Decorate/Items/Flarebox.txt"
+#include "Decorate/Items/Hazmat.txt"
+#include "Decorate/Items/Smoking.txt"
+#include "Decorate/Items/Fisher.txt"
+#include "Decorate/Items/Map.txt"
+#include "Decorate/Items/Backpack.txt"
+#include "Decorate/Items/Jetpack.txt"
+
+//Props (shhh, experimental fuckery-around, feature stuff.)
+#include "Decorate/Props/Barrels.txt"
+//#include "Decorate/Props/Torches.txt"
+//#include "Decorate/Props/Tech.txt"
+
+//Ported to zscript.
+
+/*#include "Decorate/Items/Spheres/Soulsphere.txt"
+#include "Decorate/Items/Spheres/Megasphere.txt"
+#include "Decorate/Items/Spheres/Invulsphere.txt"
+#include "Decorate/Items/Spheres/Blazingsphere.txt"
+#include "Decorate/Items/Spheres/Quaddamage.txt"
+#include "Decorate/Items/Spheres/AmmoJunkie.txt"
+#include "Decorate/Items/Spheres/Blastsphere.txt"*/
+
+//Weapons
+
+//Since there's no base weapon, might as well put it here.
+Actor ShotsWereFired : Inventory { Inventory.MaxAmount 1 }
+
+//#include "Decorate/Weapons/Macheterang.txt"
+//#include "Decorate/Weapons/Sidekick.txt"
+//#include "Decorate/Weapons/FMG.txt"
+//#include "Decorate/Weapons/ChromeJustice.txt"
+//#include "Decorate/Weapons/Fleshrend.txt"
+//#include "Decorate/Weapons/Patriarch.txt"
+//#include "Decorate/Weapons/Spikebomb.txt"
+//#include "Decorate/Weapons/Colts.txt"
+//#include "Decorate/Weapons/Skullthrottle.txt"
+//#include "Decorate/Weapons/Nutcracker.txt"
+//#include "Decorate/Weapons/Leadspitter.txt"
+//#include "Decorate/Weapons/Bitchmaker.txt"
+//#include "Decorate/Weapons/Paintrain.txt"
+
+//Extra IWAD-related stuff
+#include "Decorate/GameCounters.txt"
+#include "Decorate/Heretic.txt"
+#include "Decorate/Hexen.txt"

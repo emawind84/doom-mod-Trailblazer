@@ -1,0 +1,20 @@
+class tb_keyhandler : EventHandler
+{
+	override void WorldThingSpawned(WorldEvent e)
+	{
+		if(!e.thing) { Return; }	// gotta be shitting me... -Dino
+		
+		if(e.thing && e.thing.bDONTGIB && e.thing is "Key" && !(e.thing is "TB_UniversalKey"))
+		{
+			Key wwwwww = Key(e.thing);
+			if(!wwwwww.owner) {
+				TB_UniversalKey Bumbler = TB_UniversalKey(e.thing.Spawn("TB_UniversalKey",e.Thing.pos));
+				// This is where the real magic happens.
+				Bumbler.OurKey = wwwwww;
+				// If this was a key, GO NO FURTHER!
+				// -Dino
+				Return;
+			}
+		}
+	}
+}

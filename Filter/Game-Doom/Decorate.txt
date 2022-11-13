@@ -1,0 +1,31 @@
+ACTOR Trailblazer_Doom : Trailblazer
+{
+	Player.StartItem "DoomCounter"
+	
+	Player.StartItem Sidekick
+	Player.StartItem BulletAmmo 60
+	Player.StartItem Macheterang
+	Player.StartItem SpikebombWeapon
+	Player.StartItem SpikebombTossWeapon
+	Player.StartItem PipeQuickToss
+	Player.StartItem TinkerItem
+	Player.StartItem AmmoCrafterItem
+	//Player.StartItem HammerSpaceCounter 10
+	
+	//Machete Quick-Toss stuff
+	Player.StartItem MacheteIn
+	Player.StartItem MacheteOut
+	
+	//Gun clips
+	Player.StartItem MacheteAmmo 1
+	Player.StartItem CradleClip 6
+	Player.StartItem GraveClip 6
+	Player.StartItem UziClipLeft 30
+	Player.StartItem UziClipRight 30
+	Player.StartItem MagnumClip 6
+	Player.StartItem SidekickClip 16
+	Player.StartItem ChromeJusticeClip 8
+	Player.StartItem FMGClip 70
+	Player.StartItem PatriarchClip 12
+	Player.StartItem DoubleDeuceClip 2
+}

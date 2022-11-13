@@ -1,0 +1,27 @@
+ACTOR MacheteIn : CustomInventory
+{
+   Inventory.Amount 1
+   Inventory.MaxAmount 1
+   -INVBAR
+   States
+   {
+       Use:
+       TNT1 A 0 A_GiveInventory("MacheteGoesFast", 1)
+       Fail
+   }
+}
+
+ACTOR MacheteOut : CustomInventory
+{
+   Inventory.Amount 1
+   Inventory.MaxAmount 1
+   -INVBAR
+   States
+   {
+       Use:
+       TNT1 A 0 A_TakeInventory("MacheteGoesFast", 1)
+       Fail
+   }
+}
+
+ACTOR MacheteGoesFast : Inventory { Inventory.MaxAmount 1 }

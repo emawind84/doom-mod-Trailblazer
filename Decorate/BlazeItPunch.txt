@@ -1,0 +1,266 @@
+Actor FirePunch_BaseParticle
+{
+	+NoInteraction
+	+ForceXYBillboard
+	RenderStyle Normal
+	Alpha 0.0
+}
+
+Actor FirePunch_Cloud : FirePunch_BaseParticle
+{
+	RenderStyle Add
+	States
+	{
+		Spawn:
+			TNT1 AA 0 A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD",
+								 "SpriteE", "SpriteF", "SpriteG", "SpriteH")
+		SpriteA:
+			CLOD A 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			CLOD B 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			CLOD C 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			CLOD D 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+		SpriteE:
+			CLOD E 0 A_Jump(255, "FadeIn")
+			Goto SpriteE
+		SpriteF:
+			CLOD F 0 A_Jump(255, "FadeIn")
+			Goto SpriteF
+		SpriteG:
+			CLOD G 0 A_Jump(255, "FadeIn")
+			Goto SpriteG
+		SpriteH:
+			CLOD H 0 A_Jump(255, "FadeIn")
+			Goto SpriteH
+		FadeIn:
+			"####" "#" 0 A_FadeIn(FRandom(0.6, 0.7))
+			"####" "#" 0 A_SetScale(FRandom(0.4, 0.3))
+			Goto Idle
+		Idle:
+			"####" "#" 2 Bright A_Jump(190, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 Bright A_FadeOut(0.035)
+			"####" "#" 0 A_SetScale(ScaleX - FRandom(0.001, 0.003))
+			Loop
+	}
+}
+
+Actor FirePunch_Smoke : FirePunch_BaseParticle
+{
+	Alpha 0.0
+	RenderStyle Translucent
+	States
+	{
+		Spawn:
+		    TNT1 A 3
+			TNT1 AA 0 A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD")
+		SpriteA:
+			DYMI A 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			DYMI B 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			DYMI C 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			DYMI D 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+		FadeIn:
+			"####" "#" 0 A_SetScale(FRandom(0.3, 0.4))
+			Goto RealFadeIn
+		RealFadeIn:
+			"####" "#" 1 A_FadeIn(FRandom(0.01, 0.03))
+			"####" "#" 0 A_JumpIf(Alpha >= 0.35, "Idle")
+			Loop
+		Idle:
+			"####" "#" 5 A_Jump(200, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 A_FadeOut(FRandom(0.02,0.025))
+			"####" "#" 0 A_ScaleVelocity(0.96)
+			"####" "#" 0 A_SetScale(ScaleX + FRandom(0.015, 0.025))
+			Loop
+	}
+}
+
+Actor FirePunch_Ember : FirePunch_BaseParticle
+{
+	Alpha 0.99
+	RenderStyle Add
+	States
+	{
+		Spawn:
+			TNT1 AA 0 A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD", "SpriteE", "SpriteF")
+		SpriteA:
+			EMBR A 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			EMBR B 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			EMBR C 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			EMBR D 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+		SpriteE:
+			EMBR E 0 A_Jump(255, "FadeIn")
+			Goto SpriteE
+		SpriteF:
+			EMBR F 0 A_Jump(255, "FadeIn")
+			Goto SpriteF
+		FadeIn:
+			"####" "#" 0 Bright A_SetScale(FRandom(0.025, 0.035))
+			Goto Idle
+		Idle:
+			"####" "#" 2 Bright A_Jump(200, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 Bright A_Weave(FRandom(0.9, 1.0), FRandom(0.9, 1.0),
+										FRandom(70, 90), FRandom(70, 90))
+			"####" "#" 0 A_JumpIf(ScaleX <= 0.0, "NULL")
+			"####" "#" 0 A_ChangeVelocity(VelX * FRandom(0.93, 0.99),
+										  VelY * FRandom(0.93, 0.99),
+										  VelZ - FRandom(0.1, 0.2),
+										  CVF_REPLACE)
+			"####" "#" 0 A_SetScale(ScaleX - FRandom(0.002, 0.0015))
+			Loop
+	}
+}
+
+Actor FirePunch_Shockwave : FirePunch_BaseParticle
+{
+	RenderStyle Add
+	Scale 0.1
+	Alpha 0.99
+	States
+	{
+		Spawn:
+			SHCK A 0 NoDelay A_SetScale(ScaleX + FRandom(0.075, 0.05))
+			SHCK A 1 Bright A_FadeOut(0.1)
+			Loop
+	}
+}
+
+Actor FirePunch_Flare : FirePunch_BaseParticle
+{
+	RenderStyle Add
+	Scale 0.9
+	Alpha 0.99
+	States
+	{
+		Spawn:
+			FLER A 1 Bright A_FadeOut(0.03)
+			FLER A 0 A_SetScale(ScaleX - FRandom(0.05, 0.1))
+			FLER A 0 A_JumpIf(ScaleX <= 0.0, "NULL")
+			Loop
+	}
+}
+
+Actor FirePunch_Blast : FirePunch_BaseParticle
+{
+	RenderStyle Add
+	Scale 0.4
+	Alpha 0.35
+	States
+	{
+		Spawn:
+			TNT1 AA 0 A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD",
+								 "SpriteE", "SpriteF", "SpriteG", "SpriteH")
+		SpriteA:
+			BLAS A 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			BLAS B 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			BLAS C 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			BLAS D 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+		SpriteE:
+			BLAS E 0 A_Jump(255, "FadeIn")
+			Goto SpriteE
+		SpriteF:
+			BLAS F 0 A_Jump(255, "FadeIn")
+			Goto SpriteF
+		SpriteG:
+			BLAS G 0 A_Jump(255, "FadeIn")
+			Goto SpriteG
+		SpriteH:
+			BLAS H 0 A_Jump(255, "FadeIn")
+			Goto SpriteH
+		FadeIn:
+			"####" "#" 1 Bright A_FadeOut(0.05)
+			"####" "#" 0 A_SetScale(ScaleX + FRandom(0.1, 0.075))
+			Loop
+	}
+}
+
+Actor FirePunch_Impact
+{
+	Var Int User_SpawnCount;
+	+NoInteraction
+	States
+	{
+		Spawn:
+			TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_SmokeReduction")==2, "Emit2")
+		    TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "Emit1")	
+			TNT1 A 0 A_SetUserVar("User_SpawnCount", 10)
+			Goto Emit
+		Emit1:
+			TNT1 A 0 A_SetUserVar("User_SpawnCount", 8)
+			Goto Emit
+		Emit2:
+			TNT1 A 0 A_SetUserVar("User_SpawnCount", 4)
+		Emit:
+			TNT1 A 0 A_SpawnItemEx("FirePunch_Cloud", FRandom(-10, 10),
+									FRandom(-10, 10), FRandom(-10, 10),
+									FRandom(-0.5, 0.5), FRandom(-0.5, 0.5),
+									FRandom(-0.5, 0.5), FRandom(0.0,360.0), SXF_CLIENTSIDE, 10)
+			TNT1 A 0 A_SpawnItemEx("FirePunch_Blast", FRandom(-10, 10),
+									FRandom(-10, 10), FRandom(-10, 10),
+									FRandom(-0.5, 0.5), FRandom(-0.5, 0.5),
+									FRandom(-0.5, 0.5), FRandom(0.0,360.0), SXF_CLIENTSIDE, 10)
+			TNT1 A 0 A_SpawnItemEx("FirePunch_Smoke", FRandom(-10, 10),
+									FRandom(-10, 10), FRandom(-10, 10),
+									FRandom(1.0, -1.0), FRandom(-0.9, 0.9),
+									FRandom(-0.9, 0.9), FRandom(0.0,360.0), SXF_CLIENTSIDE, 20)
+			TNT1 A 0 A_SpawnItemEx("FirePunch_Ember", FRandom(-3, 3),
+									FRandom(-3, 3), FRandom(-3, 3),
+									FRandom(-1.0, -4.0), FRandom(-2.0, 2.0),
+									FRandom(1.0, 4.0), FRandom(0.0,360.0), SXF_CLIENTSIDE, 10)
+			/*TNT1 AA 0 A_SpawnItemEx("FirePunch_Flare", FRandom(-20, 20),
+									FRandom(-20, 20), FRandom(-20, 20),
+									0, 0, 0, 0, SXF_CLIENTSIDE)*/
+			TNT1 A 1
+		Count:				// Emit until SpawnCount <= 0.
+			TNT1 A 0 A_SetUserVar("User_SpawnCount", User_SpawnCount - 1)
+			TNT1 A 0 A_JumpIf(User_SpawnCount <= 0, "NULL")
+			Goto Emit
+	}
+}
+
+Actor FirePunch_Main : FirePunch_BaseParticle
+{
+	Species "Chainsmoker"
+	+MTHRUSPECIES
+	States
+	{
+	Spawn:
+	TNT1 A 0 NoDelay A_PlaySound("Punch/Fireblast")
+	TNT1 A 0 A_SpawnItemEx("FirePunch_Impact",0,0,0,0,0,0,0,SXF_CLIENTSIDE)
+	TNT1 A 0 A_SpawnItemEx("FirePunch_Flare",0,0,0,0,0,0,0,SXF_CLIENTSIDE)
+	TNT1 A 20 A_SpawnItemEx("FirePunch_Shockwave",0,0,0,0,0,0,0,SXF_CLIENTSIDE)
+	Stop
+	}
+}

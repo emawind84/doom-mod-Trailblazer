@@ -1,0 +1,310 @@
+//Machetes
+ACTOR MacheteAmmo : Ammo
+{
+    Inventory.PickupMessage "Got your hands at another ''Macheterang''! Chop chop, motherfuckers. (1)"
+	Inventory.Amount 1
+	Inventory.MaxAmount 4
+	Ammo.BackpackAmount 0
+	Ammo.BackpackMaxAmount 4
+    Inventory.PickupSound "Machete/Up"
+	Inventory.Icon "MCHGX0"
+	+INVENTORY.IGNORESKILL
+	+INVENTORY.UNDROPPABLE
+	States
+	{
+	Spawn:
+		MCHG X -1
+		Loop
+	}
+}
+
+//Boolets
+actor BulletAmmo : Ammo
+{
+	Inventory.PickupMessage "Got a bullet mag."
+	Inventory.PickupSound "Bullet/Ammo"
+	Inventory.Amount 15
+	Inventory.MaxAmount 400
+	Ammo.BackpackAmount 75
+	Ammo.BackpackMaxAmount 800
+	Inventory.Icon "BLTCA0"
+	Scale 0.8
+	States
+	{
+	Spawn:
+		BLTC A -1
+		Loop
+	}
+}
+
+actor BulletBox : BulletAmmo
+{
+	Inventory.PickupMessage "Nabbed the contents of a box of bullets."
+	Inventory.Amount 75
+	Scale 1
+	States
+	{
+	Spawn:
+		BLTB A -1
+		Loop
+	}
+}
+
+//Shells
+actor ShellsAmmo : Ammo
+{
+	Inventory.PickupMessage "Grabbed a bunch of shells."
+	Inventory.PickupSound "Shells/Ammo"
+	Inventory.Amount 6
+	Inventory.MaxAmount 120
+	Ammo.BackpackAmount 30
+	Ammo.BackpackMaxAmount 240
+	Inventory.Icon "RNDGX0" //"SHTSA0"
+	Scale 0.7
+	States
+	{
+	Spawn:
+		SHTS B -1
+		Loop
+	}
+}
+
+actor ShellsBox : ShellsAmmo
+{
+	Inventory.PickupMessage "Adopted a box of shells with extra care."
+	Inventory.Amount 30
+	Scale 1
+	States
+	{
+	Spawn:
+		SHTB A -1
+		Loop
+	}
+}
+
+actor DemShellsAmmo : Ammo
+{
+	Inventory.PickupMessage "Intercepted a bunch of dem shells."
+	Inventory.PickupSound "Shells/Ammo"
+	Inventory.Amount 4
+	Inventory.MaxAmount 40
+	Ammo.BackpackAmount 16
+	Ammo.BackpackMaxAmount 80
+	Inventory.Icon "PCFGX0" //"SHTSA0"
+	Scale 0.8
+	States
+	{
+	Spawn:
+		DSHL B -1
+		Loop
+	}
+}
+
+actor DemShellsBox : DemShellsAmmo
+{
+	Inventory.PickupMessage "Hugboxed dat box of dem shells."
+	Inventory.Amount 16
+	Scale 1
+	States
+	{
+	Spawn:
+		DSHB A -1
+		Loop
+	}
+}
+
+//Grenades
+actor GrenadeAmmo : Ammo
+{
+	Inventory.PickupMessage "Snapped up a bunch of 30mm's."
+	Inventory.PickupSound "Grenade/Ammo"
+	Inventory.Amount 4
+	Inventory.MaxAmount 60
+	Ammo.BackpackAmount 15
+	Ammo.BackpackMaxAmount 120
+	Inventory.Icon "GRNAA0"
+	Scale 0.9
+	States
+	{
+	Spawn:
+		GRNA B -1
+		Loop
+	}
+}
+
+actor GrenadeClip : GrenadeAmmo
+{
+	Inventory.PickupMessage "Took a grasp on a grenade clip."
+	Inventory.Amount 10
+	Scale 0.8
+	States
+	{
+	Spawn:
+		GRNC A -1
+		Loop
+	}
+}
+
+//Hellraisers
+actor HellraiserAmmo : Ammo
+{
+	Inventory.PickupMessage "Snaffled a fastloader of hellraiser bullets."
+	Inventory.PickupSound "Hellraiser/Ammo"
+	Inventory.Amount 6
+	Inventory.MaxAmount 36
+	Ammo.BackpackAmount 12
+	Ammo.BackpackMaxAmount 72
+	Inventory.Icon "MAGNA0"
+	Scale 0.7
+	States
+	{
+	Spawn:
+		MAGN A -1
+		Loop
+	}
+}
+
+actor HellraiserBox : HellraiserAmmo
+{
+	Inventory.PickupMessage "Figured out how to get hellraiser bullets\nout of that goddamn box."
+	Inventory.Amount 12
+	Scale 1
+	States
+	{
+	Spawn:
+		MAGB A -1
+		Loop
+	}
+}
+
+//Spikebombs
+ACTOR SpikebombAmmo : Ammo
+{
+	Radius 32
+	Height 24
+    Inventory.PickupMessage "Picked up a spikebomb. (1)"
+	Inventory.Amount 1
+	Inventory.MaxAmount 15
+	Ammo.BackpackAmount 1
+	Ammo.BackpackMaxAmount 30
+    Inventory.PickupSound "Spikebomb/Pick"
+	Inventory.Icon "PBMBZ0"
+	Scale 0.3
+	+INVENTORY.IGNORESKILL
+	States
+	{
+	Spawn:
+		PBMB A -1
+		Loop
+	}
+}
+
+ACTOR SpikebombBox : SpikebombAmmo
+{
+    Inventory.PickupMessage "Picked up a box of spikebombs. (1)"
+	Inventory.Amount 5
+	Scale 1
+	-INVENTORY.IGNORESKILL
+	States
+	{
+	Spawn:
+		PBOX A -1
+		Loop
+	}
+}
+
+//Torque... errr, Throttle. Eventually Torgue! EXPLOSIOOONS~
+actor ThrottleAmmo : Ammo
+{
+	Inventory.PickupMessage "Seized a minigun ammo pack."
+	Inventory.PickupSound "Throttle/Ammo"
+	Inventory.Amount 40
+	Inventory.MaxAmount 600
+	Ammo.BackpackAmount 200
+	Ammo.BackpackMaxAmount 1200
+	Inventory.Icon "CHNGX0" //"TRTLA0"
+	States
+	{
+	Spawn:
+		TRTL A -1
+		Loop
+	}
+}
+
+actor ThrottleBox : ThrottleAmmo
+{
+	Inventory.PickupMessage "Hugged a minigun ammo box."
+	Inventory.Amount 160
+	States
+	{
+	Spawn:
+		TRTB A -1
+		Loop
+	}
+}
+
+//Nutty
+actor TwoBoreAmmo : Ammo
+{
+	Inventory.PickupMessage "Took hostage of a 2Bore slug."
+	Inventory.PickupSound "2Bore/Ammo"
+	Inventory.Amount 1
+	Inventory.MaxAmount 10
+	Ammo.BackpackAmount 2
+	Ammo.BackpackMaxAmount 20
+	Inventory.Icon "NTCGX0" //"2BCTA0"
+	Scale 0.8
+	+INVENTORY.IGNORESKILL
+	States
+	{
+	Spawn:
+		2BCT A -1
+		Loop
+	}
+}
+
+actor TwoBoreBox : TwoBoreAmmo
+{
+	Inventory.PickupMessage "Discovered the wonders of a 2Bore wooden crate."
+	Inventory.Amount 5
+	Scale 1
+	-INVENTORY.IGNORESKILL
+	States
+	{
+	Spawn:
+		2BBX A -1
+		Loop
+	}
+}
+
+//Derailment
+actor RailgunAmmo : Ammo
+{
+	Inventory.PickupMessage "Snagged a railgun slug."
+	Inventory.PickupSound "Paintrain/Ammo"
+	Inventory.Amount 1
+	Inventory.MaxAmount 25
+	Ammo.BackpackAmount 5
+	Ammo.BackpackMaxAmount 50
+	Inventory.Icon "RAIGX0" //"2BCTA0"
+	Scale 0.8
+	+INVENTORY.IGNORESKILL
+	States
+	{
+	Spawn:
+		RAIA A -1 Bright
+		Loop
+	}
+}
+
+actor RailgunPack : RailgunAmmo
+{
+	Inventory.PickupMessage "Snagged a railgun slug rack."
+	Inventory.Amount 5
+	States
+	{
+	Spawn:
+		RAIP A -1 Bright
+		Loop
+	}
+}

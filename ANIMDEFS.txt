@@ -1,0 +1,3 @@
+Texture "ZIPPO1"
+Pic 1 tics 10
+Pic 2 tics 10

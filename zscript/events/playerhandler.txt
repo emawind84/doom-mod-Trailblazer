@@ -1,0 +1,12 @@
+class tb_playerhandler : EventHandler
+{
+	override void PlayerEntered(PlayerEvent e)
+	{
+		PlayerInfo player = players[e.PlayerNumber];
+		
+		if(player.mo is "Trailblazer")
+		{
+			Trailblazer(player.mo).HandlePlayerReset();
+		}
+	}
+}

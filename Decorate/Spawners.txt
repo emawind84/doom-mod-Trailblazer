@@ -1,0 +1,574 @@
+//Bonuses
+ACTOR HealthBonusSpawner : RandomSpawner replaces HealthBonus
+{
+	Dropitem "MarloPickup" 255 5
+	DropItem "HealthBonus2" 255 1
+}
+
+ACTOR ArmorBonusSpawner : RandomSpawner replaces ArmorBonus
+{
+	Dropitem "LuckiePickup" 255 5
+	DropItem "ArmorBonus2" 255 1
+}
+
+//Powerups
+ACTOR SoulsphereSpawner : RandomSpawner replaces Soulsphere
+{
+	Dropitem "SoulsphereItem"
+	DropItem "Whiskey"
+}
+
+ACTOR MegasphereSpawner : RandomSpawner replaces Megasphere
+{
+	Dropitem "MegasphereItem" 255 5
+	DropItem "Cigbox" 255 1
+}
+
+ACTOR BlursphereSpawner : RandomSpawner replaces Blursphere
+{
+	Dropitem "BlazingsphereItem"
+	DropItem "AmmoJunkieItem"
+	DropItem "QuadDamageItem"
+}
+
+//Junk
+ACTOR MinorJunkSpawner
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Null")
+		TNT1 A 0 A_SpawnItemEx("MinorJunkSpawnerMain",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR MinorJunkSpawnerMain : RandomSpawner
+{
+	Dropitem "JunkItemA"
+	Dropitem "JunkItemB"
+	Dropitem "JunkItemC"
+}
+
+ACTOR MajorJunkSpawner
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Null")
+		TNT1 A 0 A_SpawnItemEx("MajorJunkSpawnerMain",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR MajorJunkSpawnerMain : RandomSpawner
+{
+	Dropitem "JunkItemD"
+	Dropitem "JunkItemE"
+	Dropitem "JunkItemF"
+}
+
+//Ammo
+ACTOR Clip_SpawnerMain replaces Clip
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Spawn2")
+		TNT1 A 0 A_SpawnItemEx("Clip_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	Spawn2:
+		TNT1 A 0 A_SpawnItemEx("BulletAmmo",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR Clip_Spawner : RandomSpawner
+{
+	Dropitem "BulletAmmo" 255 3
+	DropItem "MinorJunkSpawner" 255 1
+}
+
+ACTOR Shell_SpawnerMain replaces Shell
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Spawn2")
+		TNT1 A 0 A_SpawnItemEx("Shell_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	Spawn2:
+		TNT1 A 0 A_SpawnItemEx("Shell_Spawner2",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR Shell_Spawner : RandomSpawner
+{
+	Dropitem "ShellsAmmo" 255 3
+	Dropitem "DemShellsAmmo" 255 2
+	DropItem "MinorJunkSpawner" 255 1
+}
+
+ACTOR Shell_Spawner2 : RandomSpawner
+{
+	Dropitem "ShellsAmmo" 255 3
+	Dropitem "DemShellsAmmo" 255 2
+}
+
+ACTOR Rocket_SpawnerMain replaces RocketAmmo
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_RocketSpawner") == 1, "Both")
+		TNT1 A 0 A_JumpIf(GetCvar("TB_RocketSpawner") == 2, "BitchOnly")
+		TNT1 A 0 A_JumpIf(GetCvar("TB_RocketSpawner") == 3, "PadreOnly")
+	Randomized:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_SpawnItemEx("Rocket_Spawner")
+		Stop
+		TNT1 A 0 A_SpawnItemEx("Rocket_Spawner2")
+		Stop
+	Both:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_Jump(9,"Junk")
+		TNT1 A 0 A_Jump(25,"Pipe")
+		TNT1 A 0 A_SpawnItemEx("HellraiserAmmo")
+		TNT1 A 0 A_SpawnItemEx("GrenadeAmmo")
+		Stop
+	BitchOnly:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_Jump(9,"Junk")
+		TNT1 A 0 A_Jump(25,"Pipe")
+		TNT1 A 0 A_SpawnItemEx("HellraiserAmmo")
+		Stop
+	PadreOnly:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_Jump(9,"Junk")
+		TNT1 A 0 A_Jump(25,"Pipe")
+		TNT1 A 0 A_SpawnItemEx("GrenadeAmmo")
+		Stop
+	Junk:
+		TNT1 A 0 A_SpawnItemEx("Rocket_JunkSpawner")
+		Stop
+	Pipe:
+		TNT1 A 0 A_SpawnItemEx("SpikebombAmmo")
+		Stop
+	}
+}
+
+ACTOR Rocket_Spawner : RandomSpawner
+{
+	Dropitem "GrenadeAmmo" 255 12
+	DropItem "HellraiserAmmo" 255 5
+	DropItem "SpikebombAmmo" 255 3
+	DropItem "Rocket_JunkSpawner" 255 1
+}
+
+ACTOR Rocket_Spawner2 : RandomSpawner
+{
+	Dropitem "GrenadeAmmo" 255 12
+	DropItem "HellraiserAmmo" 255 5
+	DropItem "SpikebombAmmo" 255 3
+}
+
+ACTOR Rocket_JunkSpawner
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnItemEx("MinorJunkSpawner")
+		TNT1 A 0 A_DropItem("MinorJunkSpawner",1,256)
+		Stop
+	}
+}
+
+ACTOR Cell_SpawnerMain replaces Cell
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_DropItem("RailgunAmmo",-1,128)
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Spawn2")
+		TNT1 A 0 A_SpawnItemEx("Cell_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	Spawn2:
+		TNT1 A 0 A_SpawnItemEx("Cell_Spawner2",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR Cell_Spawner : RandomSpawner
+{
+	Dropitem "ThrottleAmmo" 255 8
+	DropItem "TwoBoreAmmo" 255 4
+	DropItem "Cell_JunkSpawner" 255 1
+}
+
+ACTOR Cell_Spawner2 : RandomSpawner
+{
+	Dropitem "ThrottleAmmo" 255 8
+	DropItem "TwoBoreAmmo" 255 4
+}
+
+ACTOR Cell_JunkSpawner
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnItemEx("MinorJunkSpawner")
+		TNT1 AA 0 A_DropItem("MinorJunkSpawner",1,256)
+		Stop
+	}
+}
+
+//Big ammo
+ACTOR ClipBox_SpawnerMain replaces ClipBox
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Spawn2")
+		TNT1 A 0 A_SpawnItemEx("ClipBox_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	Spawn2:
+		TNT1 A 0 A_SpawnItemEx("BulletBox",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR ClipBox_Spawner : RandomSpawner
+{
+	Dropitem "BulletBox" 255 3
+	DropItem "MajorJunkSpawner" 255 1
+}
+
+ACTOR ShellBox_SpawnerMain replaces ShellBox
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Spawn2")
+		TNT1 A 0 A_SpawnItemEx("ShellBox_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	Spawn2:
+		TNT1 A 0 A_SpawnItemEx("ShellBox_Spawner2",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR ShellBox_Spawner : RandomSpawner
+{
+	Dropitem "ShellsBox" 255 3
+	Dropitem "DemShellsBox" 255 2
+	DropItem "MajorJunkSpawner" 255 1
+}
+
+ACTOR ShellBox_Spawner2 : RandomSpawner
+{
+	Dropitem "ShellsBox" 255 3
+	Dropitem "DemShellsBox" 255 2
+}
+
+ACTOR RocketBox_SpawnerMain replaces RocketBox
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_RocketSpawner") == 1, "Both")
+		TNT1 A 0 A_JumpIf(GetCvar("TB_RocketSpawner") == 2, "BitchOnly")
+		TNT1 A 0 A_JumpIf(GetCvar("TB_RocketSpawner") == 3, "PadreOnly")
+	Randomized:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_SpawnItemEx("RocketBox_Spawner")
+		Stop
+		TNT1 A 0 A_SpawnItemEx("RocketBox_Spawner2")
+		Stop
+	Both:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_Jump(9,"Junk")
+		TNT1 A 0 A_Jump(25,"Pipe")
+		TNT1 A 0 A_SpawnItemEx("HellraiserBox")
+		TNT1 A 0 A_SpawnItemEx("GrenadeClip")
+		Stop
+	BitchOnly:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_Jump(9,"Junk")
+		TNT1 A 0 A_Jump(25,"Pipe")
+		TNT1 A 0 A_SpawnItemEx("HellraiserBox")
+		Stop
+	PadreOnly:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2, 2)
+		TNT1 A 0 A_Jump(9,"Junk")
+		TNT1 A 0 A_Jump(25,"Pipe")
+		TNT1 A 0 A_SpawnItemEx("GrenadeClip")
+		Stop
+	Junk:
+		TNT1 A 0 A_SpawnItemEx("RocketBox_JunkSpawner")
+		Stop
+	Pipe:
+		TNT1 A 0 A_SpawnItemEx("SpikebombBox")
+		Stop
+	}
+}
+
+ACTOR RocketBox_Spawner : RandomSpawner
+{
+	Dropitem "GrenadeClip" 255 12
+	DropItem "HellraiserBox" 255 5
+	DropItem "SpikebombBox" 255 3
+	DropItem "RocketBox_JunkSpawner" 255 1
+}
+
+ACTOR RocketBox_Spawner2 : RandomSpawner
+{
+	Dropitem "GrenadeClip" 255 12
+	DropItem "HellraiserBox" 255 5
+	DropItem "SpikebombBox" 255 3
+}
+
+ACTOR RocketBox_JunkSpawner
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnItemEx("MajorJunkSpawner")
+		TNT1 A 0 A_DropItem("MajorJunkSpawner",1,256)
+		Stop
+	}
+}
+
+ACTOR CellPack_SpawnerMain replaces CellPack
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_DropItem("RailgunPack",5,128)
+		TNT1 A 0 A_JumpIf(GetCvar("TB_NoCrafting") >= 2,"Spawn2")
+		TNT1 A 0 A_SpawnItemEx("CellPack_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	Spawn2:
+		TNT1 A 0 A_SpawnItemEx("CellPack_Spawner2",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+ACTOR CellPack_Spawner : RandomSpawner
+{
+	Dropitem "ThrottleBox" 255 6
+	DropItem "TwoBoreBox" 255 3
+	DropItem "CellPack_JunkSpawner" 255 1
+}
+
+ACTOR CellPack_Spawner2 : RandomSpawner
+{
+	Dropitem "ThrottleBox" 255 6
+	DropItem "TwoBoreBox" 255 3
+}
+
+ACTOR CellPack_JunkSpawner
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnItemEx("MajorJunkSpawner")
+		TNT1 AA 0 A_DropItem("MajorJunkSpawner",1,256)
+		Stop
+	}
+}
+
+/*
+ACTOR Backpack_Spawner : RandomSpawner replaces Backpack
+{
+	Dropitem "Backpack2" 255 4
+	Dropitem "JetpackGiver" 255 1
+}
+}*/
+
+ACTOR Backpack_Spawner replaces Backpack
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			A_SpawnItemEx("Backpack2",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+			if(GetCvar("TB_NoCrafting") < 1) { A_DropItem("BlueprintSpawner",1,224); }
+			A_DropItem("JetpackGiver",1,64);
+		}
+		Stop
+	}
+}
+
+ACTOR Infrared_Spawner replaces Infrared
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnItemEx("FisherPrice",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		TNT1 A 0 A_DropItem("FlaresBlueprintBringer",1,204)
+		Stop
+	}
+}
+
+// Chainsaw
+ACTOR Chainsaw_Spawner : RandomSpawner replaces Chainsaw
+{
+	DropItem "Colts"
+	//DropItem "MacheteAmmo"
+}
+
+// Shotgun
+ACTOR Fleshrend_SingleSpawner : RandomSpawner
+{
+	DropItem "Fleshrend"
+}
+
+ACTOR Fleshrend_DualSpawner : RandomSpawner
+{
+	DropItem "Fleshrend_Dual"
+}
+
+ACTOR Fleshrend_Dual : TBMPWeaponGiver
+{
+	TBMPWeaponGiver.PickupCounter "FleshrendPickupCounter"
+	Inventory.PickupMessage "Obtained a pair of really damn stylish ''Fleshrend'' sawed-offs! Peeling off the skins - multiple enemies at a time! (3)"
+	DropItem "Fleshrend"
+	States
+	{
+	Spawn:
+	RND2 X -1
+	Stop
+	}
+}
+
+// Super Shotgun
+ACTOR ChromeJustice_Spawner : RandomSpawner
+{
+	DropItem "ChromeJustice"
+}
+
+ACTOR Eliminator_Spawner : RandomSpawner
+{
+	DropItem "EliminatorPickup"
+}
+
+ACTOR SSG_Spawner : RandomSpawner
+{
+	DropItem "ChromeJustice"
+	DropItem "EliminatorPickup"
+}
+
+ACTOR SSG_SpawnerDummy : RandomSpawner replaces SuperShotgun  //So the things properly recognizes spawn in multi weapons dmflag.
+{
+	Dropitem "SSG_SpawnerMain"
+}
+
+
+//Chaingun
+ACTOR Leadspitter_SingleSpawner : RandomSpawner
+{
+	DropItem "Leadspitter"
+}
+
+ACTOR Leadspitter_DualSpawner : RandomSpawner
+{
+	DropItem "Leadspitter_Dual"
+}
+
+ACTOR Leadspitter_Dual : TBMPWeaponGiver
+{
+	TBMPWeaponGiver.PickupCounter "LeadspitPickupCounter"
+	Inventory.PickupMessage "Grabbed a pair of SC-P30 ''Leadspitter'' uzis! Let there be firefight, till they all fall to the ground! (4)"
+	DropItem "Leadspitter"
+	States
+	{
+	Spawn:
+	UZI2 X -1
+	Stop
+	}
+}
+
+ACTOR FMG_Spawner : RandomSpawner
+{
+	DropItem "FMG"
+}
+
+ACTOR Chaingun_SpawnerDummy : RandomSpawner
+{
+	Dropitem "Chaingun_SpawnerMain"
+}
+
+//Rocket launcher
+ACTOR RocketLauncher_Spawner : RandomSpawner
+{
+	Dropitem "Patriarch"
+	DropItem "Bitchmaker"
+}
+
+ACTOR Bitchmaker_Spawner : RandomSpawner
+{
+	Dropitem "Bitchmaker"
+}
+
+ACTOR Patriarch_Spawner : RandomSpawner
+{
+	Dropitem "Patriarch"
+}
+
+ACTOR RocketLauncher_SpawnerDummy : RandomSpawner replaces RocketLauncher
+{
+	Dropitem "RocketLauncher_SpawnerMain"
+}
+
+//BFG 9000
+ACTOR BFG_Spawner : RandomSpawner
+{
+	DropItem "Nutcracker"
+	DropItem "DoubleDeuce"
+	DropItem "Conqueror"
+}
+
+ACTOR Nutcracker_Spawner : RandomSpawner
+{
+	DropItem "Nutcracker"
+}
+
+ACTOR DoubleDeuce_Spawner : RandomSpawner
+{
+	DropItem "DoubleDeuce"
+}
+
+ACTOR Conqueror_Spawner : RandomSpawner
+{
+	DropItem "Conqueror"
+}
+
+ACTOR BFG_SpawnerDummy : RandomSpawner replaces BFG9000 
+{
+	Dropitem "BFG_SpawnerMain"
+}
+
+//// So whatever specials were attached to the weapon itself, will be executed when you run over the weapons with all weapons being spawned in.
+ACTOR SSG_SpecialToken : Inventory
+{
+	Inventory.MaxAmount 0
+	Inventory.PickupMessage ""
+	Inventory.PickupSound ""
+	Inventory.PickupFlash "None"
+	+INVENTORY.NOSCREENFLASH
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+}
+
+ACTOR Chaingun_SpecialToken : SSG_SpecialToken {}
+ACTOR RocketLauncher_SpecialToken : SSG_SpecialToken {}
+ACTOR BFG_SpecialToken : SSG_SpecialToken {}

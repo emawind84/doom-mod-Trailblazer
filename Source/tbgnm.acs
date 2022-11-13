@@ -1,0 +1,90 @@
+// Game-specific library. Code borrowed from a few good places and modified for Trailblazer. Also handles modes for dual-weird guns.
+// By Zhs2.
+
+#library "ZDoomYUNoGamesDirYet"
+#include "zcommon.acs"
+
+//The following politely borrowed from Xaser's Necrodoom and modified.
+//Thanks for game-specific stuff, ZDoom! Now can we have more?
+
+//2016-08-28:
+//Commented out the spawnforced hax, as filters folders handle this instead these days.
+
+//2017-09-27:
+//DISREGARD THAT I SUCK COCKS~ I forgot about the gun spawners and such,
+//so this dinner is back on the course again.
+
+script "CheckGame" ENTER // Runs for every player
+{
+	// With filters, this is no longer needed, but historic, I guess.
+	int testTID = UniqueTID();
+	SpawnForced("MapSpot",GetActorX(0),GetActorY(0),GetActorZ(0),testTID,0);
+	Thing_SpawnNofog(testTID,255,0,testTID);	
+	if(ThingCountName("DoomCheck",0))
+	{
+		GiveInventory("DoomCounter",1);
+	}
+	if(ThingCountName("HereticCheck",0))
+	{
+		GiveInventory("HereticCounter",1);
+	}
+	if(ThingCountName("HexenCheck",0))
+	{
+		GiveInventory("HexenCounter",1);
+	}
+	/*if(ThingCountName("StrifeCheck",0))
+	{
+		GiveInventory("StrifeCounter",1);
+	}*/ // this game isn't about blazing murder
+	/*if(ThingCountName("ChexCheck",0))
+	{
+		GiveInventory("ChexCounter",1);
+	} // meh*/
+	Thing_Remove(testTID);
+	
+	if(GetCvar("TB_NoCrafting")) {
+		TakeInventory("TinkerItem",1);
+		TakeInventory("AmmoCrafterItem",1);
+	} else {
+		GiveInventory("TinkerItem",1);
+		GiveInventory("AmmoCrafterItem",1);
+	}
+	
+	// Multiplayer-sane dual-weirdos.
+	if((GameType() && (CheckInventory("HereticCounter") || CheckInventory("HexenCounter"))) || (GameType()==2))
+	{
+		GiveInventory("FleshrendPickupCounter", 2);
+		GiveInventory("LeadspitPickupCounter", 2);
+	}
+	// The weapon remover should be run AFTER the token is given.
+	// If the game steals the wrong Sidekick, that's bad.
+	ACS_NamedExecuteAlways("WR-40", 0, 0, 0, 0);
+}
+
+script "CheckMode" (int nodoomcheck) // This is an easy one, just have to add a script for it
+{
+	int gamemode = GameType();
+	if(!nodoomcheck) // This is default behavior for dual pickup drops. Specify it to only check gamemode
+	{
+		SetActivator(0, AAPTR_PLAYER1);
+		if(CheckInventory("DoomCounter") && (GameType()<2))
+		{
+			gamemode = 0;
+		}
+	}
+	SetResultValue(gamemode);
+}
+
+script "WR-40" (void)
+{
+	if(CheckInventory("HexenCounter"))
+	{
+		TakeInventory("Jetpack", 100); // Other game jetpacks
+	}
+	else
+	{
+		TakeInventory("Jetpack2", 100); // Hexen jetpack
+	}
+	delay(1);
+	restart;
+}

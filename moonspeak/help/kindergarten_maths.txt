@@ -1,0 +1,38 @@
+/*	KeksDose / MemeDose (kd):
+	Some interpolation functions. */
+
+class tb_Interpol {
+	// Smooth curve connecting (0, 0) to (1, 1).
+	static double trerp_unit (double t) {
+		// return sin(-90.0f + 2 * t * 90.0f);
+		return 0.5f * (1.0f + sin(90.0f * (2 * clamp(t, 0, 1) - 1)) );
+	}
+	
+	// Same, but starts halfway through, so it only slows down.
+	static double trerpfast_unit (double t) {
+		return sin(90 * t);
+	}
+	
+	// This ignores alpha.
+	static Color ColorLerpRgb (double t, Color x1, Color x2) {
+		return Color(
+			x2.a,
+			int(x1.r + t * (x2.r - x1.r)),
+			int(x1.g + t * (x2.g - x1.g)),
+			int(x1.b + t * (x2.b - x1.b)) );
+	}
+	
+	// This doesn't.
+	static Color ColorLerpArgb (double t, Color x1, Color x2) {
+		return Color(
+			int(x1.a + t * (x2.a - x1.a)),
+			int(x1.r + t * (x2.r - x1.r)),
+			int(x1.g + t * (x2.g - x1.g)),
+			int(x1.b + t * (x2.b - x1.b)) );
+	}
+	
+	// Draw a line from (x1, y1) to (x2, y2)
+	static double Line (double x, double x1, double y1, double x2, double y2) {
+		return y1 + (x - x1) / (x2 - x1) * (y2 - y1);
+	}
+}

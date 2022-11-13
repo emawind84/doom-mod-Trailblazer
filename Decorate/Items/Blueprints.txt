@@ -1,0 +1,1378 @@
+Actor BlueprintUpgrade : Inventory
+{
+	Inventory.MaxAmount 1
+	+INVENTORY.UNDROPPABLE
+}
+
+Actor JusticeStriploader : BlueprintUpgrade {}
+Actor KineticFist : BlueprintUpgrade {}
+Actor BlazingBooster : BlueprintUpgrade {}
+Actor RiftbombActive : BlueprintUpgrade {}
+Actor NutForceOne : BlueprintUpgrade {}
+Actor UraniumShot : BlueprintUpgrade {}
+Actor LuckyStrike : BlueprintUpgrade {}
+Actor KeepShooting : BlueprintUpgrade {}
+Actor HomingGrenades : BlueprintUpgrade {}
+Actor ThrottleInstaspin : BlueprintUpgrade {}
+Actor TricorneShot : BlueprintUpgrade {}
+Actor MasterExploder : BlueprintUpgrade {}
+Actor AlchemistsPotency : BlueprintUpgrade {}
+Actor AlchemistsDream : BlueprintUpgrade {}
+Actor SpontaneousFreedom : BlueprintUpgrade {} //Aka Celebration Beater.
+Actor HeavyMachinegun : BlueprintUpgrade {}
+Actor ColtBurstshot : BlueprintUpgrade {}
+
+ACTOR BlueprintSpawner : RandomSpawner
+{
+	DropItem "RiftbombsBlueprintBringer"
+	DropItem "WhiskeyBlueprintBringer"
+	DropItem "NutForceOneBlueprintBringer"
+	DropItem "StriploaderBlueprintBringer"
+	DropItem "KineticFistBlueprintBringer"
+	DropItem "BlazingBlueprintBringer"
+	DropItem "UraniumShotBlueprintBringer"
+	DropItem "LuckyStrikeBlueprintBringer"
+	DropItem "KeepShootingBlueprintBringer"
+	DropItem "HomingGrenadesBlueprintBringer"
+	DropItem "ThrottleInstaspinBlueprintBringer"
+	DropItem "TricorneShotBlueprintBringer"
+	DropItem "MasterExploderBlueprintBringer"
+	DropItem "AlchemistsPotencyBlueprintBringer"
+	DropItem "AlchemistsDreamBlueprintBringer"
+	DropItem "ArmoredMeasuresBlueprintBringer"
+	DropItem "SpontaneousFreedomBlueprintBringer"
+	DropItem "HeavyMachinegunBlueprintBringer"
+	DropItem "ColtBurstshotBlueprintBringer"
+	//DropItem "PaintrainBlueprintBringer"
+}
+
+//Basis
+ACTOR BlueprintItem : CustomInventory
+{
+   Inventory.Amount 1
+   Inventory.MaxAmount 1
+   Inventory.InterHubAmount 1
+   Inventory.PickupSound "Blueprint/Pickup"
+   Inventory.UseSound ""
+   Inventory.PickupMessage "You've got the Blueprint Computer!"
+   Tag "Blueprint Computer"
+   Scale 0.6
+   +INVBAR
+   +FORCEYBILLBOARD
+   //+INVENTORY.UNDROPPABLE
+   States
+   {
+   Spawn:
+		BLPC Z -1
+      Stop
+	NoJunk:
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_Print("$BLUEPRINTNOJUNK",2)
+		Fail
+	Success:
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_Print("$BLUEPRINTSUCCESS",2)
+		Fail
+	AlreadyIn:
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_Print("$BLUEPRINTALREADYIN",2)
+		Fail
+	Full:
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_Print("$BLUEPRINTITEMFULL",2)
+		Fail
+	}
+}
+
+actor BlueprintTimerGiver : PowerupGiver
+{
+  Inventory.Amount 0
+  powerup.type "BlueprintTimer"
+  powerup.duration -3
+  +INVENTORY.AUTOACTIVATE
+  +INVENTORY.ALWAYSPICKUP
+  states
+  {
+  Spawn:
+		TNT1 A 1
+		stop
+  }
+}
+
+actor PowerBlueprintTimer : PowerDamage
+{	
+	DamageFactor "Normal", 1.0
+}
+
+ACTOR BlueprintBringer : CustomInventory
+{
+	Inventory.MaxAmount 0
+	Inventory.PickupSound "Blueprint/Pickup"
+	+INVENTORY.AUTOACTIVATE
+	+FORCEYBILLBOARD
+	+COUNTITEM
+	Scale 0.6
+	States
+	{
+	Spawn:
+		BLPC Z -1
+		Stop
+	}
+}
+
+//Rift bombs
+ACTOR RiftbombsBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTRIFTBOMBSBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC A -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("PipeRiftToggler",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("RiftbombsBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("RiftbombsBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",30)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR RiftbombsBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTRIFTBOMBSBLUEPRINT"
+	Inventory.Icon "ARTIRBBC"
+	Tag "Riftbombs Blueprint"
+	States
+	{
+	Spawn:
+		BLPC A -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTRIFTBOMBS",3)
+		Fail
+	Continue:
+		//The junk check is added afterwards so you know how much it costs first.
+		TNT1 A 0 A_JumpIfInventory("JunkItem",60,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("PipeRiftToggler",0,"Full")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",60)
+		TNT1 A 0 A_GiveInventory("PipeRiftToggler",1)
+		TNT1 A 0 A_GiveInventory("RiftbombActive",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTRIFTBOMBSCRAFTED",4)
+		//A check that determines the gametype (coop/sp),
+		//so it can act with the item accordingly.
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Whiskey crafting
+ACTOR WhiskeyBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTWHISKEYBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC B -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("WhiskeyBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("WhiskeyBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",25)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR WhiskeyBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTWHISKEYBLUEPRINT"
+	Inventory.Icon ARTIWHBC
+	Tag "Whiskey Blueprint"
+	States
+	{
+	Spawn:
+		BLPC B -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTWHISKEY",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",50,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("Whiskey",0,"Full")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Whiskey/Pickup",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",50)
+		TNT1 A 0 A_GiveInventory("Whiskey",100)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+		Goto Success
+	Success:
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_Print("$BLUEPRINTWHISKEYCRAFTED",4)
+		Fail
+	}
+}
+
+//Nut Force One
+ACTOR NutForceOneBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTNUTFORCEONEBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC C -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("NutForceOne",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("NutForceOneBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("NutForceOneBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",100)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR NutForceOneBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTNUTFORCEONEBLUEPRINT"
+	Inventory.Icon ARTINCBC
+	Tag "Nut Force One Blueprint"
+	States
+	{
+	Spawn:
+		BLPC C -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTNUTFORCEONE",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",200,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("NutForceOne",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",200)
+		TNT1 A 0 A_GiveInventory("NutForceOne",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTNUTFORCEONECRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Nut Force One
+ACTOR StriploaderBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTSTRIPLOADERBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC D -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("JusticeStriploader",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("StriploaderBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("StriploaderBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",30)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR StriploaderBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTSTRIPLOADERBLUEPRINT"
+	Inventory.Icon ARTISLBC
+	Tag "Justice Striploader Blueprint"
+	States
+	{
+	Spawn:
+		BLPC D -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTSTRIPLOADER",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",60,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("JusticeStriploader",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",60)
+		TNT1 A 0 A_GiveInventory("JusticeStriploader",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTSTRIPLOADERCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Rift bombs
+ACTOR KineticFistBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTKINETICFISTBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC E -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("KineticFist",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("KineticFistBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("KineticFistBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",25)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR KineticFistBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTKINETICFISTBLUEPRINT"
+	Inventory.Icon ARTIKFBC
+	Tag "Kinetic Fist Blueprint"
+	States
+	{
+	Spawn:
+		BLPC E -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTKINETICFIST",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",50,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("KineticFist",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",50)
+		TNT1 A 0 A_GiveInventory("KineticFist",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTKINETICFISTCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Blazing Booster
+ACTOR BlazingBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTBLAZINGBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC F -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("BlazingBooster",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("BlazingBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("BlazingBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",75)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR BlazingBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTBLAZINGBLUEPRINT"
+	Inventory.Icon ARTIBBBC
+	Tag "Blazing Booster Blueprint"
+	States
+	{
+	Spawn:
+		BLPC F -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTBLAZING",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",150,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("BlazingBooster",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",150)
+		TNT1 A 0 A_GiveInventory("BlazingBooster",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTBLAZINGCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Uranium Shot
+ACTOR UraniumShotBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTURANIUMSHOTBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC G -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("UraniumShot",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("UraniumShotBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("UraniumShotBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",25)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR UraniumShotBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTURANIUMSHOTBLUEPRINT"
+	Inventory.Icon ARTIUSBC
+	Tag "Uranium Shot Blueprint"
+	States
+	{
+	Spawn:
+		BLPC G -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTURANIUMSHOT",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",50,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("UraniumShot",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",50)
+		TNT1 A 0 A_GiveInventory("UraniumShot",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTURANIUMSHOTCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Lucky Strike
+ACTOR LuckyStrikeBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTLUCKYSTRIKEBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC H -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("LuckyStrike",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("LuckyStrikeBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("LuckyStrikeBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",35)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR  LuckyStrikeBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTLUCKYSTRIKEBLUEPRINT"
+	Inventory.Icon ARTILSBC
+	Tag "Lucky Strike Blueprint"
+	States
+	{
+	Spawn:
+		BLPC H -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTLUCKYSTRIKE",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",80,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("LuckyStrike",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",80)
+		TNT1 A 0 A_GiveInventory("LuckyStrike",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTLUCKYSTRIKECRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Keep Shooting
+ACTOR KeepShootingBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTKEEPSHOOTINGBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC I -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("KeepShooting",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("KeepShootingBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("KeepShootingBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",35)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR  KeepShootingBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTKEEPSHOOTINGBLUEPRINT"
+	Inventory.Icon ARTIKSBC
+	Tag "Keep Shooting Blueprint"
+	States
+	{
+	Spawn:
+		BLPC I -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTKEEPSHOOTING",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",70,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("KeepShooting",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",70)
+		TNT1 A 0 A_GiveInventory("KeepShooting",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTKEEPSHOOTINGCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Keep Shooting
+ACTOR HomingGrenadesBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTHOMINGGRENADESBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC J -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("PatriarchToggler",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("HomingGrenadesBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("HomingGrenadesBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",35)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR  HomingGrenadesBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTHOMINGGRENADESBLUEPRINT"
+	Inventory.Icon ARTIHGBC
+	Tag "Homing Grenades Blueprint"
+	States
+	{
+	Spawn:
+		BLPC J -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTHOMINGGRENADES",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",60,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("PatriarchToggler",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",60)
+		TNT1 A 0 A_GiveInventory("HomingGrenades",1)
+		TNT1 A 0 A_GiveInventory("PatriarchToggler",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTHOMINGGRENADESCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Throttle Instaspin
+ACTOR ThrottleInstaspinBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTINSTASPINBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC K -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("ThrottleInstaspin",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("ThrottleInstaspinBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("ThrottleInstaspinBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",20)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR ThrottleInstaspinBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTINSTASPINBLUEPRINT"
+	Inventory.Icon ARTIISBC
+	Tag "Skullthrottle Instaspin Blueprint"
+	States
+	{
+	Spawn:
+		BLPC K -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTINSTASPIN",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",40,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("ThrottleInstaspin",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",40)
+		TNT1 A 0 A_GiveInventory("ThrottleInstaspin",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTINSTASPINCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Tricorne Shot
+ACTOR TricorneShotBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTTRICORNEBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC L -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("TricorneShot",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("TricorneShotBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("TricorneShotBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",45)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR TricorneShotBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTTRICORNEBLUEPRINT"
+	Inventory.Icon ARTITSBC
+	Tag "Tricorne Shot Blueprint"
+	States
+	{
+	Spawn:
+		BLPC L -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTTRICORNE",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",90,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("TricorneShot",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",90)
+		TNT1 A 0 A_GiveInventory("TricorneShot",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTTRICORNECRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Master Exploder
+ACTOR MasterExploderBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTEXPLODERBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC M -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("MasterExploder",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("MasterExploderBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("MasterExploderBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",60)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR MasterExploderBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTEXPLODERBLUEPRINT"
+	Inventory.Icon ARTIMEBC
+	Tag "Master Exploder Blueprint"
+	States
+	{
+	Spawn:
+		BLPC M -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTEXPLODER",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",120,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("MasterExploder",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",120)
+		TNT1 A 0 A_GiveInventory("MasterExploder",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTEXPLODERCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Alchemist's Potency
+ACTOR AlchemistsPotencyBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTALCHEMISTBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC N -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("AlchemistsPotency",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("AlchemistsPotencyBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("AlchemistsPotencyBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",25)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR AlchemistsPotencyBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTALCHEMISTBLUEPRINT"
+	Inventory.Icon ARTIAPBC
+	Tag "Alchemist's Potency Blueprint"
+	States
+	{
+	Spawn:
+		BLPC N -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTALCHEMIST",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",50,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("AlchemistsPotency",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",50)
+		TNT1 A 0 A_GiveInventory("AlchemistsPotency",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTALCHEMISTCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Alchemist's Dream
+ACTOR AlchemistsDreamBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTALCHDREAMBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC O -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("AlchemistsDream",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("AlchemistsDreamBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("AlchemistsDreamBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",100)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR AlchemistsDreamBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTALCHDREAMBLUEPRINT"
+	Inventory.Icon ARTIADBC
+	Tag "Alchemist's Dream Blueprint"
+	States
+	{
+	Spawn:
+		BLPC O -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTALCHDREAM",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",200,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("AlchemistsDream",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",200)
+		TNT1 A 0 A_GiveInventory("AlchemistsDream",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTALCHDREAMCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Armored Measures
+ACTOR ArmoredMeasuresBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTARMEASURESBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC P -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("ArmoredMeasuresBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("ArmoredMeasuresBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",25)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR ArmoredMeasuresBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTARMEASURESBLUEPRINT"
+	Inventory.Icon ARTIAMBC
+	Tag "Armored Measures Blueprint"
+	States
+	{
+	Spawn:
+		BLPC P -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTARMEASURES",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",50,1)
+		Goto NoJunk
+		/*TNT1 A 0 A_JumpIfArmorType("SecurityVest", "Full", 400)
+		TNT1 A 0 A_JumpIfArmorType("BodyArmor", "Full", 400)
+		TNT1 A 0 A_JumpIfArmorType("TacticalSet", "Full", 400)*/
+		TNT1 A 0 A_TakeInventory("BasicArmor",0)
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Armor/Pickup",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",50)
+		TNT1 A 0 A_GiveInventory("TacticalSet")
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+		Goto Success
+	Success:
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_Print("$BLUEPRINTARMEASURESCRAFTED",4)
+		Fail
+	}
+}
+
+//Spontaneous Freedom
+ACTOR SpontaneousFreedomBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTSPONTFREEBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC Q -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("SpontaneousFreedom",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("SpontaneousFreedomBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("SpontaneousFreedomBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",30)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR SpontaneousFreedomBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTSPONTFREEBLUEPRINT"
+	Inventory.Icon ARTISFBC
+	Tag "Spontaneous Freedom Blueprint"
+	States
+	{
+	Spawn:
+		BLPC Q -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTSPONTFREE",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",60,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("SpontaneousFreedom",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",60)
+		TNT1 A 0 A_GiveInventory("SpontaneousFreedom",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTSPONTFREECRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Flares
+ACTOR FlaresBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTFLARESBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC R -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("FlaresBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("FlaresBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",10)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR FlaresBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTFLARESBLUEPRINT"
+	Inventory.Icon ARTIFLBC
+	Tag "Flares Blueprint"
+	States
+	{
+	Spawn:
+		BLPC R -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTFLARES",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",20,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("Flarebox",25,"Full")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",20)
+		TNT1 A 0 A_GiveInventory("Flarebox",5)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTFLARESCRAFTED",4)
+		Fail
+	}
+}
+
+//HEAVY MACHINEGUN!
+ACTOR HeavyMachinegunBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTHMGBLUEPRINT"
+	Inventory.PickupSound "HeavyMachinegun/Pickup"
+	States
+	{
+	Spawn:
+		BLPC S -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("HeavyMachinegun",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("HeavyMachinegunBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("HeavyMachinegunBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",30)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR HeavyMachinegunBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTHMGBLUEPRINT"
+	Inventory.PickupSound "HeavyMachinegun/Pickup"
+	Inventory.Icon ARTIHMG
+	Tag "Heavy Machinegun Blueprint"
+	States
+	{
+	Spawn:
+		BLPC S -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTHMG",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",60,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("HeavyMachinegun",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("HeavyMachinegun/Okay",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",60)
+		TNT1 A 0 ACS_NamedExecuteAlways("SetFMGUpgradeClip")
+		TNT1 A 0 A_GiveInventory("HeavyMachinegun",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTHMGCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Colt Burstshot
+ACTOR ColtBurstshotBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTBURSTSHOTBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC T -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("ColtBurstshot",1,"Junk")
+		TNT1 A 0 A_JumpIfInventory("ColtBurstshotBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("ColtBurstshotBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",15)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR ColtBurstshotBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTBURSTSHOTBLUEPRINT"
+	Inventory.Icon ARTIBRST
+	Tag "Colt Burstshot Blueprint"
+	States
+	{
+	Spawn:
+		BLPC T -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTBURSTSHOT",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",30,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("ColtBurstshot",0,"AlreadyIn")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",30)
+		TNT1 A 0 A_GiveInventory("ColtBurstshot",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTBURSTSHOTCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Paintrain crafting
+ACTOR PaintrainBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTPAINTRAINBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC U -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIf(CountInv("PaintrainBlueprint") || CountInv("Paintrain"),"Junk")
+		TNT1 A 0 A_GiveInventory("PaintrainBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",50)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR PaintrainBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTPAINTRAINBLUEPRINT"
+	Inventory.Icon "ARTIPAIN"
+	Tag "Paintrain Blueprint"
+	States
+	{
+	Spawn:
+		BLPC U -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTPAINTRAIN",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",100,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("Paintrain",1,"Full")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("misc/w_pkup",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",100)
+		TNT1 A 0 A_GiveInventory("Paintrain",1)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+		Goto Success
+	Success:
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_Print("$BLUEPRINTPAINTRAINCRAFTED",4)
+		TNT1 A 0 A_JumpIf(CallACS("CheckMode",1) >= 1, 1)
+		Stop
+		TNT1 A 0
+		Fail
+	}
+}
+
+//Hazmatsuit
+ACTOR HazmatsuitBlueprintBringer : BlueprintBringer
+{
+	Inventory.PickupMessage "$GOTHAZMATBLUEPRINT"
+	States
+	{
+	Spawn:
+		BLPC V -1
+		Loop
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("HazmatsuitBlueprint",1,"Junk")
+		TNT1 A 0 A_GiveInventory("HazmatsuitBlueprint",1)
+		Stop
+	Junk:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",0,"Nope")
+		TNT1 A 0 A_GiveInventory("JunkItem",10)
+		Stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR HazmatsuitBlueprint : BlueprintItem
+{
+	Inventory.PickupMessage "$GOTHAZMATBLUEPRINT"
+	Inventory.Icon ARTIRADS
+	Tag "Hazmatsuit Blueprint"
+	States
+	{
+	Spawn:
+		BLPC V -1
+		Stop
+	Use:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_JumpIfInventory("PowerBlueprintTimer",1,"Continue")
+		TNT1 A 0 A_GiveInventory("BlueprintTimerGiver")
+		TNT1 A 0 A_Print("$BLUEPRINTHAZMAT",3)
+		Fail
+	Continue:
+		TNT1 A 0 A_JumpIfInventory("JunkItem",20,1)
+		Goto NoJunk
+		TNT1 A 0 A_JumpIfInventory("Hazmatsuit",100,"Full")
+		TNT1 A 0 A_TakeInventory("PowerCrafterTimer")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_TakeInventory("JunkItem",20)
+		TNT1 A 0 A_GiveInventory("Hazmatsuit",100)
+		TNT1 A 0 A_SetBlend("Green",0.1,25)
+		TNT1 A 0 A_Print("$BLUEPRINTHAZMATCRAFTED",4)
+		Fail
+	}
+}

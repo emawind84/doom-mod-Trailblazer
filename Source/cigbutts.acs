@@ -1,0 +1,75 @@
+// Blazer like cigs. Blazer need more cigs. Blazer not have enough nicotine! Blazer smash!!
+// By Zhs2.
+
+//Pillow: Generally, a script which handles the fact you spit a tab every once in a while.
+//Or, get a royal rush while Blazingsphere is active.
+
+#library "Smokingisntgoodforyouunlessyouarebeingconstantlypurifiedbyademonthatseeksthrillsandfartsfire"
+#include "zcommon.acs"
+// PILLOW: No, that's totally not a spoiler of future plans, eh?
+
+// On average, it takes a smoker five minutes to get through a cigarette. Blazer is an addict.
+#define AVERAGE_SMOKE 5*35*60 // 300 seconds of nicotine rush
+#define TIME_REDUCTION 3*35*60 // Shave off 3 minutes if we have the dummy - unused
+#define BUFFER_LENGTH 35*30 // The time before the spawn chance routine even runs
+
+script "Another Butt Falls" Enter
+{
+	int dropchance; // Our cig-dropping chance
+	int dropbuffer; //= 2100 // After the last cig has been dropped, take a minute or so before the chance to spawn a new one increases
+	int blazerhealth = GetActorProperty(0, APROP_HEALTH); // A variable because we do not want to exceed a certain number
+	//int cigdropfreq = CheckInventory("PowerCigButtDummy"); // Increase the frequency based on this dummy
+	
+	if(blazerhealth > 100) {blazerhealth = 100;} // Lest we divide by zero
+	
+	if(CheckInventory("PowerBlazing")) // Cig spam! And lead spam. Just spawn one every so often.
+	{
+		if(!(Timer()%70))
+		{
+			GiveInventory("CigButtSpawner",1);
+		}
+	}
+	else
+	{
+		if((dropbuffer >= BUFFER_LENGTH)) // || cigdropfreq)
+		{
+		
+			// The chance to drop a butt increases to maximum every AVERAGE_SMOKE tics
+			// which becomes increasingly more frequent with missing health (bleed equals speed, baby)
+			// If we have a certain powerup, cut the time check
+			// This leads to one very avid smoker, I'd have to say.
+			if(!(dropchance%15)) // Check only once every fifteen tics.
+			{
+				if(random(0, (AVERAGE_SMOKE/(101-blazerhealth))) < dropchance)
+				{
+					GiveInventory("CigButtSpawner",1);
+					dropchance = 0;
+					dropbuffer = 0;
+				}
+			}
+			dropchance++;
+			// This starts as zero, so as not to actually have any chance to drop a cig on the very first tic.
+			// I'd be impressed if it did regardless.
+		}
+		else { dropbuffer++; }
+	}
+	
+	if(CheckInventory("SmokingDummy"))
+	{
+		Terminate;
+	}
+	
+	Delay(1);
+	Restart;
+}
+
+script "Your Butts are Dead" Death // Dead people don't smoke!
+{
+	GiveInventory("SmokingDummy", 1);
+}
+
+script "Multiplayer Makes it Okay" Respawn // Run the script again.
+{
+	TakeInventory("SmokingDummy", 1);
+	ACS_NamedExecuteAlways("Another Butt Falls",0,0,0,0);
+}

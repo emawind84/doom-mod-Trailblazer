@@ -1,0 +1,197 @@
+//Torch base
+ACTOR TorchJunkItem : CustomInventory
+{
+	Inventory.PickupMessage "Dismantled a torch. (+4 junk.)"
+	Inventory.PickupSound "Dismantle/Torch"
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Spawn:
+		TNT1 A -1
+		Stop
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Green",0.2,15);
+			A_GiveInventory("JunkItem",4);
+		}
+		Stop
+	}
+}
+
+//Red torches
+ACTOR TB_RedTorch : TB_SwitchingDecoration replaces RedTorch
+{
+	Radius 16
+	Height 68
+	ProjectilePassHeight -16
+	TB_SwitchingDecoration.ItemToDistribute "RedTorchJunk"
+	+SOLID
+	States
+	{
+	Spawn:
+		TRED ABCD 4 Bright
+		Loop
+	Active:
+		TNT1 A 0 { TB_ItemDistributor(); }
+		Stop
+	}
+}
+
+ACTOR RedTorchJunk : TorchJunkItem
+{
+	States
+	{
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Red",0.2,15);
+			A_GiveInventory("JunkItem",4);
+		}
+		Stop
+	}
+}
+
+ACTOR TB_ShortRedTorch : TB_SwitchingDecoration replaces ShortRedTorch
+{
+	Radius 16
+	Height 37
+	ProjectilePassHeight -16
+	TB_SwitchingDecoration.ItemToDistribute "ShortRedTorchJunk"
+	+SOLID
+	States
+	{
+	Spawn:
+		SMRT ABCD 4 Bright
+		Loop
+	Active:
+		TNT1 A 0 { TB_ItemDistributor(); }
+		Stop
+	}
+}
+
+ACTOR ShortRedTorchJunk : TorchJunkItem
+{
+	Inventory.PickupMessage "Dismantled a short torch. (+2 junk.)"
+	States
+	{
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Red",0.2,15);
+			A_GiveInventory("JunkItem",2);
+		}
+		Stop
+	}
+}
+
+//Blue torches
+ACTOR TB_BlueTorch : TB_RedTorch replaces BlueTorch
+{
+	TB_SwitchingDecoration.ItemToDistribute "BlueTorchJunk"
+	States
+	{
+	Spawn:
+		TBLU ABCD 4 Bright
+		Loop
+	Active:
+		TNT1 A 0 { TB_ItemDistributor(); }
+		Stop
+	}
+}
+
+ACTOR BlueTorchJunk : TorchJunkItem
+{
+	States
+	{
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Blue",0.2,15);
+			A_GiveInventory("JunkItem",4);
+		}
+		Stop
+	}
+}
+
+ACTOR TB_ShortBlueTorch : TB_ShortRedTorch replaces ShortBlueTorch
+{
+	TB_SwitchingDecoration.ItemToDistribute "ShortBlueTorchJunk"
+	+SOLID
+	States
+	{
+	Spawn:
+		SMBT ABCD 4 Bright
+		Loop
+	Active:
+		TNT1 A 0 { TB_ItemDistributor(); }
+		Stop
+	}
+}
+
+ACTOR ShortBlueTorchJunk : ShortRedTorchJunk
+{
+	States
+	{
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Blue",0.2,15);
+			A_GiveInventory("JunkItem",2);
+		}
+		Stop
+	}
+}
+
+//Green torches
+ACTOR TB_GreenTorch : TB_RedTorch replaces GreenTorch
+{
+	TB_SwitchingDecoration.ItemToDistribute "GreenTorchJunk"
+	States
+	{
+	Spawn:
+		TGRN ABCD 4 Bright
+		Loop
+	Active:
+		TNT1 A 0 { TB_ItemDistributor(); }
+		Stop
+	}
+}
+
+ACTOR GreenTorchJunk : TorchJunkItem
+{
+	States
+	{
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Green",0.2,15);
+			A_GiveInventory("JunkItem",4);
+		}
+		Stop
+	}
+}
+
+ACTOR TB_ShortGreenTorch : TB_ShortRedTorch replaces ShortGreenTorch
+{
+	TB_SwitchingDecoration.ItemToDistribute "ShortGreenTorchJunk"
+	+SOLID
+	States
+	{
+	Spawn:
+		SMGT ABCD 4 Bright
+		Loop
+	Active:
+		TNT1 A 0 { TB_ItemDistributor(); }
+		Stop
+	}
+}
+
+ACTOR ShortGreenTorchJunk : ShortRedTorchJunk
+{
+	States
+	{
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Green",0.2,15);
+			A_GiveInventory("JunkItem",2);
+		}
+		Stop
+	}
+}

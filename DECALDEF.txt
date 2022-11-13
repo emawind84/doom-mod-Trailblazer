@@ -1,0 +1,240 @@
+//General puff, donated by WildWeasel
+decal BulletChip1Lower
+{
+    pic SCORCH1
+	shade "00 00 00"
+    x-scale 0.04
+    y-scale 0.04
+	randomflipx
+	randomflipy
+}
+ 
+decal BulletChip
+{
+	pic PUFFA0
+	add 1.0
+	fullbright
+	animator GoAway
+	x-scale 0.225
+	y-scale 0.225
+	lowerdecal BulletChip1Lower
+}
+
+decal BulletChip1Lower2 //Minigun chips
+{
+    pic SCORCH1
+    shade "00 00 00"
+    x-scale 0.06
+    y-scale 0.06
+	randomflipx
+	randomflipy
+}
+ 
+decal BulletChip2
+{
+	pic PUFFA0
+	add 1.0
+	fullbright
+	animator GoAway
+	x-scale 0.325
+	y-scale 0.325
+	lowerdecal BulletChip1Lower2
+}
+
+decal BulletChip1Lower3 //Browning chips
+{
+    pic SCORCH1
+    shade "00 00 00"
+    x-scale 0.08
+    y-scale 0.08
+	randomflipx
+	randomflipy
+}
+ 
+decal BulletChip3
+{
+	pic PUFFA0
+	add 1.0
+	fullbright
+	animator GoAway
+	x-scale 0.4
+	y-scale 0.4
+	lowerdecal BulletChip1Lower3
+}
+
+//Macheterang
+
+decal SlashRight1
+{
+	pic SLASH1
+	translucent 0.85
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decal SlashRight2
+{
+	pic SLASH2
+	translucent 0.85
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decal SlashRight3
+{
+	pic SLASH3
+	translucent 0.85
+	flipx
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decalgroup SlashRight
+{
+	SlashRight1	1
+	SlashRight2	1
+	SlashRight3	1
+}
+
+decal SlashRight1
+{
+	pic SLASH1
+	translucent 0.85
+	flipx
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decal SlashRight2
+{
+	pic SLASH2
+	translucent 0.85
+	flipx
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decal SlashRight3
+{
+	pic SLASH3
+	translucent 0.85
+	flipx
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decalgroup SlashRight
+{
+	SlashRight1	1
+	SlashRight2	1
+	SlashRight3	1
+}
+
+decal SlashLeft1
+{
+	pic SLASH1
+	translucent 0.85
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decal SlashLeft2
+{
+	pic SLASH2
+	translucent 0.85
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decal SlashLeft3
+{
+	pic SLASH3
+	translucent 0.85
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+}
+
+decalgroup SlashLeft
+{
+	SlashLeft1	1
+	SlashLeft2	1
+	SlashLeft3	1
+}
+
+//Chome Justice
+
+decal ChromeScorchLower
+{
+	pic FRNGSCRH
+	shade "00 00 00"
+	x-scale 0.1
+	y-scale 0.1
+	randomflipx
+	randomflipy
+}
+
+decal ChromeScorch
+{
+	pic FRNGA0 //FRNGSCRH
+	//shade "56 00 00"
+	fullbright
+	x-scale 0.1
+	y-scale 0.1
+	animator GoAway
+	add 1
+	lowerdecal ChromeScorchLower
+}
+
+//PainTrain
+decal PaintrainScorchLower
+{
+    pic SGLWA0
+	shade "00 00 00"
+    x-scale 0.1
+    y-scale 0.1
+	randomflipx
+	randomflipy
+}
+ 
+decal PaintrainScorch
+{
+	pic SGLWA0
+	add 1.0
+	fullbright
+	animator GoAway
+	x-scale 0.07
+	y-scale 0.07
+	randomflipx
+	randomflipy
+	lowerdecal PaintrainScorchLower
+}
+
+//Nutcracker
+decal NutcrackerChip
+{
+	pic NUTHOLE
+	shade "00 00 00"
+	x-scale 0.5
+	y-scale 0.5
+	randomflipx
+	randomflipy
+}
+
+decal NutcrackerMinorChip
+{
+	pic NUTHOLE
+	shade "00 00 00"
+	x-scale 0.25
+	y-scale 0.25
+	randomflipx
+	randomflipy
+}

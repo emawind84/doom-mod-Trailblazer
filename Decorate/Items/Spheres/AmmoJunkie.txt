@@ -1,0 +1,196 @@
+ACTOR AmmoJunkieItem : TBPowerupBase
+{
+	Inventory.PickupMessage "$GOTAMMOJUNKIE"
+	Inventory.PickupSound "AmmoJunkie/Pickup"
+	States
+	{
+	Spawn:
+		TBAJ AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("JunkieFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("AmmoJunkieParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	Pickup:
+		TNT1 A 0 {
+			//Alchemist's Dream storing.
+			if(CountInv("AlchemistsDream") && (CountInv("AmmoJunkiePortable") < 3) && GetPlayerInput(INPUT_BUTTONS) & BT_USE)
+			{
+				A_Print("$AMMOJUNKIESTORED");
+				A_GiveInventory("AmmoJunkiePortable",1);
+				Return State("Null");
+			}
+			//Stuff.
+			A_SetMugshotState("Grin");
+			A_SpawnItemEx("AmmoJunkieEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			A_GiveInventory("AmmoJunkie");
+			
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("AmmoJunkieBoost");
+			}
+			Return State("");
+		}
+		Stop
+	}
+}
+
+ACTOR AmmoJunkie : PowerupGiver
+{
+	Inventory.PickupMessage "$GOTAMMOJUNKIE"
+	Inventory.PickupSound "AmmoJunkie/Pickup"
+	Powerup.Type "AmmoJunkie"
+	Powerup.Color Yellow, 0.05
+	Powerup.Duration -45
+	Renderstyle Add
+	+FLOATBOB
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.ADDITIVETIME
+	Var Int User_Count;
+	States
+	{
+	Spawn:
+		TBAJ AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("JunkieFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("AmmoJunkieParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	}
+}
+
+actor PowerAmmoJunkie : PowerInfiniteAmmo
+{	
+    Inventory.Icon "INFAMMO0"
+}
+
+//Potency upgrade
+ACTOR AmmoJunkieBoost : PowerupGiver
+{
+	Powerup.Duration -15
+	Powerup.Type "AmmoJunkie"
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ADDITIVETIME
+}
+
+//Stored powerup
+ACTOR AmmoJunkiePortable : TBPowerupPortableBase
+{
+	Inventory.PickupMessage "$GOTAMMOJUNKIE"
+	Inventory.Icon ARTITBAJ
+	Inventory.PickupSound "AmmoJunkie/Pickup"
+	Tag "Ammo Junkie"
+	States
+	{
+	Spawn:
+		TBAJ AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("JunkieFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("AmmoJunkieParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	Use:
+		TNT1 A 0 {
+			//Stuff.
+			A_SetMugshotState("Grin");
+			A_SetBlend("Yellow",0.3,70);
+			A_PlaySound("AmmoJunkie/Pickup",3);
+			A_SpawnItemEx("AmmoJunkieEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			A_GiveInventory("AmmoJunkie");
+
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("AmmoJunkieBoost");
+			}
+		}
+		Stop
+	} 
+}
+
+//Eyecandy
+ACTOR JunkieFade : TBFadeBase
+{
+	States
+	{
+	Spawn:
+		TBAJ C 0
+		Goto Super::Fade
+	}
+}
+
+ACTOR AmmoJunkieParticle : TBItemParticle
+{
+	States
+	{
+	Spawn:
+		YPRT A 0
+	SetScale:
+		"####" "#" 0 A_SetScale(0.1)
+	Main:
+		"####" "#" 0 A_JumpIf(ScaleX <= 0,"NULL")
+		"####" "#" 0 A_FadeOut(frandom(0.02,0.04))
+		"####" "#" 0 A_ChangeVelocity(0,0,frandom(-0.1,0.15),CVF_RELATIVE)
+		"####" "#" 1 Bright A_SetScale(ScaleX-frandom(-0.01,0.02))
+		Loop
+	}
+}
+
+Actor AmmoJunkieEffect : TBPowerupEffect
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay
+		{
+			for (A_SetUserVar(User_Counter, 0); User_Counter < 6; A_SetUserVar(User_Counter, User_Counter + 1))
+			{
+				A_SetAngle(frandom(0.0,360.0));
+				A_SpawnItemEx("AmmoJunkiePart",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS);
+			}
+		}
+		TNT1 A 0 A_SetUserVar("User_Counter", 40)
+		Goto Super::Loop2
+	}
+}
+
+Actor AmmoJunkiePart : TBPowerupPart
+{
+	States
+	{
+	Spawn:
+		PSHK D 0
+		Goto Super::Setup
+	}
+}

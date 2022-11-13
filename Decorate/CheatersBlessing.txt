@@ -1,0 +1,69 @@
+ACTOR CheatMeSomeSugarBaby : CustomInventory
+{
+  Inventory.Icon "ARTIJETP"
+  Inventory.PickupMessage "This thing right here is for things to work correctly, in case of cheats."
+  Inventory.MaxAmount 2
+  Inventory.Amount 1
+  Inventory.PickupSound ""
+  Inventory.UseSound ""
+  +INVENTORY.UNDROPPABLE
+  +INVENTORY.AUTOACTIVATE
+  +INVENTORY.ALWAYSPICKUP
+  States
+  {
+  Spawn:
+    JETP A -1
+    Stop
+  Use:
+  Pickup:
+	TNT1 A 0 {
+		ACS_NamedExecuteAlways("SetChromeUpgradeClip"); //Weapon mag stuff.
+		ACS_NamedExecuteAlways("SetUziUpgradeClip");
+		ACS_NamedExecuteAlways("SetPadreUpgradeClip");
+		ACS_NamedExecuteAlways("SetMagnumUpgradeClip");
+		ACS_NamedExecuteAlways("SetFMGUpgradeClip");
+	
+		A_GiveInventory("PipeUpgrade"); //Weapon upgrade stuff.
+		A_GiveInventory("MacheteUpgrade");
+		A_GiveInventory("SideUpgrade");
+		A_GiveInventory("ColtsUpgrade");
+		A_GiveInventory("RendUpgrade");
+		A_GiveInventory("ChromeUpgrade");
+		A_GiveInventory("FMGUpgrade");
+		A_GiveInventory("LeadUpgrade");
+		A_GiveInventory("PattyUpgrade");
+		A_GiveInventory("BitchUpgrade");
+		A_GiveInventory("ThrottleUpgrade");
+		A_GiveInventory("NutterUpgrade");
+		A_GiveInventory("PaintrainUpgrade");
+		A_GiveInventory("ConquerorUpgrade");
+		A_GiveInventory("EliminatorUpgrade");
+		A_GiveInventory("DeuceUpgrade");
+		
+		A_GiveInventory("PipeMode"); //Gun modes.
+		A_GiveInventory("FMGSniperMode");
+		
+		A_GiveInventory("RiftbombActive"); //Blueprints stuff.
+		A_GiveInventory("NutForceOne");
+		A_GiveInventory("JusticeStriploader");
+		A_GiveInventory("KineticFist");
+		//A_GiveInventory("BlazingBooster"); //Because reasons.
+		A_GiveInventory("UraniumShot");
+		A_GiveInventory("LuckyStrike");
+		A_GiveInventory("KeepShooting");
+		A_GiveInventory("HomingGrenades");
+		A_GiveInventory("ThrottleInstaspin");
+		A_GiveInventory("TricorneShot");
+		A_GiveInventory("MasterExploder");
+		A_GiveInventory("AlchemistsPotency");
+		A_GiveInventory("AlchemistsDream");
+		A_GiveInventory("SpontaneousFreedom");
+		A_GiveInventory("HeavyMachinegun");
+		A_GiveInventory("ColtBurstshot");
+		
+		A_GiveInventory("PatriarchToggler"); //Gun modes, blueprints edition.
+		A_GiveInventory("PipeRiftToggler");
+	}
+	Stop
+  }
+}

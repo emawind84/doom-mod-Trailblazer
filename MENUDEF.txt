@@ -1,0 +1,314 @@
+DEFAULTLISTMENU
+{
+	Font "BigFont", "Untranslated"
+	
+	Selector "ZIPPO1", -18, -6
+	Linespacing 18
+}
+
+LISTMENU "MainMenu"
+{
+	Size "Clean"
+	StaticPatch 50, -75, "TBLOGO"
+	Position 90, 76
+		
+	TextItem "Rock'n'Roll!",  "n",	"PlayerclassMenu"
+	TextItem "Blaze-it Stuff", "b",	"BlazerMenu"
+	TextItem "Mod Controls", "c",	"CustomControls"
+	TextItem "Options",	     "o",	"OptionsMenu"
+	TextItem "Load",         "l",	"LoadGameMenu"
+	TextItem "Save",         "s",	"SaveGameMenu"
+	TextItem "Piss Off.",	 "q",	"QuitMenu"
+}
+
+ListMenu "PlayerclassMenu"
+{
+	NetgameMessage "$NEWGAME"
+	
+	StaticTextCentered 160, 15, "$MNU_CHOOSECLASS"
+	Position 80, 50
+	PlayerDisplay 220, 50, "20 00 00", "80 00 40"
+	MouseWindow 0, 220
+}
+
+ListMenu "EpisodeMenu"
+{
+	NetgameMessage "$NEWGAME"
+	
+	Position 48, 63
+	StaticTextCentered 176, 14, "Select chapter."
+}
+
+ListMenu "SkillMenu"
+{
+	StaticTextCentered 166, 38, "How Badass are you?"
+	Position 48, 66
+}
+
+ListMenu "LoadGameMenu"
+{
+	NetgameMessage "If you want to load the game in multiplayer, do it while launching it."
+	StaticTextCentered 90, -20, "Lock'n'Loading"
+	Position 80, 54
+	Class "LoadMenu"
+}
+
+ListMenu "SaveGameMenu"
+{
+	StaticTextCentered 90, -20, "Shaving"
+	Position 60, 54
+	Class "SaveMenu"
+}
+
+DefaultOptionMenu
+{
+	Position -15
+}
+
+OptionValue "SmokeSettings"
+{
+	0, "Full"
+	1, "Reduced"
+	2, "None"
+}
+
+OptionValue "ThrottleSettings"
+{
+	0, "None"
+	1, "Redneck Gibberish"
+	2, "Rock'n'Roll"
+}
+
+OptionValue "RocketSettings"
+{
+	0, "Randomized"
+	1, "Both"
+	2, "Bitchmaker only"
+	3, "Patriarch only"
+}
+
+OptionValue "ChainSettings"
+{
+	0, "FMG spawns, Uzi drops"
+	1, "Both"
+	2, "FMG only"
+	3, "Leadspitter only"
+}
+
+OptionValue "SSGSettings"
+{
+	0, "Randomized"
+	1, "Both"
+	2, "Chrome Justice only"
+	3, "Eliminator only"
+}
+
+OptionValue "PlasmaSettings"
+{
+	0, "Randomized"
+	1, "Both"
+	2, "Skullthrottle only"
+	3, "Paintrain only"
+}
+
+OptionValue "BFGSettings"
+{
+	0, "Randomized"
+	1, "All three"
+	2, "Nutcracker only"
+	3, "Double Deuce only"
+	4, "Conqueror only"
+}
+
+OptionValue "TilterSettings"
+{
+	0, "Velocity-based"
+	1, "Input-based"
+}
+
+OptionValue "CrafterSettings"
+{
+	0, "All in"
+	1, "Upgrades and ammo only"
+	2, "None"
+}
+
+OptionMenu "BlazerMenu"
+{
+	ScrollTop 2
+	StaticText "Scroll down for more options.", "LightBlue"
+	StaticText ""
+	StaticText ""
+	Title "BLAZE-IT OPTIONS"
+	StaticText ""
+	StaticText "This mod unbal, pls fix", "Untranslated"
+	Slider "Damage Given", "TB_PlayerAttackMult", 0.0, 5.0, 0.01, 2
+	Slider "Damage Taken", "TB_PlayerDefenseMult", 0.0, 5.0, 0.01, 2
+	StaticText ""
+	StaticText ""
+	Slider "Dash Timer",		"TB_DashFrames",	0, 35, 1, 0
+	Slider "Dash Cooldown", 	"TB_DashCooldown", 	0, 70, 1, 0
+	Option "Hold run toggle", 	"tb_dashholdspeed", "OnOff"
+	StaticText "In tics, setting timer to 0 disables the dash.", "DarkGray"
+	StaticText "Cooldown is self-explanatory.", "DarkGray"
+	StaticText "(Default timer is 7, default cooldown is 30.)", "DarkGray"
+	StaticText "Last option determines if you have to hold run", "DarkGray"
+	StaticText "as a modifier to trigger it.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Slider "Recoil multiplier", "TB_WeaponRecoil", 0.0, 2.0, 0.1, 1
+	Option "Weapon screen shaking", "TB_QuakeRecoil", "OnOff"
+	Option "Screen recoil", "TB_ZoomRecoil", "OnOff"
+	StaticText ""
+	StaticText ""
+	StaticText "Seasick Simulator (view tilt)", 1
+	StaticText "Also known as KeksTilt."
+	StaticText ""
+	Option "Enabled?",		"tb_tilt_enabled", "OnOff"
+	Slider "Forward angle",	"tb_tilt_movesway", 0, 3.0, 0.25, 2
+	Slider "Sideway angle",	"tb_tilt_sidesway", 0, 3.0, 0.25, 2
+	Slider "Turning angle",	"tb_tilt_looksway", 0, 3.0, 0.25, 2
+	Option "Allow Pitching", "tb_tilt_pitchsway_on", "OnOff"
+	StaticText ""
+	StaticText ""
+	Option "Quick Spikebomb Toss", "TB_TraditionalQuickToss", "OnOff"
+	StaticText "Wait wha- *BOOOOOOOM*", 1
+	StaticText "If you liked instant Spikebomb more, you can toggle it back here.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Sequential Shot",		"TB_SequentialShot",	"OnOff"
+	StaticText "Tired of holding all these buttons at once", 1
+	StaticText "It may reduce your ability to juggle between firing modes,", "DarkGray"
+	StaticText "but if you feel its not for you - you can toggle that on", "DarkGray"
+	StaticText "to fire both weapons in dual-wield with just primary fire.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Particle Reduction", "TB_ParticleReduction",	"OnOff"
+	StaticText "Oh no, my game is made of 2 FPS", 1
+	StaticText "In case item particles are ruining your day,", "DarkGray"
+	StaticText "turn that one off here.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Smoke Density",		"TB_SmokeReduction",		"SmokeSettings"
+	StaticText "Smokin'! Smokin'! Everybody just keep on tokin'!", 1
+	StaticText "Feeling bogged down with smoke from your non-cigarettes?", "DarkGray"
+	StaticText "Turn that off here! Also reduces some of the effects intensity.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Hammerspace Backpack", "TB_Hammerspace", "OnOff"
+	StaticText "I need ammo! And you are my field ops.", 1
+	StaticText "Expands your backpack by around 10% each time you pick up another", "DarkGray"
+	StaticText "after getting your first one. If you feel like you have too much", "DarkGray"
+	StaticText "ammo, disable that feature here.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Auto Reload",		"TB_ReloadMode",			"OnOff"
+	StaticText "Refill your gun juice - automatically!", 1
+	StaticText "Feeling annoyed by that tick that announces your lack of ammo?", "DarkGray"
+	StaticText "Toggle it right here.", "DarkGray"
+	StaticText "(Note: Uzis and Colts always reload.)", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Don't return sights",  "TB_SightsReturn",			"OnOff"
+	StaticText "To zoom back or not to zoom?", 1
+	StaticText "By default, if you reload in sights mode, it doesn't return to zoomed-in", "DarkGray"
+	StaticText "state after that. But since it brought chagrin to me face,", "DarkGray"
+	StaticText "as I'd rather have it go back to sights, and then someone else would", "DarkGray"
+	StaticText "be unhappy, so I made a toggle for that.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Chrome/Auto Justice Mode", "TB_JusticeSwap", "OnOff"
+	StaticText "It's logical in a way, but oh well", 1
+	StaticText "Swap Chrome/Auto Justice's firing modes.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Ignore crafting warning", "TB_CrafterWarning", "OnOff"
+	StaticText "Yeah yeah I know the drill.", 1
+	StaticText "In case you know how much junk each ammo craft will take,", "DarkGray"
+	StaticText "or you are not afraid of accidentally spending your junk points,", "DarkGray"
+	StaticText "you can toggle this to skip that message.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Crafting mode", "TB_NoCrafting", "CrafterSettings"
+	StaticText "Too much to handle, eh?", 1
+	StaticText "Removes either just blueprints or removes junk items,", "DarkGray"
+	StaticText "blueprints and anything else related to crafting", "DarkGray"
+	StaticText "in case things get too complicated, or you feel overpowered", "DarkGray"
+	StaticText "enough as-is.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Masochist Mode", "TB_MasochistMode", "OnOff"
+	StaticText "Receive full damage from explosions.", 1
+	StaticText "Explosions caused by monsters, or by your own shots reflected", "DarkGray"
+	StaticText "back at you by enemies deal full damage to you.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Chaingun replacements", "TB_ChainSpawner", "ChainSettings"
+	Option "SSG replacements", "TB_SSGSpawner", "SSGSettings"
+	Option "RL replacements", "TB_RocketSpawner", "RocketSettings"
+	//Option "Plasma replacements", "TB_PlasmaSpawner", "PlasmaSettings" // Hahaha- nah.
+	Option "BFG replacements", "TB_BFGSpawner", "BFGSettings"
+	StaticText "Defines which weapons get to spawn.", 1
+	StaticText "Warning: for my sanity's sake, those settings", "Red"
+	StaticText "do not affect Shotguns and Chainguns in Doom 1", "Red"
+	StaticText "or Crossbows in Heretic!", "Red"
+	StaticText ""
+	StaticText ""
+	Option "Skullthrottle Accompaniment", "TB_MinigunMode", "ThrottleSettings"
+	Option "Conqueror Accompaniment", "TB_ConquerorMode", "ThrottleSettings"
+	StaticText "Just to make it more epic.", 1
+	StaticText "Toggles extra sound effects when firing those weapons.", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Key Sharing", "TB_KeyShare", "OnOff"
+	StaticText "Keysersoze Eyesore", 1
+	StaticText "Picking up a key grants every player the access codes", "DarkGray"
+	StaticText "they need to continue the mission. (Access codes?", "DarkGray"
+	StaticText "Who needs that, I've got MY SPECIAL CHARM!)", "DarkGray"
+	StaticText ""
+	StaticText ""
+	Option "Show scores",		"TB_Scores",			"OnOff"
+	StaticText "Gotta track them down", 1
+	StaticText "Shows kills, secrets and items", "DarkGray"
+	StaticText "in your top left corner.", "DarkGray"
+}
+
+OptionMenu "CustomControls"
+{
+	Title "Mod Controls"
+	ScrollTop 2
+	StaticTextSwitchable 	"ENTER to change, BACKSPACE to clear", "Press new key for control, ESC cancels.", "ControlMessage"
+	StaticText 	""
+	StaticText "Main Controls", 1
+	StaticText 	"Necessary to make full use of this mod."
+	StaticText 	""
+	Control 	"Fire",				"+attack"
+	Control 	"Altfire",			"+altattack"
+	Control 	"Reload",			"+reload"
+	Control 	"Punch",			"+zoom"
+	Control 	"Machete Quick-Toss", "+Gimbostratus"
+	Control 	"Spikebomb Quick-Toss", "BobsBrainBestExplosiveEver"
+	StaticText 	""
+	Control 	"Use / Open",		"+use"
+	Control 	"Jump",				"+jump"
+	Control 	"Crouch",			"+crouch"
+	StaticText 	""
+	Control 	"Move forward",			"+forward"
+	Control 	"Move backward",		"+back"
+	Control 	"Strafe left",			"+moveleft"
+	Control 	"Strafe right",			"+moveright"
+	Control 	"Hover up / Swim up",	"+moveup"
+	Control 	"Hover down / Swim down",	"+movedown"
+	StaticText 	""
+	StaticText 	"Quick Item Usage", 1
+	StaticText 	"In case you need something immediately."
+	StaticText 	""
+	Control 	"Nightvision Goggles",	"Vision"
+	Control 	"Hazmat Suit",			"Rubberfruit"
+	Control 	"Whiskey",				"UbermenschUnlimited"
+	Control 	"Jetpack",				"+FlyingDumbass"
+	Control 	"Blastsphere",			"SpontaneousExplosion"
+	StaticText 	""
+	StaticText 	"In case of Hexen, check your keyring."
+	Control 	"Keys list",			"showpop 2"
+}

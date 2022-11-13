@@ -1,0 +1,150 @@
+#library "ballet"
+#include "zdefs.acs"
+#include "zspecial.acs"
+
+// -----------------------------------------------------------------------------
+//
+// View tilt script (for Guncaster) Pillow: Now also for Trailblazer!
+//
+// Written by KeksDose
+// 25 / February / 2017
+//
+// This ACS changes your view tilt with a lot of customisability.
+//	a)	You can set how far you want the view to tilt
+//	b)	Two modes: Based on your actual velocity and your input
+//	c)	Weighting: You can make looking from side to side affect your tilt more
+//		than moving
+//	d)	And of course, how fast you want the view tilt change to take place
+//
+// Check the special menu and cvarinfo.txt in the mod for more info.
+//
+// NOTICE:
+// You can reuse this file and edit the scripts as you like, but I want you to
+// ship the .acs source file with your mod if you use it (even if you edited it,
+//  and keep the header intact above everything else) and give due credit. Tell
+//  all your friends about Trailblazer and how cool ACS is. And most importantly
+//  - remember to praise Mima!
+//
+// -----------------------------------------------------------------------------
+
+#define SCRIPT_TILTER		"View Tilt"
+#define SCRIPT_REACTIVATE	"Bend over, Wiese. Yes."
+#define CVAR_MAXTILT		"tb_maxtilt"
+#define CVAR_TILTINTERPOL	"tb_tiltinterpol"
+#define CVAR_INPUTINTERPOL	"tb_inputinterpol"
+#define CVAR_TILTWEIGHT		"tb_tiltweight"
+#define CVAR_TILTMODE		"tb_tiltmode"
+#define CVAR_SWAYFACTOR		"tb_swayfactor"
+
+#define VELOCITY_CAP	25.0
+#define SWAY_CAP		0.1
+#define SWAY_INTENSITY	2
+#define INPUTMOVE_CAP	10240.0	// GetPlayerInput SIDEMOVE cap (zdoom wiki)
+// #define INPUTMOVE_CAP	16340.0	// sqrt(10240^2 + 12800^2)
+#define INPUTMOVE_MAGIC	1.6		// ❝Happens to normalise horizontal input.❞
+// INPUTMOVE_CAP is based off the maximum values presented in the GetPlayerInput
+// entry on the zdoom wiki. Side move is capped by 10240, forward move by 12800.
+// We pick their vector length, so it should be normalised with this.
+
+// Linear interpolation from a to b by factor f in [0, 1.0].
+function int lerp(int f, int a, int b) {
+	return a + FixedMul(f, b - a);
+}
+
+script SCRIPT_REACTIVATE respawn {
+	// With result: This circumvents the script being delayed by one tic.
+	ACS_NamedExecuteWithResult(SCRIPT_TILTER);
+}
+
+script SCRIPT_TILTER enter {
+	// 1st mode: Transform x, y velocity to amount of side movement
+	// 2nd mode: Just use the player's side movement input
+	int me = PlayerNumber();
+	int tilting = true;
+	int vx, vy, len;
+	int tiltmode = 0;
+	int tiltinterpol;
+	int inputinterpol;
+	int weight = 0.0;
+	int swayfactor;
+	
+	int roll, rolltarget;
+	int maxtilt;
+	int sway;
+	int side;
+	
+	while(tilting) {
+		maxtilt       = GetUserCvar(me, CVAR_MAXTILT);
+		tiltinterpol  = GetUserCvar(me, CVAR_TILTINTERPOL);
+		inputinterpol = GetUserCvar(me, CVAR_INPUTINTERPOL);
+		weight        = GetUserCvar(me, CVAR_TILTWEIGHT);
+		tiltmode      = GetUserCvar(me, CVAR_TILTMODE);
+		swayfactor    = GetUserCvar(me, CVAR_SWAYFACTOR);
+		
+		if(GetActorProperty(0, APROP_HEALTH) <= 0)
+			tilting = false;
+		
+		// Okay, this used to take MODINPUT_YAW, which disables this during
+		// frozen player situations. But it would NOT be funny. You have to see
+		// your aggro tilting when you cannot move. :p
+		sway = GetPlayerInput(-1, INPUT_YAW) * SWAY_INTENSITY;
+		sway = FixedMul(sway, swayfactor);
+		
+		// Cap off sway between -SWAY_CAP and SWAY_CAP.
+		if(0 < sway - SWAY_CAP)
+			sway = SWAY_CAP;
+		else if(sway + SWAY_CAP < 0)
+			sway = -SWAY_CAP;
+		
+		// Velocity tilt (any non-0 value activates this). Very smooth, bases
+		// the current view tilt off the player's actual velocity instead of
+		// stiff movement inputs.
+		if(tiltmode) {
+			// VELOCITY_CAP is a good guess to your maximum movement speed. If
+			// you go above it, it'll be capped off completely to avoid "bending
+			// over too far, yes."
+			vx = GetActorVelX(0);
+			vy = GetActorVelY(0);
+			len = FixedDiv(VectorLength(vx, vy), VELOCITY_CAP);
+			
+			if(len > 1.0)
+				len = 1.0;
+			
+			// Here we transform your movement direction to your view angle.
+			// This kind of makes use of the cross product, but the gist is that
+			// the more "sideways" your movement, the farther you can tilt at
+			// most. So diagonal movement tilts less than sideways.
+			side = FixedMul(sin(VectorAngle(vx, vy) - GetActorAngle(0)), len);
+		}
+		
+		// Sway by actual inputs, not by current velocity.
+		else {
+			// Linearly interpolate the input a bit. It actually has only three
+			// states: 0, slow and fast. We want a bit more for smoothness.
+			vx = lerp(inputinterpol, vx, -GetPlayerInput(-1, INPUT_SIDEMOVE));
+			
+			// This creates a normalised side result with regards to the cap.
+			side = FixedMul(FixedDiv(vx << 16, INPUTMOVE_CAP), INPUTMOVE_MAGIC);
+		}
+		
+		// Do not simplify here until movement tilt is implemented.
+		side = FixedMul(side, maxtilt);
+		
+		// This is the arithmetic mean between the sway caused by looking from
+		// side to side and the movement sway. It is linear, so if you set the
+		// weight to 0, you get 100% movement sway and no look sway. 0.5 has
+		// 50% of both, and 1.0 has 0% movement sway but full look sway. All
+		// values between are ok, too.
+		rolltarget = FixedMul(weight, sway) + FixedMul(1.0 - weight, side);
+		rolltarget >>= 1;
+		
+		// Linearly interpolate the roll to the actual roll target for
+		// smoothness. This line and the commented one are the same, but lerp
+		// was added later as a function, so if we remove it again, well y'know.
+		// roll = roll + FixedMul(rolltarget - roll, tiltinterpol);
+		roll = lerp(tiltinterpol, roll, rolltarget);
+		ChangeActorRoll(0, -roll);	
+		Delay(const:1);
+	}
+	ChangeActorRoll(0, 0);
+}

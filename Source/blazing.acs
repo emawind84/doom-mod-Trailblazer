@@ -1,0 +1,113 @@
+// Blazing speed! With this script, the player gets faster based on how little health he has. Great for emergencies!
+// By Zhs2.
+
+// Edits 4/4/14: To account for ironsighting, minigun revving, and having a knife out. (You always run faster with a knife out!)
+// The death of slowride?
+// PILLOW: Most likely.
+
+// Edit 1/14/15: Blazing powerup!
+
+#library "BLAZING"
+#include "zcommon.acs"
+
+function int abs (int x)
+{
+    if (x < 0)
+        return -x;
+
+    return x;
+}
+
+script "EscapeBlaze" ENTER
+{
+	if ((abs(GetPlayerInput(-1, INPUT_FORWARDMOVE)) > 6400) || (abs(GetPlayerInput(-1, INPUT_SIDEMOVE)) > 6400))
+	{
+		if (GetActorProperty(0,APROP_HEALTH) < 100 || CheckInventory("PowerBlazing"))
+		{
+			if(CheckInventory("PowerBlazing"))
+			{
+				SetActorProperty(0,APROP_SPEED,(2.0+(CheckWeapon("Macheterang")*0.2)-(CheckInventory("EliminatorFocused") | CheckInventory("SidekickZoomed") | CheckInventory("FMGZoomed") | CheckInventory ("SlowRideMinigun"))*0.2));
+				// Flat 2x speed, unachievable by the Trailblazer normally. Go nuts!
+			}
+			else
+			{
+				SetActorProperty(0,APROP_SPEED,(1.0+(CheckWeapon("Macheterang")*0.2)-((CheckInventory("EliminatorFocused") | CheckInventory("SidekickZoomed") | CheckInventory("FMGZoomed") | CheckInventory ("SlowRideMinigun"))*0.2))+((100-GetActorProperty(0,APROP_HEALTH))*0.01));
+				// The bonus scales to health lowered; the movement bonuses/penalties from everything else are flat and do not affect the result.
+			}
+		}
+		else { SetActorProperty(0,APROP_SPEED,(1.0+(CheckWeapon("Macheterang")*0.2)-((CheckInventory("EliminatorFocused") | CheckInventory("SidekickZoomed") | CheckInventory("FMGZoomed") | CheckInventory ("SlowRideMinigun"))*0.2))); }
+		// Still running, but has full health or overheal.
+	}
+	else { SetActorProperty(0,APROP_SPEED,(1.0-((CheckInventory("EliminatorFocused") | CheckInventory("SidekickZoomed") | CheckInventory("FMGZoomed") | CheckInventory ("SlowRideMinigun"))*0.2))); }
+	// Do not add the knife speed bonus while walking. What if the player wants to move even slower?
+	delay(1);
+	restart;
+}
+
+// Edit: 4/7/17: It's raining money! ... I mean nicotine!
+// By Zhs2.
+
+// Pillow: to compensate for lack of cigarette pickups in heretic/hexen,
+// the monsters drop them there. I know, it doesn't make sense, but whatever~
+
+#define STARTING_DROP_CHANCE 32 // Start at 12.5% chance.
+#define JACKPOT_CHANCE_MAX 150 // 1+luckystrike in x chance of jackpot, where x is this.
+#define DROPPABLES_MAX 4 // The max number of different items that can be dropped.
+
+Script "Everyone's A Smoker, Yay" KILL
+{
+	int thisTID = UniqueTID();
+	int cigsgiven = 0;
+	int cigdropchance = STARTING_DROP_CHANCE;
+	int luckystrike, currentdrop, totalitemsleft;
+	str itemstodrop[DROPPABLES_MAX] = { "MarloPickup", "LuckiePickup", "HealthBonus2", "ArmorBonus2" };
+	Thing_ChangeTID(0, thisTID); // Give the corpse a reference TID.
+	SetActivatorToTarget(0); // Check the player because he has the thing.
+	if(CheckInventory("HereticCounter") || CheckInventory("HexenCounter"))
+	{
+		// These checks are done on the player, so they go before resetting the activator.
+		if(CheckInventory("BlazingBooster"))
+		{
+			// Increase the drop chance for cigs.
+			cigdropchance *= 2.0;
+		}
+		if(CheckInventory("LuckyStrike"))
+		{
+			// Add a bonus to the jackpot chance for more luck.
+			luckystrike = 2;
+		}
+		SetActivator(thisTID); // Change back to the corpse,
+		Thing_ChangeTID(0, 0); // and remove its TID.
+		if(!(ClassifyActor(0) & ACTOR_MONSTER)) { terminate; } //You are not a monster. Therefore, you can't be smoking!
+		
+		if(random(0,JACKPOT_CHANCE_MAX)<1+luckystrike) // Jackpot, baby.
+		{
+			Playsound(0, "Cigs/Jackpot", 4, 1.0, FALSE, ATTN_NORM);
+			while(cigsgiven < 20)
+			{
+				// Drop twenty cigs of any kind.
+				DropItem(0, itemstodrop[random(0,DROPPABLES_MAX-1)]);
+				cigsgiven++;
+				delay(random(3,5));
+			}
+		}
+		else // Regular drop instead.
+		{
+			// Attempt three different gives with decreasing chance.
+			for(int i = 0; (i < 2); i++)
+			{
+				if(random(0,256) < cigdropchance)
+				{
+					DropItem(0, itemstodrop[random(0,DROPPABLES_MAX-1)]);
+				}
+				cigdropchance /= 2;
+			}
+		}
+	}
+	else
+	{
+		SetActivator(thisTID); // Change back to the corpse,
+		Thing_ChangeTID(0, 0); // and remove its TID.
+		terminate;
+	}
+}

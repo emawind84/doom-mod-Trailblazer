@@ -1,0 +1,659 @@
+/*
+CRUDUTS:
+
+Sprites:
+Weapon - DoomNukem, 3DRealms
+SGLWA0 - Uhhhh... as usual I got it... somewhere. Fug.
+Tracer model by Zanieon, reskinned by me.
+
+Sounds:
+Select - Unreal Tournament (Epic Games), Quake 4 (ID Software)
+Hit - Quake 4 (ID Software), Wolfenstein 2k9 (Raven Software)
+Fire, Idle, Ammo, Add - Quake 4 (ID Software)
+FireMain, Charge - C&C Red Alert 2: Yuri's Revenge (Westwood)
+*/
+
+Actor PaintrainSelected : Inventory { Inventory.MaxAmount 1 }
+Actor PaintrainZoomed : Inventory { Inventory.MaxAmount 1 }
+Actor PaintrainUpgrade : Inventory { Inventory.MaxAmount 1 }
+
+Actor Paintrain : Weapon
+{
+	Weapon.AmmoUse 1
+	Weapon.AmmoGive 15
+	Weapon.AmmoType "RailgunAmmo"
+	Weapon.SlotNumber 6
+	Weapon.SelectionOrder 3
+	Weapon.UpSound "Paintrain/Up"
+	Weapon.Kickback 50
+	Inventory.PickupSound "misc/w_pkup"
+	Inventory.PickupMessage "Boarded upon ''Paintrain'' Railgun assembly! Sky's the limit, and I've got a whole lot of birds to shoot. (6)"
+	Obituary "%o was non-sexually penetrated to hell and back by %k's ''Paintrain''."
+	Weapon.BobStyle "InverseSmooth"
+	Weapon.BobSpeed 2.0
+	Weapon.BobRangeY 0.6
+	Weapon.BobRangeX 0.7
+	+NOALERT
+	//+NOAUTOAIM
+	States
+	{
+	Ready:
+		RAIU ABCDE 1
+		RAIG A 1
+	ReadyMain:
+		RAIG A 0 A_PlaySound("Paintrain/Idle",5,0.5,1)
+		RAIG AABBCCBB 1 {
+			A_WeaponReady(WRF_ALLOWRELOAD|WRF_ALLOWZOOM);
+			Return A_JumpIf(CountInv("MacheteGoesFast") > 0 && CountInv("MacheteAmmo") > 0,"CaberToss");
+		}
+		Loop
+	ZoomedReady:
+		RAIS B 0 A_PlaySound("Paintrain/Idle",5,0.5,1)
+		RAIS B 1 A_WeaponReady
+		Loop
+		
+	Deselect:
+		RAIG A 0 A_JumpIf(CountInv("PaintrainZoomed"),"AltFire")
+		RAIG A 0 {
+			A_TakeInventory("PaintrainSelected");
+			A_TakeInventory("PowerCrafterTimer");
+			A_TakeInventory("PaintrainZoomed");
+			A_ZoomFactor(1.0);
+			A_SetCrosshair(0);
+		}
+		RAIG A 1
+		RAIU EDCBA 1
+		TNT1 A 0 A_StopSound(5)
+		TNT1 A 1 A_Lower(18)
+		Wait
+		
+	Select:
+		TNT1 A 0 A_GiveInventory("PaintrainSelected")
+		TNT1 A 1 A_Raise(18)
+		Wait
+	
+	Fire:
+		RAIG A 0 A_JumpIf(CountInv("PaintrainZoomed"),"ZoomedFire")
+		RAIC A 0 {
+			A_PlaySound("Paintrain/Charge",5,0.85);
+			A_Light1;
+		}
+		//No interpolation so it fits with the rest of weapons.
+		RAIC A 0 A_JumpIf(CountInv("PaintrainUpgrade"),8)
+		RAIC AABBCCDD 1 Bright A_WeaponOffset(0+frandom(1.0,-1.0),32+frandom(1.0,0.0))
+		RAIC A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),8)
+		RAIC AABBCCDD 1 Bright A_WeaponOffset(0+frandom(1.0,-1.0),32+frandom(1.0,0.0))
+		RAIF A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),4)
+		RAIF ABC 2 Bright A_WeaponOffset(0,32)
+		RAIF D 1 Bright {
+			A_WeaponOffset(4,36);
+			A_PlaySound("Paintrain/MainFire",5,0.85);
+			A_PlaySound("Paintrain/Fire",1,0.85);
+			A_PlaySound("Paintrain/Add",6,0.85);
+			A_AlertMonsters;
+			A_GunFlash;
+			A_RailAttack((350), 3, 1, "", "blue", RGF_NORANDOMPUFFZ|RGF_SILENT/*|RGF_NOPIERCING*/, 0, "PaintrainPuff", 0, 0, 0, 35, 64.0, 0.5, "PaintrainCore", 2, 0, 0);
+			A_RailAttack(0, 3, 0, "", "blue", RGF_NORANDOMPUFFZ|RGF_SILENT/*|RGF_NOPIERCING*/, 0, "PaintrainPuff", 0, 0, 0, 35, 3.0, 0.5, "PaintrainCore2", 2, 0, 0);
+			//A_FireBullets(0,0,1,350,"PaintrainPuff",RGF_NORANDOMPUFFZ|FBF_NORANDOM,8192);
+			A_SetPitch(pitch-1.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-1.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire",4);
+				A_SetBlend("Blue",0.075,25);
+			}
+		}
+		RAIF A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		RAIF D 1 Bright {
+			A_Light2;
+			A_WeaponOffset(9,41);
+			A_SetPitch(pitch-1.0 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-1.0 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIF E 1 Bright {
+			A_WeaponOffset(13,45);
+			A_SetPitch(pitch-0.75 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-0.75 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIF A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIF E 1 Bright {
+			A_WeaponOffset(16,48);
+			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIF F 1 Bright {
+			A_WeaponOffset(19,51);
+		}
+		RAIG A 1 {
+			A_Light0;
+			A_WeaponOffset(16,48);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIF A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIG A 1 {
+			A_WeaponOffset(13,45);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIG B 1 {
+			A_WeaponOffset(9,41);
+			A_SetPitch(pitch+1.0 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+1.0 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIF A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		RAIG B 1 {
+			A_WeaponOffset(7,39);
+			A_SetPitch(pitch+1.0 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+1.0 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIG C 1 {
+			A_WeaponOffset(5,37);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIF A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIG C 1 {
+			A_WeaponOffset(3,35);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIG B 1 {
+			A_WeaponOffset(2,34);
+		}
+		RAIF A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIG B 1 A_WeaponOffset(1,33)
+		RAIG A 0 A_WeaponOffset(0,32)
+		RAIG A 3 A_JumpIf(Health <= 75 || CountInv("PowerBlazing"),1)
+		RAIG A 3 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		RAIG A 3 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		RAIG A 1
+		Goto ReadyMain
+		
+	ZoomedFire:
+		RAIS B 0 {
+			A_PlaySound("Paintrain/Charge",5,0.85);
+			A_Light1;
+		}
+		//No interpolation so it fits with the rest of weapons.
+		RAIS B 0 A_JumpIf(CountInv("PaintrainUpgrade"),8)
+		RAIS BBBBBBBB 1 A_WeaponOffset(0+frandom(1.0,-1.0),32+frandom(1.0,0.0))
+		RAIS B 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),8)
+		RAIS BBBBBBBB 1 A_WeaponOffset(0+frandom(1.0,-1.0),32+frandom(1.0,0.0))
+		RAIS B 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIS B 6 A_WeaponOffset(0,32)
+		RAIS B 1 {
+			A_PlaySound("Paintrain/MainFire",5,0.85);
+			A_PlaySound("Paintrain/Fire",1,0.85);
+			A_PlaySound("Paintrain/Add",6,0.85);
+			A_AlertMonsters;
+			A_GunFlash;
+			A_ZoomFactor(4.9);
+			A_RailAttack((350), -4, 1, "", "blue", RGF_NORANDOMPUFFZ|RGF_SILENT, 0, "PaintrainPuff", 0, 0, 0, 35, 64.0, 0.5, "PaintrainCore", 0, 0, 0);
+			A_RailAttack(0, -4, 0, "", "blue", RGF_NORANDOMPUFFZ|RGF_SILENT, 0, "PaintrainPuff", 0, 0, 0, 35, 3.0, 0.5, "PaintrainCore2", 0, 0, 0);
+			A_FireBullets(0,0,1,350,"PaintrainPuff",RGF_NORANDOMPUFFZ|FBF_NORANDOM,8192);
+			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire",4);
+				A_SetBlend("Blue",0.075,25);
+			}
+		}
+		RAIS B 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		RAIS B 1 {
+			A_Light2;
+			A_ZoomFactor(4.8);
+			A_SetPitch(pitch-0.75 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-0.75 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS B 1 {
+			A_ZoomFactor(4.7);
+			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS B 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIS B 1 {
+			A_ZoomFactor(4.75);
+			A_SetPitch(pitch-0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch-0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS B 1 {
+		}
+		RAIS B 1 {
+			A_Light0;
+			A_ZoomFactor(4.8);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIS B 1 {
+			A_ZoomFactor(4.85);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS B 1 {
+			A_ZoomFactor(4.9);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		RAIS B 1 {
+			A_ZoomFactor(4.95);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS B 1 {
+			A_ZoomFactor(5.0);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS B 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIS B 1 {
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+			A_SetPitch(pitch+0.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		}
+		RAIS B 1
+		RAIS B 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIS B 1
+		RAIS B 3 A_JumpIf(Health <= 75 || CountInv("PowerBlazing"),1)
+		RAIS B 3 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		RAIS B 3 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		RAIS B 1
+		Goto ZoomedReady
+	
+	//Zoom in/out.
+	Altfire:
+		"####" "#" 0 {
+			A_PlaySound("Sights/Weapon",4,0.8);
+			if(!CountInv("PaintrainZoomed")) {
+				A_GiveInventory("PaintrainZoomed");
+				A_ZoomFactor(5.0);
+				A_SetCrosshair(77);
+				return State("ZoomIn");
+			} else {
+				A_TakeInventory("PaintrainZoomed");
+				A_ZoomFactor(1.0);
+				A_SetCrosshair(0);
+				return State("ZoomOut");
+			}
+			return State("");
+		}
+		Goto ReadyMain
+	
+	ZoomIn:
+		RAIS A 1
+		RAIS A 1 A_WeaponOffset(-12,32+12)
+		RAIS A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIS A 1 A_WeaponOffset(-28,32+28)
+		RAIS A 1 A_WeaponOffset(-48,32+48)
+		RAIS A 1 A_WeaponOffset(-72,32+72)
+		RAIS A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIS B 1 A_WeaponOffset(0,32+184)
+		RAIS B 1 A_WeaponOffset(0,32+116)
+		RAIS B 1 A_WeaponOffset(0,32+56)
+		RAIS A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		RAIS B 1 A_WeaponOffset(0,32+32)
+		RAIS B 1 A_WeaponOffset(0,32+12)
+		RAIS A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIS B 1 A_WeaponOffset(0,32+6)
+		RAIS B 1 A_WeaponOffset(0,32+3)
+		RAIS A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIS B 1 A_WeaponOffset(0,32+1)
+		RAIS B 1 A_WeaponOffset(0,32)
+		Goto ZoomedReady
+	ZoomOut:
+		RAIS B 1 A_WeaponOffset(0,32+1)
+		RAIS B 1 A_WeaponOffset(0,32+3)
+		RAIS A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIS B 1 A_WeaponOffset(0,32+6)
+		RAIS B 1 A_WeaponOffset(0,32+12)
+		RAIS A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIS B 1 A_WeaponOffset(0,32+32)
+		RAIS B 1 A_WeaponOffset(0,32+56)
+		RAIS A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		RAIS B 1 A_WeaponOffset(0,32+116)
+		RAIS B 1 A_WeaponOffset(0,32+184)
+		RAIS A 1 A_WeaponOffset(-72,32+72)
+		RAIS A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		RAIS A 1 A_WeaponOffset(-48,32+48)
+		RAIS A 1 A_WeaponOffset(-28,32+28)
+		RAIS A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		RAIS A 1 A_WeaponOffset(-12,32+12)
+		RAIS A 1 A_WeaponOffset(0,32)
+		Goto ReadyMain
+		
+	//Melee.
+	Punch:
+	Zoom:
+		RAIG A 1
+		RAIU EDCBA 1
+	PunchSkulls:
+		"####" A 0 {
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		QML1 A 0 A_Overlay(-4,"PunchFlash")
+		QML1 A 0 A_PlaySound("Punch/Swing",6,1.0)
+		QML1 A 0 A_JumpIfInventory("PowerStrength2",1,2)
+		QML1 A 0 A_Jump(256,3)
+		FML1 A 0 A_SetBlend("Orange",0.05,10)
+		FML1 A 0 A_PlaySound("Melee/Firepunch",5)
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2)
+		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" B 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		"####" C 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" D 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIfInventory("KineticFist",1,"KineticPunch")
+		"####" A 0 A_JumpIfInventory("PowerStrength2",1,3)
+		"####" A 0 A_CustomPunch(30, 1, 0, "PunchCracker", 100)
+		"####" A 0 A_Jump(256,"PunchContinue")
+		"####" A 0 A_CustomPunch(90, 1, 0, "FlamePunchCracker", 150,0.06)
+		Goto PunchContinue
+  KineticPunch:
+		"####" A 0 A_JumpIfInventory("PowerStrength2",1,3)
+		"####" A 0 A_CustomPunch(30, 1, 0, "PunchCracker", 300)
+		"####" A 0 A_Jump(256,"PunchContinue")
+		"####" A 0 A_CustomPunch(90, 1, 0, "FlamePunchCracker2", 350,0.06)
+		Goto PunchContinue
+  PunchContinue:
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		"####" E 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" F 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2)
+		"####" G 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" H 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		"####" I 1
+		"####" J 1
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		"####" K 1
+		TNT1 A 5
+		CHNU A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "PunchSkulls")
+		RAIU ABCDE 1
+		RAIG A 1
+		Goto ReadyMain
+	PunchFlash:
+		TNT1 A 1
+		TNT1 A 3
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2)
+		TNT1 AA 1
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		TNT1 AA 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		TNT1 AA 1
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2)
+		TNT1 AA 1
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		TNT1 AA 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		TNT1 AA 1
+		Stop
+		
+	//Machete toss.
+	CaberToss:
+		RAIG A 1
+		RAIU EDCBA 1
+	CaberMain:
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1)
+		TNT1 A 1
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		TNT1 A 1
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		TNT1 A 1
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1
+		TNT1 A 0 A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE)
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,3)
+		MCHT A 0 {
+			if(A_JumpIf(CountInv("PowerAmmoJunkie") > 0, "Null")) {
+				A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			} Else {
+				A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			}
+		}
+		TNT1 A 0 A_Jump(256,2)
+		MCHT A 0 {
+			if(A_JumpIf(CountInv("PowerAmmoJunkie") > 0, "Null")) {
+				A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			} Else {
+				A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			}
+		}
+		// This solution is ten times better. Just let it bouncecount out.
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1)
+		MCHT E 1
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		MCHT G 1
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		MCHT I 1
+		TNT1 A 3
+		TNT1 A 0 A_JumpIf(CountInv("MacheteGoesFast") > 0 && CountInv("MacheteAmmo") > 0, "CaberMain")
+		
+		RAIU ABCDE 1
+		RAIG A 1
+		Goto ReadyMain
+	Spawn:
+		RAIG X -1
+		Stop
+	}
+}
+
+Actor PaintrainPuff
+{
+	+NOBLOCKMAP
+	+PUFFONACTORS
+	+PUFFGETSOWNER
+	+ALWAYSPUFF
+	+NOGRAVITY
+	States
+	{
+	Spawn:
+	Crash:
+		TNT1 A 0 NoDelay {
+			A_PlaySound("Paintrain/Hit",5,0.7);
+			A_SpawnItemEx("PaintrainShock",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_SpawnItemEx("PaintrainDecaler",0,0,-15,0,0,0,0,SXF_CLIENTSIDE); //The offset is messed up for lord knows what reason, and I can't move puff origin, so... HAX TIME.
+		}
+		TNT1 AAAAAAAAAAAAAAA 1 {
+			A_SpawnItemEx("PaintrainSpark",0,0,0,frandom(1.0,4.0),0,frandom(1.0,4.0),frandom(0.0,360.0),SXF_CLIENTSIDE);
+		}
+		TNT1 A 5
+		Stop
+	XDeath:
+		TNT1 A 0
+		Stop
+	}
+}
+
+//Splitter shot
+/*Actor PaintrainPuff
+{
+	+NOBLOCKMAP
+	+PUFFONACTORS
+	+PUFFGETSOWNER
+	+ALWAYSPUFF
+	+NOGRAVITY
+	+SEEKERMISSILE
+	Decal "PaintrainScorch"
+	States
+	{
+	XDeath:
+		TNT1 A 0 {
+			A_SeekerMissile(0,0,SMF_LOOK,256,20);
+			A_FaceTracer;
+			A_CustomRailgun((350),0, "","blue",RGF_NORANDOMPUFFZ|RGF_SILENT|RGF_CENTERZ,0,0,"PaintrainPuff2",0,0,0,35,3.0,0.5,"PaintrainCore2",-9,0,0,0);
+		}
+	Spawn:
+	Crash:
+		TNT1 A 0 NoDelay {
+			A_PlaySound("Paintrain/Hit",5,0.7);
+			A_SpawnItemEx("PaintrainShock",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			//A_SpawnItemEx("PaintrainDecaler",0,0,-15,0,0,0,0,SXF_CLIENTSIDE); //The offset is messed up for lord knows what reason, and I can't move puff origin, so... HAX TIME.
+		}
+		TNT1 AAAAAAAAAAAAAAA 1 {
+			A_SpawnItemEx("PaintrainSpark",0,0,0,frandom(1.0,4.0),0,frandom(1.0,4.0),frandom(0.0,360.0),SXF_CLIENTSIDE);
+		}
+		TNT1 A 5
+		Stop
+	}
+}
+
+Actor PaintrainPuff2 : PaintrainPuff
+{
+	Decal ""
+	States
+	{
+	XDeath:
+		TNT1 A 0
+		Stop
+	Spawn:
+	Crash:
+		TNT1 A 0 NoDelay {
+			A_PlaySound("Paintrain/Hit",5,0.7);
+			A_SpawnItemEx("PaintrainShock",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_SpawnItemEx("PaintrainDecaler",0,0,-15,0,0,0,0,SXF_CLIENTSIDE); //The offset is messed up for lord knows what reason, and I can't move puff origin, so... HAX TIME.
+		}
+		TNT1 AAAAAAAAAAAAAAA 1 {
+			A_SpawnItemEx("PaintrainSpark",0,0,0,frandom(1.0,4.0),0,frandom(1.0,4.0),frandom(0.0,360.0),SXF_CLIENTSIDE);
+		}
+		TNT1 A 5
+		Stop
+	}
+}
+
+Actor FuckPuff
+{
+	+NOINTERACTION
+}*/
+
+Actor PaintrainDecaler
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_CustomBulletAttack(0,0,1,0,"PaintrainDecal",0,CBAF_AIMFACING)
+		Stop
+	}
+}
+
+Actor PaintrainDecal
+{
+	+NOBLOCKMAP
+	+ALWAYSPUFF
+	+BLOODLESSIMPACT
+	+DONTSPLASH
+	+NOTIMEFREEZE
+	Decal "PaintrainScorch"
+}
+
+Actor PaintrainShock
+{
+	Renderstyle "Add"
+	Scale 0.1
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		SHCK H 1 Bright {
+			A_SetScale(ScaleX+0.04);
+			A_FadeOut(0.04);
+		}
+		Loop
+	}
+}
+
+Actor PaintrainSpark
+{
+	+NOINTERACTION
+	Renderstyle "Add"
+	Scale 0.025
+	States
+	{
+	Spawn:
+		SGLW A 1 Bright {
+			A_FadeOut(0.03);
+			A_SetScale(ScaleX - 0.0005);
+			A_ChangeVelocity(0,0,frandom(-0.15,-0.25));
+			Return A_JumpIf(ScaleX <= 0, "Null");
+		}
+		Wait
+	}
+}
+
+Actor PaintrainCount : Inventory
+{
+	Inventory.MaxAmount 150
+}
+
+Actor PaintrainCore
+{
+	+NOINTERACTION
+	+FLATSPRITE
+	Renderstyle "Add"
+	Scale 0.15
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			A_Explode(10,48,0,0,32);
+			A_SetPitch(Pitch + 90);
+			//A_SpawnItemEx("PaintrainCoreB",0,0,0,0,0,0,0,SXF_CLIENTSIDE); // Seems to take up too much viewspace.
+		}
+		SHCK H 1 Bright {
+			A_FadeOut(0.05);
+			A_SetScale(ScaleX - 0.005);
+			//if(Alpha <= 0.7) { A_ChangeVelocity(frandom(0.05,-0.05),frandom(0.05,-0.05),frandom(0.05,-0.05)); }
+			Return A_JumpIf(ScaleX <= 0, "Null");
+		}
+		Wait
+
+		/*SGLW A 1 Bright {
+			A_FadeOut(0.05);
+			A_SetScale(ScaleX - 0.01);
+			//if(Alpha <= 0.7) { A_ChangeVelocity(frandom(0.05,-0.05),frandom(0.05,-0.05),frandom(0.05,-0.05)); }
+			Return A_JumpIf(ScaleX <= 0, "Null");
+		}
+		Wait*/
+	}
+}
+
+Actor PaintrainCoreB : PaintrainCore
+{
+	Alpha 0.35
+	Scale 0.15
+	-FLATSPRITE
+	States
+	{
+	Spawn:
+		SHCK H 1 Bright {
+			A_FadeOut(0.02);
+			A_SetScale(ScaleX + 0.02);
+		}
+		Wait
+	}
+}
+
+Actor PaintrainCore2 : PaintrainCore
+{
+	Scale 0.15
+	-FLATSPRITE
+	States
+	{
+	Spawn:
+		SGLW A 1 Bright {
+			A_FadeOut(0.05);
+			A_SetScale(ScaleX - 0.007);
+			//if(Alpha <= 0.7) { A_ChangeVelocity(frandom(0.05,-0.05),frandom(0.05,-0.05),frandom(0.05,-0.05)); }
+			Return A_JumpIf(ScaleX <= 0, "Null");
+		}
+		Loop
+	}
+}

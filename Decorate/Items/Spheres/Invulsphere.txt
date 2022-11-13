@@ -1,0 +1,191 @@
+ACTOR InvulsphereItem : TBPowerupBase replaces InvulnerabilitySphere
+{
+	Inventory.PickupMessage "$GOTINVULSPHERE"
+	Inventory.PickupSound "Invulnerability/Pickup"
+	States
+	{
+	Spawn:
+		TBIS AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("InvulFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("InvulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	Pickup:
+		TNT1 A 0 {
+			//Alchemist's Dream storing.
+			if(CountInv("AlchemistsDream") && (CountInv("InvulspherePortable") < 3) && GetPlayerInput(INPUT_BUTTONS) & BT_USE)
+			{
+				A_Print("$INVULSPHERESTORED");
+				A_GiveInventory("InvulspherePortable",1);
+				Return State("Null");
+			}
+			//Stuff.
+			A_GiveInventory("Invulsphere2");
+			A_SpawnItemEx("InvulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("Invulsphere2Boost");
+			}
+			Return State("");
+		}
+		Stop
+	}
+}
+
+ACTOR Invulsphere2 : InvulnerabilitySphere
+{
+	Inventory.PickupMessage "$GOTINVULSPHERE"
+	Powerup.Type "GodMode"
+	Powerup.Color "Yellow", 0.05
+	Inventory.PickupSound "Invulnerability/Pickup"
+	Renderstyle Add
+	+FLOATBOB
+	Var Int User_Count;
+	States
+	{
+	Spawn:
+		TBIS AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("InvulFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("InvulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	}
+}
+
+ACTOR PowerGodMode : PowerInvulnerable
+{
+	Powerup.Duration -30
+	Inventory.Icon "GDMOD0"
+}
+
+//Potency upgrade
+ACTOR Invulsphere2Boost : PowerupGiver
+{
+	Powerup.Duration -15
+	Powerup.Type "GodMode"
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ADDITIVETIME
+}
+
+//Stored powerup
+ACTOR InvulspherePortable : TBPowerupPortableBase
+{
+	Inventory.PickupMessage "$GOTINVULSPHERE"
+	Inventory.Icon ARTITBIS
+	Inventory.PickupSound "Invulnerability/Pickup"
+	Tag "Invulnerability Sphere"
+	States
+	{
+	Spawn:
+		TBIS AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("InvulFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("InvulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	Use:
+		TNT1 A 0 {
+			//Stuff.
+			A_SetBlend("Green",0.3,70);
+			A_PlaySound("Invulnerability/Pickup",3);
+			A_GiveInventory("Invulsphere2");
+			A_SpawnItemEx("InvulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("Invulsphere2Boost");
+			}
+		}
+		Stop
+	} 
+}
+
+//Eyecandy
+ACTOR InvulFade : TBFadeBase
+{
+	States
+	{
+	Spawn:
+		TBIS C 0
+		Goto Super::Fade
+	}
+}
+
+ACTOR InvulsphereParticle : TBItemParticle
+{
+	States
+	{
+	Spawn:
+		GPRT A 0
+	SetScale:
+		"####" "#" 0 A_SetScale(0.1)
+	Main:
+		"####" "#" 0 A_JumpIf(ScaleX <= 0,"NULL")
+		"####" "#" 0 A_FadeOut(frandom(0.02,0.04))
+		"####" "#" 0 A_ChangeVelocity(0,0,frandom(-0.1,0.15),CVF_RELATIVE)
+		"####" "#" 1 Bright A_SetScale(ScaleX-frandom(-0.01,0.02))
+		Loop
+	}
+}
+
+Actor InvulsphereEffect : TBPowerupEffect
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay
+		{
+			for (A_SetUserVar(User_Counter, 0); User_Counter < 6; A_SetUserVar(User_Counter, User_Counter + 1))
+			{
+				A_SetAngle(frandom(0.0,360.0));
+				A_SpawnItemEx("InvulspherePart",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS);
+			}
+		}
+		TNT1 A 0 A_SetUserVar("User_Counter", 40)
+		Goto Super::Loop2
+	}
+}
+
+Actor InvulspherePart : TBPowerupPart
+{
+	States
+	{
+	Spawn:
+		PSHK C 0
+		Goto Super::Setup
+	}
+}

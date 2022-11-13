@@ -1,0 +1,4 @@
+gameinfo
+{
+	playerclasses = "Trailblazer_Heretic"
+}

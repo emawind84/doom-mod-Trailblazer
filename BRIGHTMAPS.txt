@@ -1,0 +1,87 @@
+//Zerk
+brightmap sprite PSTRA0 { map "Bmaps/PSTRA.png" }
+
+//Throttle ammo
+brightmap sprite TRTBA0 { map "Bmaps/TRTBA.png" }
+brightmap sprite TRTLA0 { map "Bmaps/TRTLA.png" }
+
+//Fisher spectacles
+brightmap sprite PVISA0 { map "Bmaps/PVISA.png" }
+brightmap sprite PVISB0 { map "Bmaps/PVISA.png" }
+
+//Full map
+brightmap sprite PMAPA0 { map "Bmaps/PMAPA.png" }
+brightmap sprite PMAPB0 { map "Bmaps/PMAPA.png" }
+brightmap sprite PMAPC0 { map "Bmaps/PMAPA.png" }
+brightmap sprite PMAPD0 { map "Bmaps/PMAPA.png" }
+
+//Homing grenades
+brightmap sprite PATGB1 { map "Bmaps/PATGB.png" }
+brightmap sprite PATGB7B3 { map "Bmaps/PATGB7B.png" }
+brightmap sprite PATGB8B2 { map "Bmaps/PATGB8B.png" }
+
+//Fire punch
+brightmap sprite FML1A0 { map "Bmaps/BFIST01.png" }
+brightmap sprite FML1B0 { map "Bmaps/BFIST02.png" }
+brightmap sprite FML1C0 { map "Bmaps/BFIST03.png" }
+brightmap sprite FML1D0 { map "Bmaps/BFIST04.png" }
+brightmap sprite FML1E0 { map "Bmaps/BFIST05.png" }
+brightmap sprite FML1F0 { map "Bmaps/BFIST06.png" }
+brightmap sprite FML1G0 { map "Bmaps/BFIST07.png" }
+brightmap sprite FML1H0 { map "Bmaps/BFIST08.png" }
+brightmap sprite FML1I0 { map "Bmaps/BFIST09.png" }
+brightmap sprite FML1J0 { map "Bmaps/BFIST10.png" }
+
+//Paintrain
+brightmap sprite RAICA0 { map "Bmaps/RAICA.png" disablefullbright }
+brightmap sprite RAICB0 { map "Bmaps/RAICB.png" disablefullbright }
+brightmap sprite RAICC0 { map "Bmaps/RAICC.png" disablefullbright }
+brightmap sprite RAICD0 { map "Bmaps/RAICD.png" disablefullbright }
+
+brightmap sprite RAIFA0 { map "Bmaps/RAIFA.png" disablefullbright }
+brightmap sprite RAIFB0 { map "Bmaps/RAIFB.png" disablefullbright }
+brightmap sprite RAIFC0 { map "Bmaps/RAIFC.png" disablefullbright }
+brightmap sprite RAIFD0 { map "Bmaps/RAIFD.png" disablefullbright }
+brightmap sprite RAIFE0 { map "Bmaps/RAIFE.png" disablefullbright }
+brightmap sprite RAIFF0 { map "Bmaps/RAIFF.png" disablefullbright }
+
+brightmap sprite RAIGA0 { map "Bmaps/RAIGA.png" }
+brightmap sprite RAIGB0 { map "Bmaps/RAIGB.png" }
+brightmap sprite RAIGC0 { map "Bmaps/RAIGC.png" }
+
+brightmap sprite RAIUC0 { map "Bmaps/RAIUA.png" }
+brightmap sprite RAIUD0 { map "Bmaps/RAIUB.png" }
+brightmap sprite RAIUE0 { map "Bmaps/RAIUC.png" }
+
+brightmap sprite RAISA0 { map "Bmaps/RAISA.png" disablefullbright }
+brightmap sprite RAISB0 { map "Bmaps/RAISB.png" disablefullbright }
+
+brightmap sprite RAIAA0 { map "Bmaps/RAIAA.png" disablefullbright }
+
+//Blueprints
+brightmap sprite BLPCA0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCB0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCC0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCD0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCE0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCF0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCG0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCH0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCI0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCJ0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCK0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCL0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCM0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCN0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCO0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCP0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCQ0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCR0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCS0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCT0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCU0 { map "Bmaps/BLPC.png" }
+brightmap sprite BLPCV0 { map "Bmaps/BLPC.png" }
+
+//Bonuses
+brightmap sprite BON1B0 { map "Bmaps/BONBMAP.png" }
+brightmap sprite BON2B0 { map "Bmaps/BONBMAP.png" }

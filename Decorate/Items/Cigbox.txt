@@ -1,0 +1,47 @@
+ACTOR Cigbox : CustomInventory
+{
+	Inventory.Icon "ARTICBOX"
+	Inventory.PickupMessage "Got a box of quality cuban cigars! Fuck yes."
+	Inventory.MaxAmount 3
+	Inventory.Amount 1
+	Inventory.InterHubAmount 3
+	Inventory.PickupSound "Cigbox/Pickup"
+	Inventory.UseSound ""
+	Tag "Smoking real good"
+	Scale 0.8
+	+INVBAR
+	+INVENTORY.UNDROPPABLE
+	States
+	{
+	Spawn:
+		CBOX A -1
+		Stop
+	Use:
+		TNT1 A 0 {
+			//Stuff.
+			A_PlaySound("Cigbox/Use",3);
+			A_PlaySound("Trailblazer/Aah",2,0.7);
+			A_GiveInventory("NicotineToken",25);
+			A_SetBlend("Gray",0.2,50);
+			A_SpawnItemEx("CigbuttHail",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_GiveInventory("MegasphereArmor2",1);
+			A_GiveInventory("MegasphereHealth2",1);
+			
+			A_GiveInventory("Blazingsphere",1);
+			A_GiveInventory("AmmoJunkie",1);
+			A_GiveInventory("QuadDamage",1);
+			
+			//Blazing Booster.
+			If(CountInv("BlazingBooster")) {
+				A_GiveInventory("NicotineToken",8);
+			}
+			
+			//Nicotine Rush.
+			If(CountInv("NicotineToken") >= 100) {
+				A_TakeInventory("NicotineToken",100);
+				A_GiveInventory("NicotineRushItem");
+			}
+		}
+		Stop
+	}
+}

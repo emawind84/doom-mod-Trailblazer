@@ -1,0 +1,295 @@
+ Actor JetpackGiver : CustomInventory Replaces ArtiFly
+{
+	Inventory.PickupMessage "Obtained a Jetpack! Hold jump to fly, release and hold it again to enter hover mode!"
+	Inventory.PickupSound "Jetpack/Pickup"
+	+INVENTORY.AUTOACTIVATE
+	States
+	{
+	Spawn:
+		JETP A -1
+		Stop
+	Pickup: 
+		TNT1 A 0 A_JumpIfInventory("HexenCounter", 1, "HexenMode") //INFINITE POWERRRRRR~ well, kind of.
+		TNT1 A 0 A_JumpIfInventory("Jetpack",100,"Nope")
+		TNT1 A 0 A_GiveInventory("Jetpack", 100)
+		stop
+	HexenMode:
+		TNT1 A 0 A_GiveInventory("Jetpack2", 100)
+		TNT1 A 0 A_GiveInventory("HexenRefuelCounter", 1)
+		stop
+	Nope:
+		TNT1 A 0
+		Fail
+	}
+}
+
+ACTOR Jetpack : CustomInventory
+{
+	Inventory.Icon "ARTIJETP"
+	Inventory.PickupMessage "Obtained a Jetpack! Hold jump to fly, release and hold it again to enter hover mode, use the item for a thrust jump!"
+	Inventory.MaxAmount 100
+	Inventory.Amount 100
+	Inventory.InterHubAmount 100
+	Inventory.PickupSound "Jetpack/Pickup"
+	Inventory.UseSound ""
+	Tag "Jetpack"
+	+INVBAR
+	+INVENTORY.UNDROPPABLE
+	States
+	{
+	Spawn:
+		JETP A -1
+		Stop
+	Use:
+		//TNT1 A 0 A_JumpIf(CountInv("PowerThrustCooldown") || !(GetPlayerInput(INPUT_BUTTONS) & (BT_LEFT | BT_MOVELEFT | BT_RIGHT | BT_MOVERIGHT | BT_FORWARD | BT_BACK)),"Nope")
+		TNT1 A 0 A_TakeInventory("Jetpack",1)
+		TNT1 A 0 A_GiveInventory("ThrustCooldowner",1)
+		TNT1 A 0 A_PlaySound("Jetpack/Thrust",2)
+		TNT1 A 0 {
+			if(GetPlayerInput(INPUT_BUTTONS) & BT_CROUCH) {
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_LEFT | BT_MOVELEFT)) {
+					A_ChangeVelocity(0.0,20.0,0.0,CVF_RELATIVE);
+				}
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_RIGHT | BT_MOVERIGHT)) {
+					A_ChangeVelocity(0.0,-20.0,0.0,CVF_RELATIVE);
+				}
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_FORWARD)) {
+					A_ChangeVelocity(20.0,0.0,0.0,CVF_RELATIVE);
+				}
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_BACK)) {
+					A_ChangeVelocity(-20.0,0.0,0.0,CVF_RELATIVE);
+				}
+			} else {
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_LEFT | BT_MOVELEFT)) {
+					A_ChangeVelocity(0.0,10.0,20.0,CVF_RELATIVE);
+				}
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_RIGHT | BT_MOVERIGHT)) {
+					A_ChangeVelocity(0.0,-10.0,20.0,CVF_RELATIVE);
+				}
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_FORWARD)) {
+					A_ChangeVelocity(10.0,0.0,20.0,CVF_RELATIVE);
+				}
+				if(GetPlayerInput(INPUT_BUTTONS) & (BT_BACK)) {
+					A_ChangeVelocity(-10.0,0.0,20.0,CVF_RELATIVE);
+				}
+				else {
+					A_ChangeVelocity(0.0,0.0,20.0,CVF_RELATIVE);
+				}
+			}
+			//A_ChangeVelocity(velx,vely,20.0,CVF_REPLACE);
+		}
+		TNT1 A 0 A_SpawnItemEx("JetpackThrust",0,0,0,0,0,0,0,SXF_ORIGINATOR|SXF_SETMASTER)
+	Nope:
+		TNT1 A 0
+		Fail
+	/*TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+	TNT1 A 0 A_Print("\c[white]You don't have to activate this item.\n\c[white]To use the jetpack, simply hold your jump button.")
+	Fail*/
+	}
+}
+
+actor PowerThrustCooldown : PowerDamage
+{	
+	DamageFactor "Normal", 1.0
+}
+
+actor ThrustCooldowner : PowerupGiver
+{
+	Inventory.Amount 0
+	Powerup.Type "ThrustCooldown"
+	Powerup.Duration 35
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+}
+
+ACTOR Jetpack2 : Jetpack
+{
+  Inventory.InterHubAmount 0
+}
+
+ACTOR HexenRefuelCounter : Inventory
+{
+  Inventory.InterHubAmount 0
+  Inventory.MaxAmount 1
+}
+
+ACTOR JetpackActive
+{
+    +NOINTERACTION
+	+NOTIMEFREEZE
+    States
+    {
+    Spawn:
+		TNT1 A 15 NoDelay {
+			A_ChangeVelocity(frandom(1.5,-1.5), frandom(1.5,-1.5), frandom(-1.5,-4.5));
+			A_SpawnItemEx("JetpackFlare",
+				frandom(2.0,-2.0),frandom(2.0,-2.0),-18-frandom(2.0,-2.0),
+				VelX,VelY,VelZ + frandom(-1.5,-4.5),
+				0,SXF_CLIENTSIDE,30);
+			A_SpawnItemEx("JetpackSmoke",
+				frandom(4.0,-4.0),frandom(4.0,-4.0),-18-frandom(4.0,-4.0),
+				VelX,VelY,VelZ + frandom(-7.0,-4.5),
+				0,SXF_CLIENTSIDE,20);
+			A_SpawnItemEx("JetpackFire",
+				frandom(2.0,-2.0),frandom(2.0,-2.0),-18-frandom(2.0,-2.0),
+				VelX,VelY,VelZ + frandom(-3.0,-4.0),
+				0,SXF_CLIENTSIDE,20);
+		}
+		Stop
+    }
+}
+
+Actor JetpackThrust
+{
+    +NOINTERACTION
+	+NOTIMEFREEZE
+	var int user_c;
+    States
+    {
+    Spawn:
+		TNT1 A 0 NoDelay A_SetUserVar("user_c",15)
+	Looplo:
+		TNT1 A 1 {
+			if(user_c) {
+				A_SetUserVar("user_c", user_c - 1);
+				A_Warp(AAPTR_MASTER,0,0,0,0,WARPF_INTERPOLATE|WARPF_NOCHECKPOSITION);
+				A_SpawnItemEx("JetpackActive",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+				return state("");
+			}
+			else {
+				return state("null");
+			}
+			return state("");
+		}
+		Loop
+	}
+}
+
+ACTOR JetpackActive2
+{
+    +NOINTERACTION
+	+NOTIMEFREEZE
+    States
+    {
+    Spawn:
+       TNT1 A 0 NoDelay A_SpawnItemEx("JetpackSmoke2",-14-frandom(1.0,-1.0),frandom(1.0,-1.0),-15-frandom(1.0,-1.0),frandom(0.1,0.05),frandom(0.1,0.05),frandom(-1.5,-3.0),frandom(0.0,360.0),SXF_CLIENTSIDE,40)
+       Stop
+    }
+}
+
+ACTOR JetpackSmoke
+{ 
+    Scale 0.025
+    Alpha 0.0
+    RenderStyle Translucent
+    //+NOINTERACTION
+    +NOGRAVITY
+    +THRUGHOST
+    +DONTSPLASH
+	+NOTIMEFREEZE
+    States
+    {
+    Spawn:
+      SMKE A 3
+      SMKE A 0 A_Jump(256,"SpriteA","SpriteB","SpriteC","SpriteD")
+	SpriteA:
+		DYMI A 0 A_Jump(256, "FadeIn")
+		Goto SpriteA
+	SpriteB:
+		DYMI B 0 A_Jump(256, "FadeIn")
+		Goto SpriteB
+	SpriteC:
+		DYMI C 0 A_Jump(256, "FadeIn")
+		Goto SpriteC
+	SpriteD:
+		DYMI D 0 A_Jump(256, "FadeIn")
+		Goto SpriteD
+	FadeIn:
+		"####" "#" 0 A_FadeIn(0.02)
+		"####" "#" 0 A_SetScale(ScaleX+frandom(0.01,0.02))
+		"####" "#" 1 A_JumpIf(Alpha >= 0.25,"Main")
+		Loop
+	Main:
+		"####" "#" 0 A_FadeOut(0.005)
+		"####" "#" 0 A_ChangeVelocity(frandom(0.1,-0.1),frandom(0.1,-0.1),0,CVF_RELATIVE)
+		"####" "#" 1 A_SetScale(ScaleX+frandom(0.02,0.03))
+		Loop
+    }
+}
+
+ACTOR JetpackSmoke2 : JetpackSmoke
+{ 
+    States
+    {
+    Spawn:
+      SMKE A 0 NoDelay A_Jump(256,"SpriteA","SpriteB","SpriteC","SpriteD")
+	  Goto SpriteA
+	}
+}
+
+ACTOR JetpackFire
+{
+	+NOGRAVITY
+	+NOINTERACTION
+	+THRUGHOST
+	+DONTSPLASH
+	+NOTIMEFREEZE
+	RenderStyle Add
+	Scale 0.2
+	Alpha 0.7
+	states
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_Jump(256, "SpriteA", "SpriteB", "SpriteC", "SpriteD",
+									 "SpriteE", "SpriteF", "SpriteG", "SpriteH")
+	SpriteA:
+		BLAS A 0 A_Jump(256, "FadeIn")
+		Goto SpriteA
+	SpriteB:
+		BLAS B 0 A_Jump(256, "FadeIn")
+		Goto SpriteB
+	SpriteC:
+		BLAS C 0 A_Jump(256, "FadeIn")
+		Goto SpriteC
+	SpriteD:
+		BLAS D 0 A_Jump(256, "FadeIn")
+		Goto SpriteD
+	SpriteE:
+		BLAS E 0 A_Jump(256, "FadeIn")
+		Goto SpriteE
+	SpriteF:
+		BLAS F 0 A_Jump(256, "FadeIn")
+		Goto SpriteF
+	SpriteG:
+		BLAS G 0 A_Jump(256, "FadeIn")
+		Goto SpriteG
+	SpriteH:
+		BLAS H 0 A_Jump(256, "FadeIn")
+		Goto SpriteH
+	FadeIn:
+		"####" "#" 1 Bright A_FadeOut(0.05)
+		"####" "#" 0 A_SetScale(ScaleX - FRandom(0.005, 0.0075))
+		"####" "#" 0 A_JumpIf(ScaleX <= 0,"NULL")
+		Loop
+	}
+}
+
+Actor JetpackFlare
+{
+	+NOGRAVITY
+	+NOINTERACTION
+	+THRUGHOST
+	+DONTSPLASH
+	+NOTIMEFREEZE
+	RenderStyle Add
+	Scale 0.25
+	Alpha 0.95
+	States
+	{
+		Spawn:
+			FLER A 1 Bright A_FadeOut(0.1)
+			FLER A 0 A_SetScale(ScaleX - FRandom(0.005, 0.0075))
+			FLER A 0 A_JumpIf(ScaleX <= 0.0, "NULL")
+			Loop
+	}
+}

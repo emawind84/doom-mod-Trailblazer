@@ -1,0 +1,453 @@
+//Items
+actor Backpack3 : Backpack2
+{
+  Inventory.PickupMessage "Picked up backpack full of!... well, gun mana!"
+}
+
+actor ArtiBoostManaSpawner replaces ArtiBoostMana
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_SpawnItemEx("Backpack3",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		TNT1 A 0 { if(!GetCvar("TB_NoCrafting")) { A_DropItem("BlueprintSpawner",1,205); } }
+		Stop
+	}
+}
+
+actor ArtiHealingRadiusSpawner : RandomSpawner
+{
+	DropItem "Berserk2" 256 3
+	DropItem "BlursphereSpawner" 256 3
+	DropItem "Whiskey" 256 3
+	DropItem "SoulsphereItem" 256 3
+	DropItem "Cigbox" 256 1
+	DropItem "BlueprintSpawner" 256 3
+}
+
+actor ArtiHealingRadiusSpawner2 : RandomSpawner
+{
+	DropItem "Berserk2" 256 3
+	DropItem "BlursphereSpawner" 256 3
+	DropItem "Whiskey" 256 3
+	DropItem "SoulsphereItem" 256 3
+	DropItem "Cigbox" 256 1
+}
+
+actor ArtiHealingRadiusSpawnerMain : RandomSpawner replaces ArtiHealingRadius
+{
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(GetCvar("TB_NoCrafting"),"Spawn2")
+		TNT1 A 0 A_SpawnItemEx("ArtiHealingRadiusSpawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	Spawn2:
+		TNT1 A 0 A_SpawnItemEx("ArtiHealingRadiusSpawner2",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL)
+		Stop
+	}
+}
+
+//Torch, Wings, and the Urn got replaced in Heretic, so it affects it here, too.
+actor AmuletOfWardingSpawner : RandomSpawnerWithRadsuit replaces AmuletOfWarding { DropItem "SecurityVest" }
+actor PlatinumHelmSpawner : RandomSpawnerWithRadsuit replaces PlatinumHelm { DropItem "SecurityVest" }
+actor MeshArmorSpawner : RandomSpawnerWithRadsuit replaces MeshArmor { DropItem "BlueArmorSpawner" }
+actor FalconShieldSpawner : RandomSpawnerWithRadsuit replaces FalconShield { DropItem "BlueArmorSpawner" }
+
+actor ArtiBoostArmorSpawner  : RandomSpawner replaces ArtiBoostArmor { DropItem "BodyArmor" }
+actor ArtiInvulnerability2Spawner : RandomSpawner replaces ArtiInvulnerability2 { DropItem "InvulsphereItem" }
+actor ArtiSpeedBootsSpawner : ArtiHealingRadiusSpawnerMain replaces ArtiSpeedBoots {}
+actor ArtiPorkSpawner : ArtiHealingRadiusSpawnerMain replaces ArtiPork {}
+
+actor ArtiArtiTeleportSpawner : ArtiHealingRadiusSpawnerMain replaces ArtiTeleport {}
+actor ArtiArtiTeleportOtherSpawner : ArtiHealingRadiusSpawnerMain replaces ArtiTeleportOther {}
+actor ArtiDarkServantSpawner : RandomSpawner replaces ArtiDarkServant { DropItem "Cigbox" }
+actor ArtiBlastRadiusSpanwer : RandomSpawner replaces ArtiBlastRadius { DropItem "BlastsphereHexen" }
+
+actor BlueMana : Ammo
+{
+  Radius 8
+  Height 8
+  Inventory.Amount 25
+  Inventory.MaxAmount 500
+  Ammo.BackpackAmount 100
+  Ammo.BackpackMaxAmount 1000
+  Inventory.PickupMessage "Blue stuff that powers your guns!"
+  Inventory.Icon "MAN1I0"
+  +FLOATBOB
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    MAN1 ABCDEFGHI 2 Bright
+    Loop
+  }
+}
+
+actor GreenMana : Ammo
+{
+  Radius 8
+  Height 8
+  Inventory.Amount 25
+  Inventory.MaxAmount 500
+  Ammo.BackpackAmount 100
+  Ammo.BackpackMaxAmount 1000
+  Inventory.PickupMessage "Green stuff that powers your guns!"
+  Inventory.Icon "MAN2F0"
+  +FLOATBOB
+  +NOGRAVITY
+  States
+  {
+  Spawn:
+    MAN2 ABCDEFGHIJKLMNOP 2 Bright
+    Loop
+  }
+}
+
+//Now 100% more endlessly annoying during invasion-style levels, doctor Freeman.
+actor CombineMana : CustomInventory
+{
+  Radius 8
+  Height 8
+  Inventory.PickupMessage "Holy shit, it's red stuff that powers your guns!"
+  +FLOATBOB
+  States
+  {
+  Spawn:
+    MAN3 ABCDEFGHIJKLMNOP 2 Bright
+    Loop
+  Pickup:
+    TNT1 A 0 A_GiveInventory("BlueMana", 25)
+    TNT1 A 0 A_GiveInventory("GreenMana", 25)
+    Stop
+  }
+}
+
+actor BlueMana_Spawner : RandomSpawner replaces Mana1
+{
+	DropItem "MinorJunkSpawner" 256 1
+	DropItem "BlueMana" 256 3
+}
+
+actor GreenMana_Spawner : RandomSpawner replaces Mana2
+{
+	DropItem "MinorJunkSpawner" 256 1
+	DropItem "GreenMana" 256 3
+}
+
+actor CombineMana_Spawner : RandomSpawner replaces Mana3
+{
+	DropItem "MajorJunkSpawner" 256 1
+	DropItem "CombineMana" 256 3
+}
+
+//Weapons
+actor CWeapStaffSpawner : RandomSpawner replaces CWeapStaff
+{
+	DropItem "Colts"
+}
+
+actor FWeapAxe_Spawner replaces FWeapAxe
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	States
+	{
+	Spawn:
+	TNT1 A 3 NoDelay A_JumpIf(CallACS("CheckMode"), "DualPickup") //So much for instant dual-wield in multi.
+	TNT1 A 0 A_SpawnItemEx("FleshrendPickup")
+	Stop
+	DualPickup:
+	TNT1 A 0 A_SpawnItemEx("Fleshrend_DualSpawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0)
+	Stop
+	}
+}
+
+actor ChromeSpawnerHexen : SSG_SpawnerDummy replaces FWeapHammer {}
+
+actor MWeapFrost_Spawner : Chaingun_SpawnerDummy replaces MWeapFrost {}
+
+actor CWeapFlame_Spawner : RocketLauncher_SpawnerDummy replaces CWeapFlame {}
+
+actor MWeapLightning_Spawner : RandomSpawner replaces MWeapLightning { DropItem "Skullthrottle" }
+
+//Pieced weapons.
+actor NutcrackerPiece : WeaponPiece
+{
+  Inventory.PickupSound "misc/w_pkup"
+  WeaponPiece.Weapon "Nutcracker"
+  +FLOATBOB
+  +NOGRAVITY
+}
+
+actor NutcrackerPiece1 : NutcrackerPiece replaces FWeaponPiece1
+{
+  WeaponPiece.Number 1
+  Inventory.PickupMessage "Obtained Nutcracker's stock!"
+  States
+  {
+  Spawn:
+    NUTP A -1 Bright
+    Stop
+  } 
+}
+
+actor NutcrackerPiece2 : NutcrackerPiece replaces FWeaponPiece2
+{
+  WeaponPiece.Number 2
+  Inventory.PickupMessage "Obtained Nutcracker's rear barrel part!"
+  States
+  {
+  Spawn:
+    NUTP B -1 Bright
+    Stop
+  } 
+}
+
+actor NutcrackerPiece3 : NutcrackerPiece replaces FWeaponPiece3
+{
+  WeaponPiece.Number 3
+  Inventory.PickupMessage "Obtained Nutcracker's front barrel part!"
+  States
+  {
+  Spawn:
+    NUTP C -1 Bright
+    Stop
+  } 
+}
+
+actor DoubleDeucePiece : WeaponPiece
+{
+  Inventory.PickupSound "misc/w_pkup"
+  WeaponPiece.Weapon "DoubleDeuce"
+  +FLOATBOB
+  +NOGRAVITY
+}
+
+actor DoubleDeucePiece1 : DoubleDeucePiece replaces MWeaponPiece1
+{
+  WeaponPiece.Number 1
+  Inventory.PickupMessage "Obtained Double Deuce's stock!"
+  States
+  {
+  Spawn:
+    DEUP A -1 Bright
+    Stop
+  } 
+}
+
+actor DoubleDeucePiece2 : DoubleDeucePiece replaces MWeaponPiece2
+{
+  WeaponPiece.Number 2
+  Inventory.PickupMessage "Obtained Double Deuce's chamber!"
+  States
+  {
+  Spawn:
+    DEUP B -1 Bright
+    Stop
+  } 
+}
+
+actor DoubleDeucePiece3 : DoubleDeucePiece replaces MWeaponPiece3
+{
+  WeaponPiece.Number 3
+  Inventory.PickupMessage "Obtained Double Deuce's barrels!"
+  States
+  {
+  Spawn:
+    DEUP C -1 Bright
+    Stop
+  } 
+}
+
+actor ConquerorPiece : WeaponPiece
+{
+  Inventory.PickupSound "misc/w_pkup"
+  WeaponPiece.Weapon "Conqueror"
+  +FLOATBOB
+  +NOGRAVITY
+}
+
+actor ConquerorPiece1 : ConquerorPiece replaces CWeaponPiece1
+{
+  WeaponPiece.Number 1
+  Inventory.PickupMessage "Obtained Conqueror's handle!"
+  States
+  {
+  Spawn:
+    CNQP A -1 Bright
+    Stop
+  } 
+}
+
+actor ConquerorPiece2 : ConquerorPiece replaces CWeaponPiece2
+{
+  WeaponPiece.Number 2
+  Inventory.PickupMessage "Obtained Conqueror's main body!"
+  States
+  {
+  Spawn:
+    CNQP B -1 Bright
+    Stop
+  } 
+}
+
+actor ConquerorPiece3 : ConquerorPiece replaces CWeaponPiece3
+{
+  WeaponPiece.Number 3
+  Inventory.PickupMessage "Obtained Conqueror's barrels!"
+  States
+  {
+  Spawn:
+    CNQP C -1 Bright
+    Stop
+  } 
+}
+
+actor ArtiPoisonBagSpawner : RandomSpawner replaces ArtiPoisonBag
+{
+	DropItem "SpikebombAmmo"
+}
+
+/*
+actor BitchmakerPiece : WeaponPiece
+{
+  Inventory.PickupSound "misc/w_pkup"
+  WeaponPiece.Weapon "Bitchmaker"
+  +FLOATBOB
+  +NOGRAVITY
+}
+
+actor BitchmakerPiece1 : BitchmakerPiece replaces MWeaponPiece1
+{
+  WeaponPiece.Number 1
+  Inventory.PickupMessage "Obtained Bitchmaker's grip!"
+  States
+  {
+  Spawn:
+    BTHP A -1 Bright
+    Stop
+  } 
+}
+
+actor BitchmakerPiece2 : BitchmakerPiece replaces MWeaponPiece2
+{
+  WeaponPiece.Number 2
+  Inventory.PickupMessage "Obtained Bitchmaker's cylinder!"
+  States
+  {
+  Spawn:
+    BTHP B -1 Bright
+    Stop
+  } 
+}
+
+actor BitchmakerPiece3 : BitchmakerPiece replaces MWeaponPiece3
+{
+  WeaponPiece.Number 3
+  Inventory.PickupMessage "Obtained Bitchmaker's barrel!"
+  States
+  {
+  Spawn:
+    BTHP C -1 Bright
+    Stop
+  } 
+}
+
+actor SkullthrottlePiece : WeaponPiece
+{
+  Inventory.PickupSound "misc/w_pkup"
+  WeaponPiece.Weapon "Skullthrottle"
+  +FLOATBOB
+  +NOGRAVITY
+}
+
+actor SkullthrottlePiece1 : SkullthrottlePiece replaces CWeaponPiece1
+{
+  WeaponPiece.Number 1
+  Inventory.PickupMessage "Obtained Skullthrottle's handle!"
+  States
+  {
+  Spawn:
+    SKLP A -1 Bright
+    Stop
+  } 
+}
+
+actor SkullthrottlePiece2 : SkullthrottlePiece replaces CWeaponPiece2
+{
+  WeaponPiece.Number 2
+  Inventory.PickupMessage "Obtained Skullthrottle's main body!"
+  States
+  {
+  Spawn:
+    SKLP B -1 Bright
+    Stop
+  } 
+}
+
+actor SkullthrottlePiece3 : SkullthrottlePiece replaces CWeaponPiece3
+{
+  WeaponPiece.Number 3
+  Inventory.PickupMessage "Obtained Skullthrottle's barrels!"
+  States
+  {
+  Spawn:
+    SKLP C -1 Bright
+    Stop
+  } 
+}
+*/
+
+//Flechettes
+actor BlazerPoisonBag : ArtiPoisonBag3
+{
+  Inventory.PickupFlash "none"
+  Inventory.UseSound "Flechette/Throw"
+  Inventory.MaxAmount 25
+  Inventory.PickupMessage "Obtained an explosive flask."
+  Tag "Bottle of C4-orium"
+  -FANCYPICKUPSOUND
+  States
+  {
+  Spawn:
+    PSBG A 1 //A_SpawnItemEx("GreenParticle",frandom(6.0,-6.0),frandom(6.0,-6.0),16+frandom(15.0,2.0),frandom(0.2,-0.2),frandom(0.2,-0.2),frandom(1.6,0.4),frandom(0.0,360.0),SXF_CLIENTSIDE,64)
+	Loop
+  }
+}
+
+actor ThrowingBomb2 : ThrowingBomb replaces ThrowingBomb
+{
+  DeathSound ""
+  DamageType "Patriarch"
+  Speed 20
+  +FOILINVUL
+  +DONTREFLECT
+  States
+  {
+  Spawn:
+    THRW A 4 A_CheckThrowBomb
+    THRW BCDE 3 A_CheckThrowBomb
+    THRW F 3 A_CheckThrowBomb2
+    Loop
+    THRW G 6 A_CheckThrowBomb
+    THRW F 4 A_CheckThrowBomb
+    THRW H 6 A_CheckThrowBomb
+    THRW F 4 A_CheckThrowBomb
+    THRW G 6 A_CheckThrowBomb
+    THRW F 3 A_CheckThrowBomb
+    Wait
+  Death:
+    TNT1 A 0 A_NoGravity
+    TNT1 A 0 A_AlertMonsters
+    TNT1 A 0 A_PlaySound("Explosion/Init",5,0.8)
+    TNT1 A 0 A_PlaySound("Explosion/Main",6,0.8)
+    TNT1 A 0 A_PlaySound("Explosion/Layer",4,0.8)
+    TNT1 A 0 A_PlaySound("Explosion/Flavor",7,0.8)
+    TNT1 A 0 A_SpawnItemEx("Patriarch_Main",0,0,0,0,0,0,SXF_CLIENTSIDE,0)
+	TNT1 A 0 A_Explode(200,164)
+	TNT1 A 28 A_Quake(3,12,0,512,"none")
+    Stop
+  }
+}

@@ -1,0 +1,387 @@
+//Ze barrel, shamelessly stolen and modified from Xaser and Prophet's work. God bless 'em both, and curse me for eternity!
+ACTOR XaserBarrel : TB_SwitchingDecoration replaces ExplosiveBarrel
+{
+	Health 20
+	Radius 10
+	Height 42
+	DeathSound "world/barrelx"
+	Obituary "$OB_BARREL"
+	TB_SwitchingDecoration.ItemToDistribute "RadioactiveBonus"
+	DamageFactor "Radiator", 0.0
+	+SOLID
+	+SHOOTABLE
+	+NOBLOOD
+	+ACTIVATEMCROSS
+	+DONTGIB
+	+NOICEDEATH
+	+OLDRADIUSDMG
+	+PUSHABLE
+	var int user_makeitrain;
+	var int user_emptied;
+	var int user_dumbprevention;
+	States
+	{
+	Spawn:
+		TNT1 A 0 nodelay { user_dumbprevention = 0; }
+	Looplet:
+		BAR1 ABCDEFGHIJKLM 1 {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				A_SpawnItemEx("BarrelParticle",
+					frandom(10.0,-10.0),frandom(10.0,-10.0),26+frandom(2.0,-2.0),
+					frandom(0.4,-0.4),frandom(0.4,-0.4),frandom(2.2,0.4),
+					frandom(0.0,360.0),SXF_CLIENTSIDE,164);
+			}
+		}
+		Loop
+	Active:
+		TNT1 A 0 {
+			if(user_dumbprevention) { Return State("Death"); }
+			user_emptied = 1;
+			TB_ItemDistributor(); //A_GiveInventory("RadioactiveBonus",1,AAPTR_TARGET);
+			Return State("");
+		}
+		Goto Emptied
+	Emptied:
+		BARR X -1
+		Stop
+	Death:
+		BEXP A 0 A_JumpIf(user_emptied, "EmptyDeath")
+		BEXP A 0 { user_dumbprevention = 1; }
+		BEXP ABC 5 Bright
+		TNT1 A 0 A_JumpIfInTargetInventory("MasterExploder",1,"PotentBlast")
+	StandardBlast:
+		TNT1 A 0 A_SpawnItemEx("BarrelExplode",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS,0)
+		Goto Casing
+	PotentBlast:
+		TNT1 A 0 A_Jump(25,1)
+		Goto ImperviousBlast
+		TNT1 A 0 A_SpawnItemEx("SuperBarrelExplode",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS,0)
+		Goto Casing
+	ImperviousBlast:
+		TNT1 A 0 A_SpawnItemEx("BarrelExploder",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS,0)
+		Goto Casing
+	Casing:
+		TNT1 A 0 A_NoBlocking
+		TNT1 A 0 A_SpawnItemEx("BarrelShell",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0)
+		TNT1 A 1050 A_BarrelDestroy
+		TNT1 A 5 A_Respawn
+		Wait
+	EmptyDeath:
+		TNT1 A 0 {
+			A_PlaySound("Barrel/Break",6,0.8);
+			for(user_makeitrain = 0; user_makeitrain < 20; user_makeitrain++) {
+				A_SpawnItemEx("BarrelParts",frandom(5.0,-5.0),frandom(5.0,-5.0),
+					frandom(0.5,10.0),frandom(2.0,8.0),0,random(6.0,12.0),
+					frandom(0.0,360.0),SXF_CLIENTSIDE,20) ;
+			}
+		}
+		Goto Casing
+	}
+}
+
+ACTOR RadioactiveBonus : CustomInventory
+{
+	Inventory.PickupMessage "You just drank an entire barrel's worth of radioactive sludge. I won't even question how."
+	Inventory.PickupSound "Barrel/Slurp"
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Spawn:
+		TNT1 A -1
+		Stop
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Green",0.2,15);
+			A_SpawnItemEx("RadioactiveAura",0,0,32,0,0,0,0,SXF_SETTARGET);
+		}
+		Stop
+	}
+}
+
+ACTOR RadioactiveCounter : Inventory { Inventory.MaxAmount 999999 }
+
+actor IAmRadioactiveMan : PowerupGiver
+{
+	Inventory.Amount 0
+	Powerup.Type "RadioactiveMan"
+	Powerup.Color "Green", 0.03
+	Powerup.Duration -20
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+}
+
+actor IAmRadioactiveMan2 : PowerupGiver
+{
+	Inventory.Amount 0
+	Powerup.Type "RadioactiveMan2"
+	Powerup.Color "None", 0.0
+	Powerup.Duration -20
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+}
+
+ACTOR PowerRadioactiveMan : TB_PowerIronFeet // Zscript.
+{
+	+INVENTORY.ADDITIVETIME
+}
+
+ACTOR PowerRadioactiveMan2 : PowerProtection
+{
+	DamageFactor "Normal", 0.8
+	+INVENTORY.ADDITIVETIME
+}
+
+ACTOR RadioactiveAura
+{
+	Projectile
+	DamageType "Radiator"
+	+NOINTERACTION
+	+FORCERADIUSDMG
+	var int user_radtime;
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			if(CountInv("PowerRadioactiveMan",AAPTR_TARGET)) {
+				A_GiveInventory("IAmRadioactiveMan",1,AAPTR_TARGET);
+				A_GiveInventory("IAmRadioactiveMan2",1,AAPTR_TARGET);
+				A_GiveInventory("RadioactiveCounter",1,AAPTR_TARGET);
+				Return State("Null");
+			}
+			else {
+				A_GiveInventory("IAmRadioactiveMan",1,AAPTR_TARGET);
+				A_GiveInventory("IAmRadioactiveMan2",1,AAPTR_TARGET);
+				A_GiveInventory("RadioactiveCounter",1,AAPTR_TARGET);
+			}
+			user_radtime = 0;
+			A_PlaySound("Barrel/Rad",5,0.6,1);
+			Return State("");
+		}
+		TNT1 A 1 {
+			user_radtime++;
+			if(user_radtime % 15 == 0) {
+				A_Explode(10+CountInv("RadioactiveCounter",AAPTR_TARGET),132,0,0);
+			}
+			A_Warp(AAPTR_TARGET,0,0,30,0);
+			A_SpawnParticle("40ff40",	//color.
+							SPF_FULLBRIGHT | SPF_RELATIVE, //flags
+							random(15,50), //lifespan
+							frandom(2.0,3.0), //size
+							frandom(0.0,360.0), //angle
+							frandom(-64.0,64.0), //x offset
+							frandom(-64.0,64.0), //y offset
+							frandom(-64.0,64.0), //z offset
+							frandom(0.01,0.2),	//x velocity
+							frandom(-0.1,0.1),	//y velocity
+							frandom(-0.2,0.2),	//z velocity
+							0,0,0, //x/y/z acceleration
+							0.6, //alpha upon spawning
+							-1); //fade step
+			Return A_JumpIf(!CountInv("PowerRadioactiveMan",AAPTR_TARGET),"Null");
+		}
+		Wait
+	}
+}
+
+ACTOR BarrelExplode
+{
+	+NOINTERACTION
+	DamageType "Patriarch"
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_PlaySound("Explosion/Init",5,0.8)
+		TNT1 A 0 A_PlaySound("Explosion/Main",6,0.8)
+		TNT1 A 0 A_PlaySound("Explosion/Layer",4,0.8)
+		TNT1 A 0 A_PlaySound("Explosion/Flavor",7,0.8)
+		TNT1 A 0 A_Quake(3,12,0,512,"none")
+		TNT1 A 0 A_SpawnItemEx("Patriarch_Main",0,0,0,0,0,0,SXF_CLIENTSIDE,0)
+		TNT1 A 28 A_Explode(175,148)
+		Stop
+	}
+}
+
+ACTOR BarrelParts
+{
+	Radius 2
+	Height 2
+	Scale 0.3
+	ReactionTime 2
+	BounceType "Hexen"
+	Projectile
+	-NOGRAVITY
+	Scale 0.75
+	States
+	{
+	Spawn:
+		TNT1 A 0 A_Countdown
+		BARF AABBCCDDEE 2
+		TNT1 A 0 A_Jump(128,2)
+		TNT1 A 0 A_Countdown
+		BARF FFGGHHIIJJ 2
+		Loop
+	Death:
+		TNT1 A 1 A_SpawnItemEx("BarrelPartsDrop",0,0,0,0,0,0,0,SXF_CLIENTSIDE)
+		Stop
+	}
+}
+
+ACTOR BarrelPartsDrop
+{
+	Scale 0.75
+	+NOCLIP
+	States
+	{
+	Spawn:
+		TNT1 A 0
+		TNT1 A 0 A_SetTranslucent(1,0)
+		TNT1 A 0 A_Jump(255,"BARFA","BARFB","BARFC","BARFD","BARFE",
+							"BARFF","BARFG","BARFH","BARFI","BARFJ")
+	BARFA:
+		BARF A 0 A_Jump(256,"Main")
+	BARFB:
+		BARF B 0 A_Jump(256,"Main")
+	BARFC:
+		BARF C 0 A_Jump(256,"Main")
+	BARFD:
+		BARF D 0 A_Jump(256,"Main")
+	BARFE:
+		BARF E 0 A_Jump(256,"Main")
+	BARFF:
+		BARF F 0 A_Jump(256,"Main")
+	BARFG:
+		BARF G 0 A_Jump(256,"Main")
+	BARFH:
+		BARF H 0 A_Jump(256,"Main")
+	BARFI:
+		BARF I 0 A_Jump(256,"Main")
+	BARFJ:
+		BARF J 0 A_Jump(256,"Main")	
+	Main:
+		"####" "#" 200
+		"####" "#" 1 A_FadeOut(0.01)
+		Wait
+	}
+}
+
+ACTOR BarrelExploder : BarrelExplode
+{
+	DamageType "MasteringExplosions" //Because barrels are your best friends.
+}
+
+ACTOR SuperBarrelExplode
+{
+	+NOINTERACTION
+	DamageType "MasteringExplosions" //I mean it!
+	var int User_Blastspan;
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			A_SetUserVar("User_Blastspan",14);
+			
+			A_PlaySound("Spikebomb/Explosion",5,0.9);
+			A_PlaySound("Spikebomb/Add",7);
+			A_PlaySound("Spikebomb/Far",6,0.8);
+			
+			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+			
+			A_QuakeEx(3,3,3,55,0,768,"none",QF_SCALEDOWN);
+			A_QuakeEx(3,3,3,55,0,768,"none",QF_SCALEDOWN|QF_WAVE,0.75,0.75,0.75);
+			A_QuakeEx(7,7,7,55,0,384,"none",QF_SCALEDOWN);
+			A_QuakeEx(7,7,7,55,0,384,"none",QF_SCALEDOWN|QF_WAVE,0.75,0.75,0.75);
+			
+			A_Explode(250,364,0,1);
+			A_Explode(150,256,1,1);
+		}
+	DeathLoop:
+		TNT1 A 0 A_SetUserVar("User_Blastspan", User_Blastspan - 1)
+		TNT1 A 4 { A_Explode(20,364,0,1); A_Explode(10,256,1,1); }
+		TNT1 A 0 A_JumpIf(User_Blastspan <= 0, 1)
+		Loop
+		TNT1 A 6
+		Stop
+	}
+}
+
+ACTOR BarrelParticle
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	+FORCEXYBILLBOARD
+	+NOTONAUTOMAP
+	Renderstyle Add
+	Alpha 0.5
+	States
+	{
+	Spawn:
+		GPRT A 0
+	SetScale:
+		"####" "#" 0 A_SetScale(0.05)
+	Main:
+		"####" "#" 0 A_JumpIf(ScaleX <= 0,"NULL")
+		"####" "#" 0 A_FadeOut(frandom(0.015,0.025))
+		"####" "#" 0 A_ChangeVelocity(frandom(0.1,-0.1),frandom(0.1,-0.1),frandom(0.1,-0.1),CVF_RELATIVE)
+		"####" "#" 1 Bright A_SetScale(ScaleX-frandom(0.0025,0.005))
+		Loop
+	}
+}
+
+ACTOR BarrelShell
+{
+	+FLOORCLIP
+	-NOGRAVITY
+	States
+	{
+	Spawn:
+      	BARR Y 0
+		"####" "#" 210 A_CheckSight("Fadying")
+		Loop
+	Fadying:
+		"####" "#" 1 A_FadeOut(0.1)
+		Wait
+	}
+}
+/*
+//Fire barrel
+ACTOR TB_BurningBarrel : TB_SwitchingDecoration replaces BurningBarrel
+{
+	Radius 16
+	Height 32
+	ProjectilePassHeight -16
+	TB_SwitchingDecoration.ItemToDistribute "BurningBarrelJunk"
+	+SOLID
+	States
+	{
+	Spawn:
+		FCAN ABC 4 Bright
+		Loop
+	Active:
+		TNT1 A 0 { TB_ItemDistributor(); }
+		Stop
+	}
+}
+
+ACTOR BurningBarrelJunk : CustomInventory
+{
+	Inventory.PickupMessage "Dismantled a burning barrel. (+6 junk.)"
+	Inventory.PickupSound "Dismantle/Firebarrel"
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Spawn:
+		TNT1 A -1
+		Stop
+	Pickup:
+		TNT1 A 0 {
+			A_SetBlend("Yellow",0.2,15);
+			A_GiveInventory("JunkItem",6);
+		}
+		Stop
+	}
+}

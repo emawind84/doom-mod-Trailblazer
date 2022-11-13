@@ -1,0 +1,208 @@
+class TBMPWeaponGiver : WeaponGiver {
+
+	class<Inventory> pickupCounter;
+	property PickupCounter: pickupCounter;
+
+	override bool TryPickup(in out Actor toucher) {
+		if (Super.TryPickup(toucher)) {
+			int pickupMax = GetDefaultByType(pickupCounter).MaxAmount;
+			toucher.SetInventory(pickupCounter, pickupMax, false);
+			return true;
+		}
+		return false;
+	}
+}
+
+// HAAAAAAX!!
+class RandomSpawnerWithRadsuit : RandomSpawner
+{
+	override void PostBeginPlay ()
+	{
+		if(!bDROPPED && random(0,3) == 0)
+		{
+			A_DropItem("HazmatsuitBlueprintBringer",-1,256);
+		}
+		Super.PostBeginPlay();
+		Return;
+	}
+}
+
+class Shotgun_Spawner : actor replaces Shotgun
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 3 NoDelay A_JumpIf(multiplayer && !(self.SpawnFlags & MTF_SINGLE) && sv_noweaponspawn, "Null");
+		TNT1 A 0 A_JumpIf(bDROPPED == true, "Extras");
+		TNT1 A 0 A_SpawnItemEx("FleshrendPickup",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		Stop;
+	Extras:
+		TNT1 A 0 A_SpawnItemEx("FleshrendPickup2",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		Stop;
+	}
+}
+
+class SSG_SpawnerMain : actor
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(multiplayer && !(self.SpawnFlags & MTF_SINGLE) && sv_noweaponspawn, "Null");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_SSGSpawner") == 1, "Both");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_SSGSpawner") == 2, "ChromeOnly");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_SSGSpawner") == 3, "EliminatorOnly");
+	Randomized:
+		TNT1 A 0 A_SpawnItemEx("SSG_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		Stop;
+	ChromeOnly:
+		TNT1 A 0 A_SpawnItemEx("ChromeJustice_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		Stop;
+	EliminatorOnly:
+		TNT1 A 0 A_SpawnItemEx("Eliminator_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		Stop;
+	Both:
+		TNT1 A 0 A_SpawnItemEx("ChromeJustice_Spawner");
+		TNT1 A 0 A_SpawnItemEx("Eliminator_Spawner");
+		TNT1 A 0 A_SpawnItemEx("SSG_SpecialToken",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0); //So whatever specials were attached to the weapon itself, will be executed.
+		Stop;
+	}
+}
+
+class Chaingun_SpawnerMain : actor replaces Chaingun
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(multiplayer && !(self.SpawnFlags & MTF_SINGLE) && sv_noweaponspawn, "Null");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_ChainSpawner") == 1, "Both");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_ChainSpawner") == 2, "FMGOnly");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_ChainSpawner") == 3, "LeadspitOnly");
+		TNT1 A 0 A_JumpIf(bDROPPED == true, "LeadspitOnly");
+	FMGOnly:
+		TNT1 A 0 A_SpawnItemEx("FMG_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		Stop;
+	LeadspitOnly:
+		TNT1 A 0 A_SpawnItemEx("LeadspitterPickup",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		Stop;
+	Both:
+		TNT1 A 0 A_SpawnItemEx("FMG_Spawner");
+		TNT1 A 0 A_SpawnItemEx("LeadspitterPickup");
+		TNT1 A 0 A_SpawnItemEx("Chaingun_SpecialToken",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	}
+}
+
+class RocketLauncher_SpawnerMain : actor
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(multiplayer && !(self.SpawnFlags & MTF_SINGLE) && sv_noweaponspawn, "Null");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_RocketSpawner") == 1, "Both");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_RocketSpawner") == 2, "BitchOnly");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_RocketSpawner") == 3, "PadreOnly");
+	Randomized:
+		TNT1 A 0 A_SpawnItemEx("RocketLauncher_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	Both:
+		TNT1 A 0 A_SpawnItemEx("Patriarch_Spawner");
+		TNT1 A 0 A_SpawnItemEx("Bitchmaker_Spawner");
+		TNT1 A 0 A_SpawnItemEx("RocketLauncher_SpecialToken",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	BitchOnly:
+		TNT1 A 0 A_SpawnItemEx("Bitchmaker_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	PadreOnly:
+		TNT1 A 0 A_SpawnItemEx("Patriarch_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	}
+}
+
+class BFG_SpawnerMain : actor
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_JumpIf(multiplayer && !(self.SpawnFlags & MTF_SINGLE) && sv_noweaponspawn, "Null");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_BFGSpawner") == 1, "AllThree");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_BFGSpawner") == 2, "NutterOnly");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_BFGSpawner") == 3, "DeuceOnly");
+		TNT1 A 0 A_JumpIf(GetCvar("TB_BFGSpawner") == 4, "ConqerorOnly");
+	Randomized:
+		TNT1 A 0 A_SpawnItemEx("BFG_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	AllThree:
+		TNT1 A 0 A_SpawnItemEx("Nutcracker_Spawner");
+		TNT1 A 0 A_SpawnItemEx("DoubleDeuce_Spawner");
+		TNT1 A 0 A_SpawnItemEx("Conqueror_Spawner");
+		TNT1 A 0 A_SpawnItemEx("BFG_SpecialToken",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	NutterOnly:
+		TNT1 A 0 A_SpawnItemEx("Nutcracker_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	DeuceOnly:
+		TNT1 A 0 A_SpawnItemEx("DoubleDeuce_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	ConqerorOnly:
+		TNT1 A 0 A_SpawnItemEx("Conqueror_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		Stop;
+	}
+}
+
+class SkullRodAmmoSpawner : RandomSpawner replaces SkullRodAmmo
+{
+	Default
+	{
+		DropItem "ThrottleAmmo", 255, 3;
+		DropItem "Rocket_JunkSpawner", 255, 1;
+	}
+	
+	override void PostBeginPlay ()
+	{
+		A_DropItem("RailgunAmmo",-1,128);
+		Super.PostBeginPlay();
+		Return;
+	}
+		
+}
+
+class SkullRodHeftySpawner : RandomSpawner replaces SkullRodHefty
+{
+	Default
+	{
+		DropItem "ThrottleBox", 255, 3;
+		DropItem "RocketBox_JunkSpawner", 255, 1;
+	}
+	
+	override void PostBeginPlay ()
+	{
+		A_DropItem("RailgunPack",-1,128);
+		Super.PostBeginPlay();
+		Return;
+	}
+}

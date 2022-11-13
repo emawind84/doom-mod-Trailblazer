@@ -1,0 +1,255 @@
+/*	KeksDose / MemeDose (kd):
+	
+	This makes your view tilt with certain actions. There's some cvars you might
+	wanna mess around with:
+	
+	tb_tilt_looksway		= 1.337		Angle from turning
+	tb_tilt_movesway		= 0.69		Angle from moving forwards only (not back!)
+	tb_tilt_sidesway		= 0.420		Angle from moving sideways (JET PLANE)
+	tb_tilt_pitchsway_on	= true		Wanna sway pitch a bit, too?
+	tb_tilt_enabled			= true		Wanna tilt at all?
+	
+	*/
+
+struct tb_Swagger play {
+
+	// kd: These help us juggle info better than naked cvars.
+	private tb_DefaultCvar			cvar_enabled;
+	private tb_DefaultCvar			cvar_move_sway;
+	private tb_DefaultCvar			cvar_side_sway;
+	private tb_DefaultCvar			cvar_tilt_sway;
+	private tb_DefaultCvar			cvar_pitch_sway_on;
+	private tb_DefaultCvar			cvar_always_run;
+	private tb_DefaultCvar			cvar_free_look;
+	private tb_DefaultCvar			cvar_normal_steps;
+	private PlayerInfo				player_info;
+	
+	private double					yaw_f;
+	private double					target_yaw_f;
+	private double					side_f;
+	private double					target_side_f;
+	private double					sub_target_side_f;
+	private double					forw_f;
+	private double					sway_f;
+	private double					sway_ang;
+	private bool					has_ticked;
+	private int						rock_tics;
+	private int						move_tics;
+	
+	const walk_speed		= 4.0;
+	const run_speed			= 21.0;
+	const side_walk_speed	= 9.0;
+	const sway_full_tics	= 20;
+	const sway_rate			= 1.0 / sway_full_tics;
+	const side_full_tics	= 30; // kd: tics till sides reach orbit
+	const side_rate			= 1.0 / side_full_tics;
+	
+	const walk_tics				= 18;	// also while crouching
+	const run_tics				= 10;
+	const linebacker_walk_tics	= 24;
+	const linebacker_run_tics	= 20;
+	
+	double SidewaysPhase () const {
+		return side_f;
+	}
+	
+	// kd: Not necessarily total.
+	double MovingPhase () const {
+		return sway_f;
+	}
+	
+	double BobAngle () const {
+		return sway_ang;
+	}
+	
+	bool IsEnabled () const {
+		return cvar_enabled.GetBool();
+	}
+	
+	void Tick () {
+		static const int sway_tics [] = {
+			walk_tics
+		,	run_tics
+		,	linebacker_walk_tics
+		,	linebacker_run_tics
+		};
+		
+		let mo = Trailblazer(player_info.mo);
+		
+		if(mo == NULL) {
+			return;
+		}
+		
+		// reset the view if we decided we don't want this boating simulator
+		if(!cvar_enabled.GetBool()) {
+			if(has_ticked) {
+				mo.A_SetRoll(0);
+			}
+			
+			Reset();
+			return;
+		}
+		
+		has_ticked = false;
+		
+		let max_sway_ang	= abs(cvar_move_sway.GetDouble(0));
+		let max_look_ang	= abs(cvar_move_sway.GetDouble(0));
+		let max_side_ang	= abs(cvar_side_sway.GetDouble(0));
+		let max_ang			= max_sway_ang + max_look_ang + max_side_ang;
+		
+		let is_bt_run		= BT_SPEED & player_info.cmd.buttons ? true : false;
+		let	is_bt_crouch	= BT_CROUCH & player_info.cmd.buttons ? true : false;
+		let is_running		= (cvar_always_run.GetBool() != is_bt_run) && !is_bt_crouch;
+		
+		// kd: Forward movement causes a different type of sway from sideways.
+		// Forwards, you can have pitch swaying. Additionally, your roll kinda
+		// bounces back and forth.
+		
+		// Sideways, it's more like a tilt added on top of everything else!
+		
+		// So that's why we look at the forward and side velocities separately.
+		// (Also, screw checking INPUTS for tilting, unless you really like
+		// 45°-angling into walls like A CERTAIN 5M TALL SKELETON ROCKSTAR.)
+		
+		let forw			= (cos(mo.angle), sin(mo.angle));
+		let side			= (forw.y, -forw.x);
+		let forw_vel		= forw dot mo.vel.xy;
+		let side_vel		= side dot mo.vel.xy;
+		
+		// kd: Handle the swaying. Just speed it up once we're fast enough,
+		// and slow it back down when we're about to stop.
+		move_tics++;
+		
+		if(player_info.onground && walk_speed < mo.vel.length()) {
+		// if(walk_speed < mo.vel.length()) {
+			sway_f = clamp(sway_f + sway_rate, 0, 1);
+		}
+		
+		else {
+			sway_f = clamp(sway_f - sway_rate, 0, 1);
+		}
+		
+		if(player_info.onground && walk_speed < forw_vel) {
+		// if(walk_speed < forw_vel) {
+			forw_f = clamp(forw_f + sway_rate, 0, 1);
+		}
+		
+		else {
+			forw_f = clamp(forw_f - sway_rate, 0, 1);
+		}
+		
+		let sway_rate_f = clamp(
+			tb_Interpol.Line(forw_vel, walk_speed, 1, run_speed, 2), 1, 2);
+		
+		if(sway_rate_f < 0.002) {
+			move_tics = 0;
+		}
+		
+		if(rock_tics == 0 || rock_tics <= move_tics) {
+			rock_tics = sway_tics [is_running ? 1 : 0];
+			move_tics = 0;
+			// console.printf("check it %i", level.time);
+		}
+		
+		// kd: Do side tilting tootytoot. If I read the sign of the side
+		// velocity, we'd get SHAKECITY by pressing left / right repeatedly when
+		// reaching sidewalk speed. Instead, we're gonna do the same thing
+		// twice, which looks really really terrible but is actually quantum
+		// geology / experimental algebra / tactical sewing genius level.
+		
+		if(player_info.onground && side_walk_speed < side_vel) {
+			target_side_f = 1;
+		}
+		
+		else if(player_info.onground && side_vel < -side_walk_speed) {
+			target_side_f = -1;
+		}
+		
+		else {
+			target_side_f = 0;
+		}
+		
+		sub_target_side_f = 0.5 * sub_target_side_f + 0.5 * target_side_f;
+		side_f = 0.95 * side_f + 0.05 * sub_target_side_f;
+		
+		// kd: Now do some weird thing for looking.
+		
+		target_yaw_f	+= player_info.cmd.yaw * 0.05;
+		target_yaw_f	= clamp(0.87 * target_yaw_f, -1, 1);
+		yaw_f			= target_yaw_f * 0.12 + yaw_f * 0.88;
+		
+		// kd: Put it into a blender.
+		
+		sway_ang			+= 180 / rock_tics;
+		
+		if(sway_f < 0.001) {
+			sway_ang = 0;
+		}
+		
+		else if(360 <= sway_ang) {
+			sway_ang -= 360;
+		}
+		
+		let sway_rang		= forw_f * max_sway_ang * sin(sway_ang);
+		let look_rang		= yaw_f * max_look_ang;
+		let side_rang		= side_f * max_side_ang;
+		let effective_rang	= clamp(sway_rang + look_rang + side_rang, -max_ang, max_ang);
+		let vang_f			= (90 - abs(mo.pitch)) / 90;
+		
+		mo.A_SetRoll(vang_f * effective_rang, SPF_INTERPOLATE);
+		
+		// kd: Pitch sway is optional and it also does not happen at all if
+		// freelook is off or not allowed. You might notice if you run forwards,
+		// your pitch will creep up or down ever so slightly. If you play with
+		// a mouse, that's not so bad, but otherwise... OH NOOOOOOOOOOO
+		
+		if(
+		cvar_pitch_sway_on.GetBool() &&
+		cvar_free_look.GetBool() &&
+		level.IsFreelookAllowed()) {
+			let vang			= mo.pitch;
+			let sway_vang		= sway_f * max_sway_ang * cos(2 * sway_ang);
+			let effective_vang	= clamp(sway_vang, -max_ang, max_ang) / 20;
+			
+			if(is_bt_crouch) {
+				effective_vang *= 0.5;
+			}
+			
+			mo.A_SetPitch(clamp(vang + vang_f * effective_vang, -90, 90), SPF_INTERPOLATE);
+		}
+		
+		// kd: Ok, so sometimes, the user might just experiment with a feature
+		// and go, "wow, tilting sucks, I'mma turn it off". This here is just a
+		// cue to reset roll to 0 (we don't really care what others do with the
+		// roll cuz nobody cares).
+		
+		has_ticked = true;
+	}
+	
+	void Init (PlayerInfo player) {
+		if(player) {
+			cvar_enabled.		Get("tb_tilt_enabled", player);
+			cvar_move_sway.		Get("tb_tilt_movesway", player);
+			cvar_tilt_sway.		Get("tb_tilt_tiltsway", player);
+			cvar_side_sway.		Get("tb_tilt_sidesway", player); // AIRPLANE
+			cvar_pitch_sway_on.	Get("tb_tilt_pitchsway_on", player);
+			cvar_normal_steps.	Get("tb_forcenormalsteps", player);
+			cvar_always_run.	Get("cl_run", player);
+			cvar_free_look.		Get("freelook", player);
+			player_info = player;
+		}
+		
+		Reset();
+	}
+	
+	private void Reset () {
+		yaw_f				= 0;
+		target_yaw_f		= 0;
+		sway_f				= 0;
+		sway_ang			= 0;
+		sub_target_side_f	= 0;
+		target_side_f		= 0;
+		side_f				= 0;
+		has_ticked			= false;
+	}
+}

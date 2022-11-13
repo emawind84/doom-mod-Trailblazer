@@ -1,0 +1,1146 @@
+#include "Brightmaps.txt"
+
+//Sideprick
+Object UraniumPuff
+{
+    frame TNT1A { light URANFLASH }
+}
+
+Object CommandoUraniumPuff
+{
+    frame TNT1A { light URANFLASH }
+}
+
+Object EliminatorUraniumPuff
+{
+    frame TNT1A { light URANFLASH }
+}
+
+pulselight URANFLASH
+{
+    color 1.0 0.35 0.0
+    size 0
+    secondarySize 24
+    interval 0.7
+}
+
+//Fireworks
+Object LeadspitterFirework
+{
+	frame FWRKA { light FIREWORK1 }
+	frame FWRK { light FIREWORK2 }
+}
+
+pointlight FIREWORK1
+{
+    color 0.8 0.1 0.1
+    size 18
+}
+
+pointlight FIREWORK2
+{
+    color 0.1 0.1 0.5
+    size 24
+}
+
+Object LeadspitterFireworkFlare
+{
+	frame FREFA { light FIREWORKRED }
+	frame FREFB { light FIREWORKWHITE }
+	frame FREFC { light FIREWORKBLUE }
+}
+
+pulselight FIREWORKRED
+{
+    color 0.8 0.1 0.1
+    size 0
+    secondarySize 64
+    interval 0.7
+}
+
+pulselight FIREWORKWHITE
+{
+    color 0.8 0.8 0.8
+    size 0
+    secondarySize 64
+    interval 0.7
+}
+
+pulselight FIREWORKBLUE
+{
+    color 0.1 0.1 0.8
+    size 0
+    secondarySize 64
+    interval 0.7
+}
+
+
+//Chrome
+Object ChromeJusticeSonicfire
+{
+    frame TNT1A { light CHROMEFLIGHT }
+}
+
+pointlight CHROMEFLIGHT
+{
+    color 1.0 0.5 0.1
+    size 32
+}
+
+Object ChromeJusticeSonicfire
+{
+    frame TNT1A { light CHROMEFLIGHT }
+}
+
+pulselight CHROMEFLASH
+{
+    color 1.0 0.3 0.05
+    size 0
+    secondarySize 24
+    interval 2.5
+}
+
+Object ChromeImpact
+{
+    frame TNT1A { light CHROMEFLASH }
+}
+
+//Padre
+pulselight PATRIARCHFLASH
+{
+    color 1.0 0.35 0.0
+    size 0
+    secondarySize 256
+    interval 1.0
+}
+
+Object PatriarchProjectile
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+Object PatriarchBounceProjectile
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+Object PatriarchProjectile2
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+Object PatriarchBounceProjectile2
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+//Piper at the Gates of Dawn
+object SpipeFX
+{
+    frame TNT1 { light SPIPEBLAST }
+}
+
+Object SpikebombBomb
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+pulselight SPIPEBLAST
+{
+    color 0.9 0.4 0.2
+    size 0
+    secondarySize 512
+    interval 2.8
+}
+
+//Master exploder barrel/Blastsphere blast
+object SuperBarrelExplode
+{
+    frame TNT1 { light SPIPEBLAST }
+}
+
+object BlastsphereBlast
+{
+    frame TNT1 { light SPIPEBLAST }
+}
+
+//Throttle
+pointlight THROTTLEBOOLET
+{
+    color 1.0 0.9 0.4
+    size 16
+}
+
+Object ThrottleBullet
+{
+    frame TRACA { light THROTTLEBOOLET }
+}
+
+//Bitchmaker
+pointlight MAGNUMFLIGHT
+{
+    color 1.0 0.3 0.1
+    size 32
+}
+
+pulselight MAGNUMFLASH
+{
+    color 1.0 0.3 0.1
+    size 0
+    secondarySize 128
+    interval 0.5
+}
+
+Object MagnumProjectile
+{
+    frame TNT1A { light MAGNUMFLIGHT }
+}
+
+Object MagnumImpact
+{
+    frame TNT1A { light MAGNUMFLASH }
+}
+
+//Paintrain
+pulselight PAINSHOCK
+{
+    color 0.0 0.4 0.8
+    size 0
+    secondarySize 56
+    interval 0.85
+}
+
+object PaintrainPuff
+{
+	frame TNT1 { light PAINSHOCK }
+}
+
+//Nutter
+pointlight NUTTERBOOLET
+{
+    color 1.0 0.9 0.4
+    size 48
+}
+
+Object NutcrackerBullet
+{
+    frame TRACA { light NUTTERBOOLET }
+}
+
+pointlight NUTTERBOOLET
+{
+    color 1.0 0.9 0.4
+    size 48
+}
+
+//Nutter Glory Shot
+Object NutcrackerGloryShot
+{
+    frame FREBA { light SHOTFORGLORY }
+    frame FREB { light SHOTFORGLORY2 }
+}
+
+pointlight SHOTFORGLORY
+{
+    color 1.0 1.0 1.0
+    size 32
+}
+
+pointlight SHOTFORGLORY2
+{
+    color 0.1 0.1 0.9
+    size 48
+}
+
+Object NutcrackerGloryTrailA
+{
+	frame NTCTA { light GLORYTRAILA }
+}
+
+Object NutcrackerGloryTrailB
+{
+	frame NTCTB { light GLORYTRAILB }
+}
+
+Object NutcrackerGloryTrailC
+{
+	frame NTCTC { light GLORYTRAILC }
+}
+
+pointlight GLORYTRAILA
+{
+    color 1.0 1.0 1.0
+    size 128
+}
+
+pointlight GLORYTRAILB
+{
+    color 1.0 0.0 0.0
+    size 128
+}
+
+pointlight GLORYTRAILC
+{
+    color 0.0 0.0 1.0
+    size 128
+}
+
+object FreedomFX
+{
+    frame TNT1A { light FREEDOMBLASTA }
+    //frame TNT1 { light FREEDOMBLASTB }
+    frame TNT1 { light FREEDOMBLASTC }
+}
+
+pulselight FREEDOMBLASTA
+{
+    color 0.7 0.7 0.9
+    size 0
+    secondarySize 384
+    interval 2.9
+}
+
+pulselight FREEDOMBLASTB
+{
+    color 0.0 0.0 1.0
+    size 0
+    secondarySize 486
+    interval 2.9
+}
+
+pulselight FREEDOMBLASTC
+{
+    color 1.0 0.0 0.0
+    size 0
+    secondarySize 512
+    interval 2.9
+}
+
+Object GloryShotBlast
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+//Konka-czongka
+Object Conqueror90mmProjectile
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+
+//Puffs
+pointlight PUFFFLASH
+{
+    color 0.5 0.45 0.25
+    size 4
+}
+
+Object BuellerPuff_Main
+{
+    frame 1PUF { light PUFFFLASH }
+}
+
+pointlight MACHETEFLASH
+{
+    color 0.5 0.45 0.25
+    size 7
+}
+
+Object MachetePuff_Flash
+{
+    frame 2PUF { light MACHETEFLASH }
+}
+
+pointlight MACHETEBERSERKFLASH
+{
+    color 0.5 0.15 0.05
+    size 7
+}
+
+Object MachetePuff_BerserkFlash
+{
+    frame 3PUF { light MACHETEBERSERKFLASH }
+}
+
+pointlight MACHETEBERSANG
+{
+    color 1.0 0.3 0.1
+    size 24
+}
+
+Object MacheterangBerserkProjectile
+{
+	Frame MCHP { light MACHETEBERSANG }
+}
+
+pulselight FIREPUNCHFLASH
+{
+    color 1.0 0.25 0.1
+    size 0
+    secondarySize 128
+    interval 0.7
+}
+
+Object FirePunch_Main
+{
+    frame TNT1A { light FIREPUNCHFLASH }
+}
+
+pointlight LAZERPUFF
+{
+    color 1.0 0.4 0.1
+    size 3
+}
+
+Object LasersightPuff
+{
+    frame RTINA { light LAZERPUFF }
+}
+
+//Bonuses
+pointlight HEALTHYBONUS
+{
+    color 0.5 0.1 0.1
+    size 20
+    offset 0 14 0
+    dontlightself 1
+}
+
+pointlight ARMORYBONUS
+{
+    color 0.1 0.1 0.5
+    size 20
+    offset 0 14 0
+    dontlightself 1
+}
+
+object HealthBonus2
+{
+    frame BON1 { light HEALTHYBONUS }
+}
+
+object ArmorBonus2
+{
+    frame BON2 { light ARMORYBONUS }
+}
+
+//Soulsphere
+pointlight SOULLIGHT
+{
+    color 0.1 0.1 0.9
+    size 48
+    offset 0 16 0
+    dontlightself 1
+}
+
+object Soulsphere2
+{
+    frame TBSS { light SOULLIGHT }
+}
+
+object SoulsphereItem
+{
+    frame TBSS { light SOULLIGHT }
+}
+
+object SoulspherePortable
+{
+    frame TBSS { light SOULLIGHT }
+}
+
+pulselight SOULSHOCK
+{
+    color 0.0 0.0 1.0
+    size 0
+    secondarySize 256
+    interval 1.45
+    offset 0 16 0
+}
+
+object SoulsphereEffect
+{
+	frame TNT1 { light SOULSHOCK }
+}
+
+//Megasphere
+pointlight MEGALIGHT
+{
+    color 0.8 0.8 0.6
+    size 48
+    offset 0 16 0
+    dontlightself 1
+}
+
+object MegasphereItem
+{
+    frame TBMS { light MEGALIGHT }
+}
+
+object MegaspherePortable
+{
+    frame TBMS { light MEGALIGHT }
+}
+
+pulselight MEGASHOCK
+{
+    color 1.0 1.0 1.0
+    size 0
+    secondarySize 256
+    interval 1.45
+    offset 0 16 0
+}
+
+object MegasphereEffect
+{
+	frame TNT1 { light MEGASHOCK }
+}
+
+//Blazingsphere
+pointlight BLAZINGLIGHT
+{
+    color 0.6 0.1 0.8
+    size 48
+    offset 0 16 0
+    dontlightself 1
+}
+
+object Blazingsphere
+{
+    frame TBCS { light BLAZINGLIGHT }
+}
+
+object BlazingsphereItem
+{
+    frame TBCS { light BLAZINGLIGHT }
+}
+
+object BlazingspherePortable
+{
+    frame TBCS { light BLAZINGLIGHT }
+}
+
+pulselight BLAZINGSHOCK
+{
+    color 0.8 0.1 1.0
+    size 0
+    secondarySize 256
+    interval 1.45
+    offset 0 16 0
+}
+
+object BlazingsphereEffect
+{
+	frame TNT1 { light BLAZINGSHOCK }
+}
+
+//Invulsphere
+pointlight INVULLIGHT
+{
+    color 0.1 0.8 0.1
+    size 48
+    offset 0 16 0
+    dontlightself 1
+}
+
+object Invulsphere2
+{
+    frame TBIS { light INVULLIGHT }
+}
+
+object InvulsphereItem
+{
+    frame TBIS { light INVULLIGHT }
+}
+
+object InvulspherePortable
+{
+    frame TBIS { light INVULLIGHT }
+}
+
+pulselight INVULSHOCK
+{
+    color 0.0 1.0 0.0
+    size 0
+    secondarySize 256
+    interval 1.45
+    offset 0 16 0
+}
+
+object InvulsphereEffect
+{
+	frame TNT1 { light INVULSHOCK }
+}
+
+//Quad Damage
+object QuadDamage
+{
+    frame TBQD { light SOULLIGHT }
+}
+
+object QuadDamageItem
+{
+    frame TBQD { light SOULLIGHT }
+}
+
+object QuadDamagePortable
+{
+    frame TBQD { light SOULLIGHT }
+}
+
+//Ammo Junkie
+pointlight JUNKIELIGHT
+{
+    color 0.7 0.7 0.1
+    size 48
+    offset 0 16 0
+    dontlightself 1
+}
+
+object AmmoJunkie
+{
+    frame TBAJ { light JUNKIELIGHT }
+}
+
+object AmmoJunkieItem
+{
+    frame TBAJ { light JUNKIELIGHT }
+}
+
+object AmmoJunkiePortable
+{
+    frame TBAJ { light JUNKIELIGHT }
+}
+
+pulselight JUNKIESHOCK
+{
+    color 1.0 1.0 0.0
+    size 0
+    secondarySize 256
+    interval 1.45
+    offset 0 16 0
+}
+
+object AmmoJunkieEffect
+{
+	frame TNT1 { light JUNKIESHOCK }
+}
+
+//Blastphere
+pointlight BLASTSPHERELIGHT
+{
+    color 0.8 0.6 0.1
+    size 48
+    offset 0 16 0
+    dontlightself 1
+}
+
+object Blastsphere
+{
+    frame TBBS { light BLASTSPHERELIGHT }
+}
+
+object BlastspherePortable
+{
+    frame TBBS { light BLASTSPHERELIGHT }
+}
+
+//Whiskey
+pointlight WHISKERS
+{
+    color 0.8 0.8 0.1
+    size 20
+    offset 0 8 0
+}
+
+object Whiskey
+{
+    frame WHSK { light WHISKERS }
+}
+
+//Berserk
+pointlight BERNIEZERK
+{
+    color 0.6 0.1 0.1
+    size 20
+	dontlightself 1
+    offset 0 8 0
+}
+
+object Berserk2
+{
+    frame PSTR { light BERNIEZERK }
+}
+
+object BerserkPortable
+{
+    frame PSTR { light BERNIEZERK }
+}
+
+pulselight ZERKSHOCK
+{
+    color 0.7 0.2 0.1
+    size 0
+    secondarySize 256
+    interval 1.45
+    offset 0 16 0
+}
+
+object BerserkEffect
+{
+	frame TNT1 { light ZERKSHOCK }
+}
+
+//Jetpack
+pulselight JETFLIGHT
+{
+    color 0.5 0.25 0.05
+    size 0
+    secondarySize 96
+    interval 0.5
+}
+
+Object JetpackActive
+{
+    frame TNT1 { light JETFLIGHT }
+}
+
+//Infrared
+pointlight FISHERGLOW
+{
+    color 0.1 0.4 0.1
+    size 20
+	dontlightself 1
+    offset 0 8 0
+}
+
+object FisherPrice
+{
+    frame PVIS { light FISHERGLOW }
+}
+
+//Flares
+flickerlight FLARELIGHTOR //Nithor was here, silly mortals! HO HO HO~
+{
+    color 0.9 0.7 0.2
+    size 224
+    secondarySize 256
+    offset 0 35 0
+    chance 0.2
+}
+
+pointlight FLARELIGHTOR2
+{
+    color 0.8 0.5 0.1
+    size 480
+    offset 0 35 0
+}
+
+object Flaresticker
+{
+    frame TNT1 { light FLARELIGHTOR }
+	frame TNT1A { light FLARELIGHTOR2 }
+}
+
+object Flarestick
+{
+    frame FSTKA { light FLARELIGHTOR }
+	frame FSTKB { light FLARELIGHTOR }
+	frame FSTK { light FLARELIGHTOR2 }
+}
+
+//Allmap
+pointlight MAPGLOW
+{
+    color 0.1 0.8 0.1
+    size 18
+    offset 0 8 0
+    dontlightself 1
+}
+
+object Fullmap
+{
+    frame PMAP { light MAPGLOW }
+}
+
+//Blueprints
+Object RiftbombsBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object WhiskeyBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object NutForceOneBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object StriploaderBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object KineticFistBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object UraniumShotBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object LuckyStrikeBlueprint{ frame BLPC { light BLUEPRINTGLOW } }
+Object KeepShootingBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object HomingGrenadesBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object ThrottleInstaspinBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object TricorneShotBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object MasterExploderBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object AlchemistsPotencyBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object AlchemistsDreamBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object ArmoredMeasuresBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object SpontaneousFreedomBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object FlaresBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object HeavyMachinegunBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object ColtBurstshotBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object PaintrainBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+Object HazmatsuitBlueprint { frame BLPC { light BLUEPRINTGLOW } }
+
+Object RiftbombsBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object WhiskeyBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object NutForceOneBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object StriploaderBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object KineticFistBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object UraniumShotBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object LuckyStrikeBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object KeepShootingBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object HomingGrenadesBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object ThrottleInstaspinBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object TricorneShotBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object MasterExploderBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object AlchemistsPotencyBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object AlchemistsDreamBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object ArmoredMeasuresBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object SpontaneousFreedomBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object FlaresBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object HeavyMachinegunBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object ColtBurstshotBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object PaintrainBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+Object HazmatsuitBlueprintBringer { frame BLPC { light BLUEPRINTGLOW } }
+
+pulselight BLUEPRINTGLOW
+{
+    color 0.1 0.2 0.8
+    size 24
+    secondarySize 18
+    interval 1.4
+	dontlightself 1
+	offset 0 10 0
+}
+
+//Lucky Strike
+object LuckyStrikeEffect
+{
+	frame TNT1 { light LUCKYSTRIKE }
+}
+
+pulselight LUCKYSTRIKE
+{
+    color 0.4 0.4 0.7
+    size 0
+    secondarySize 256
+    interval 1.45
+    offset 0 16 0
+}
+
+//Throttle ammo
+pointlight THROTTLEAMMO
+{
+    color 0.1 0.3 0.6
+    size 12
+	dontlightself 1
+    offset 0 4 0
+}
+
+object ThrottleAmmo
+{
+    frame TRTL { light THROTTLEAMMO }
+}
+
+pointlight THROTTLEBOX
+{
+    color 0.1 0.3 0.6
+    size 20
+	dontlightself 1
+    offset 0 8 0
+}
+
+object ThrottleBox
+{
+    frame TRTB { light THROTTLEBOX }
+}
+
+//Paintrain ammo
+Object RailgunAmmo
+{
+    frame RAIAA { light RAILGUNAMMO }
+}
+
+pulselight RAILGUNAMMO
+{
+    color 0.1 0.4 0.8
+    size 12
+    secondarySize 16
+	dontlightself 1
+    interval 1.2
+}
+
+//Barrels
+Pointlight BARRELGLOW
+{
+    Color 0.1 0.5 0.1
+    Size 16
+    Offset 0 20 0
+}
+
+Object XaserBarrel
+{
+    Frame BAR1 { light BARRELGLOW }
+	Frame BEXP { light BARRELGLOW }
+}
+
+Object BarrelExplode
+{
+    frame TNT1A { light PATRIARCHFLASH }
+}
+
+Object RadioactiveAura
+{
+    frame TNT1A { light RADIOBARRELGLOW }
+}
+
+pulselight RADIOBARRELGLOW
+{
+    color 0.1 0.3 0.1
+    size 128
+    secondarySize 104
+	dontlightself 0
+    interval 1.2
+}
+
+//Red keys
+pointlight REDKEY
+{
+    color 0.6 0.1 0.1
+    size 16
+    offset 0 4 0
+}
+
+pointlight REDKEY1
+{
+    color 0.5 0.1 0.4
+    size 6
+    offset 0 4 0
+}
+
+pointlight REDKEY2
+{
+    color 0.5 0.1 0.4
+    size 10
+    offset 0 4 0
+}
+
+/*
+object RedCard2
+{
+    frame RCRD { light REDKEY }
+	
+    frame RCRDA { light REDKEY1 }
+    frame RCRDB { light REDKEY2 }
+}
+
+object RedSkull2
+{
+    frame RSKL { light REDKEY }
+	
+    frame RSKLA { light REDKEY1 }
+    frame RSKLB { light REDKEY2 }
+}*/
+
+//Yellow keys
+pointlight YELLOWKEY
+{
+    color 0.6 0.6 0.1
+    size 16
+    offset 0 4 0
+}
+
+pointlight YELLOWKEY1
+{
+    color 0.6 0.4 0.1
+    size 6
+    offset 0 4 0
+}
+
+pointlight YELLOWKEY2
+{
+    color 0.6 0.4 0.1
+    size 10
+    offset 0 4 0
+}
+/*
+object YellowCard2
+{
+    frame YCRD { light YELLOWKEY }
+	
+    frame YCRDA { light YELLOWKEY1 }
+    frame YCRDB { light YELLOWKEY2 }
+}
+
+object YellowSkull2
+{
+    frame YSKL { light YELLOWKEY }
+	
+    frame YSKLA { light YELLOWKEY1 }
+    frame YSKLB { light YELLOWKEY2 }
+}*/
+
+//Blue keys
+pointlight BLUEKEY
+{
+    color 0.1 0.1 0.6
+    size 16
+    offset 0 4 0
+}
+
+pointlight BLUEKEY1
+{
+    color 0.1 0.4 0.6
+    size 6
+    offset 0 4 0
+}
+
+pointlight BLUEKEY2
+{
+    color 0.1 0.4 0.6
+    size 10
+    offset 0 4 0
+}
+/*
+object BlueCard2
+{
+    frame BCRD { light BLUEKEY }
+	
+    frame BCRDA { light BLUEKEY1 }
+    frame BCRDB { light BLUEKEY2 }
+}
+
+object BlueSkull2
+{
+    frame BSKL { light BLUEKEY }
+	
+    frame BSKLA { light BLUEKEY1 }
+    frame BSKLB { light BLUEKEY2 }
+}*/
+
+object TB_UniversalKey
+{
+    frame RCRD { light REDKEY }
+	
+    frame RCRDA { light REDKEY1 }
+    frame RCRDB { light REDKEY2 }
+	
+    frame RSKL { light REDKEY }
+	
+    frame RSKLA { light REDKEY1 }
+    frame RSKLB { light REDKEY2 }
+
+    frame YCRD { light YELLOWKEY }
+	
+    frame YCRDA { light YELLOWKEY1 }
+    frame YCRDB { light YELLOWKEY2 }
+	
+    frame YSKL { light YELLOWKEY }
+	
+    frame YSKLA { light YELLOWKEY1 }
+    frame YSKLB { light YELLOWKEY2 }
+	
+    frame BSKL { light BLUEKEY }
+	
+    frame BSKLA { light BLUEKEY1 }
+    frame BSKLB { light BLUEKEY2 }
+	
+	frame BCRD { light BLUEKEY }
+	
+    frame BCRDA { light BLUEKEY1 }
+    frame BCRDB { light BLUEKEY2 }
+}
+
+//Props
+/*object TB_RedTorch
+{
+    frame TRED { light BIGREDTORCH }
+}
+
+object TB_GreenTorch
+{
+    frame TGRN { light BIGGREENTORCH }
+}
+
+object TB_BlueTorch
+{
+    frame TBLU { light BIGBLUETORCH }
+}
+
+object TB_ShortRedTorch
+{
+    frame SMRT { light SMALLREDTORCH }
+}
+
+object TB_ShortGreenTorch
+{
+    frame SMGT { light SMALLGREENTORCH }
+}
+
+object TB_ShortBlueTorch
+{
+    frame SMBT { light SMALLBLUETORCH }
+}
+
+object TB_BurningBarrel
+{
+    frame FCAN { light FIREBARREL }
+}
+
+object TB_TechLamp2
+{
+    frame TLP2 { light SMALLLAMP }
+}
+
+object TB_TechLamp
+{
+    frame TLMP { light BIGLAMP }
+}*/
+
+/*
+//Hexen Mana
+pulselight BLUESHIZNIT
+{
+    color 0.2 0.2 1.0
+    size 24
+    secondarySize 32
+	offset 0 12 0
+    interval 1.0
+}
+
+object BlueMana
+{
+    frame MAN1 { light BLUESHIZNIT }
+}
+
+pulselight GREENSHIZNIT
+{
+    color 0.1 0.8 0.1
+    size 24
+    secondarySize 32
+	offset 0 12 0
+    interval 1.0
+}
+
+object GreenMana
+{
+    frame MAN2 { light GREENSHIZNIT }
+}
+
+pulselight REDSHIZNIT
+{
+    color 0.8 0.1 0.1
+    size 24
+    secondarySize 32
+	offset 0 12 0
+    interval 1.0
+}
+
+object CombineMana
+{
+    frame MAN3 { light REDSHIZNIT }
+}*/

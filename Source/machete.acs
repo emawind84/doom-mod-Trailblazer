@@ -1,0 +1,24 @@
+// Clank! A check that compares machete position to player position. The DECORATE handles the rest.
+
+// By Zhs2.
+// PILLOW: I had fully decorate method for that, it wasn't so bad!... okay, it was.
+
+#library "MACHETE"
+#include "zcommon.acs"
+
+script "MacheteMagic" (void)
+{
+	int machposx, machposy, playposx, playposy, totalposx, totalposy;
+	machposx = GetActorX(0); // First get the machete's position...
+	machposy = GetActorY(0);
+	SetActivatorToTarget(0); // I didn't think this would work, but it's actually kind of simple.
+	playposx = GetActorX(0); // The player is now the activator so he needs no TID
+	playposy = GetActorY(0);
+	totalposx = (machposx - playposx) >> 16; // Fixed point will ruin our lives
+	totalposy = (machposy - playposy) >> 16;
+	if (sqrt(totalposx*totalposx + totalposy*totalposy) <= 48) // Bah, distance formulas
+	{
+		SetResultValue(True); // We're close enough!
+	}
+	else {SetResultValue(False);} // No we're not.
+}

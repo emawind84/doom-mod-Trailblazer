@@ -1,0 +1,17 @@
+//Backpack
+Actor Backpack2 : CustomInventory
+{
+  Inventory.PickupSound "Backpack/Pickup"
+  Inventory.PickupMessage "$GOTBACKPACK"
+  +COUNTITEM
+  +INVENTORY.ALWAYSPICKUP
+  States
+  {
+  Spawn:
+    BPAK A -1
+    Loop
+  Pickup:
+	TNT1 A 0 ACS_NamedExecuteAlways("HammerspaceBackpack")
+	Stop
+  }
+}

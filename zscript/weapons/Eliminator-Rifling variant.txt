@@ -1,0 +1,759 @@
+//Saved in case I'd want to return to this madness, but I have decided to against it.
+
+class EliminatorSelected : Inventory { Default { Inventory.MaxAmount 1; } }
+class EliminatorUpgrade : Inventory { Default { Inventory.MaxAmount 1; } }
+class EliminatorFocused : Inventory { Default { Inventory.MaxAmount 1; } } //Something to let ACS know that you are doing it.
+
+class EliminatorPickup : CustomInventory
+{
+	Default
+	{
+		Inventory.PickupSound "misc/w_pkup";
+		Inventory.PickupMessage "Flipped out at ZZ ''Eliminator'' lever-action shotgun slash rifle! Come with me, sharp-dressed gun. (3)";
+	}
+	
+	States
+	{
+	Spawn:
+		LEVG X -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 A_JumpIfInventory("EliminatorPickupCounter",2,"CheckAmmo");
+		Goto GiveItNevertheless;
+	CheckAmmo:
+		TNT1 A 0 { If(A_JumpIfInventory("DemShellsAmmo",0,"Null") &&
+					  A_JumpIfInventory("BulletAmmo",0,"Null")) {
+				Return ResolveState("Bailure");
+			}
+			Return ResolveState(Null);
+		}
+	GiveItNevertheless:
+		TNT1 A 0 {
+			if(CountInv("EliminatorPickupCounter") == 2) { A_SetMugshotState("Grin"); }
+			A_GiveInventory("Eliminator",1);
+			A_GiveInventory("DemShellsAmmo",8);
+			A_GiveInventory("BulletAmmo",50);
+			A_GiveInventory("EliminatorPickupCounter",1);
+		}
+		Stop;
+	Bailure:
+		LEVG X 1;
+		Fail;
+	}
+}
+
+class EliminatorPickupCounter : Inventory
+{
+	Default
+	{
+		Inventory.Icon "TNT1A0";
+		Inventory.MaxAmount 3;
+		Inventory.Amount 1;
+		-INVENTORY.INVBAR
+	}
+	
+	States
+	{
+	Spawn:
+		LEVG X -1;
+		Stop;
+	}
+}
+
+class Eliminator : Weapon
+{
+	Default
+	{
+		Weapon.AmmoUse1 1;
+		Weapon.AmmoUse2 1;
+		Weapon.AmmoGive1 0;
+		Weapon.AmmoGive2 0;
+		Weapon.AmmoType1 "DemShellsAmmo";
+		Weapon.AmmoType2 "BulletAmmo";
+		Weapon.SlotNumber 3;
+		Weapon.SelectionOrder 2;
+		Weapon.UpSound "Eliminator/Up";
+		Weapon.Kickback 100;
+		Inventory.PickupSound "misc/w_pkup";
+		Inventory.PickupMessage "Flipped out at ZZ ''Eliminator'' lever-action shotgun slash rifle! Come with me, sharp-dressed gun. (3)";
+		Obituary "%o was eliminated by %k's ''Eliminator''.";
+		Weapon.BobStyle "InverseSmooth";
+		Weapon.BobSpeed 1.6;
+		Weapon.BobRangeY 0.5;
+		Weapon.BobRangeX 0.9;
+		+WEAPON.NOALERT
+		//+WEAPON.AMMO_CHECKBOTH
+		//+NOAUTOAIM
+	}
+	
+	int BulletShotRight;
+	int BulletShotLeft;
+	
+	/*override void DoEffect()
+	{
+		Class<Ammo> DumbTest;
+		DumbTest = 'DemShellsAmmo';
+		DumbTest = 'BulletAmmo';
+		console.printf("%s", name(DumbTest));
+		Super.DoEffect();
+	}*/
+	
+	//Hexen handling.
+	override Void AttachToOwner (actor user) {
+		if(gameinfo.gametype == Game_HEXEN) {
+			AmmoGive1 = 64;
+			AmmoType1 = "GreenMana";
+			AmmoType2 = "GreenMana";
+			AmmoUse1 = 8;
+			AmmoUse2 = 8;
+		}
+		Super.AttachToOwner(user);
+	}
+	
+	States
+	{
+	Spawn:
+		LEVG X -1;
+		Stop;
+	
+	//Focus handler. Also ammo handler.
+	FocusHandler:
+		TNT1 A 1 {
+			if((GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD) || (!CountInv("DemShellsAmmo"))) {
+                if(GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD) { A_ZoomFactor(1.5); A_SetInventory("EliminatorFocused",1); }
+				else { A_ZoomFactor(1.0); }
+                if(CountInv("HexenCounter")) {
+                    invoker.AmmoUse1 = 3;
+                    invoker.AmmoUse2 = 3;
+                    invoker.AmmoType1 = "BlueMana";
+                    invoker.AmmoType2 = "BlueMana";
+                    invoker.Ammo1 = Ammo(invoker.owner.FindInventory("BlueMana"));
+					invoker.Ammo2 = Ammo(invoker.owner.FindInventory("BlueMana"));
+                } else {
+                    invoker.AmmoUse1 = 5;
+                    invoker.AmmoUse2 = 5;
+                    invoker.AmmoType1 = "BulletAmmo";
+                    invoker.AmmoType2 = "BulletAmmo";
+                    invoker.Ammo1 = Ammo(invoker.owner.FindInventory("BulletAmmo"));
+                    invoker.Ammo2 = Ammo(invoker.owner.FindInventory("BulletAmmo"));
+                }
+            }
+            else {
+                A_ZoomFactor(1.0);
+				A_SetInventory("EliminatorFocused",0);
+                if(CountInv("HexenCounter")) {
+                    invoker.AmmoUse1 = 8;
+                    invoker.AmmoUse2 = 8;
+                    invoker.AmmoType1 = "GreenMana";
+                    invoker.AmmoType2 = "GreenMana";
+                    invoker.Ammo1 = Ammo(invoker.owner.FindInventory("GreenMana"));
+                    invoker.Ammo2 = Ammo(invoker.owner.FindInventory("GreenMana"));
+                } else {
+                    invoker.AmmoUse1 = 1;
+                    invoker.AmmoUse2 = 1;
+                    invoker.AmmoType1 = "DemShellsAmmo";
+                    invoker.AmmoType2 = "DemShellsAmmo";
+                    invoker.Ammo1 = Ammo(invoker.owner.FindInventory("DemShellsAmmo"));
+                    invoker.Ammo2 = Ammo(invoker.owner.FindInventory("DemShellsAmmo"));
+                }
+            }
+		}
+		Loop;
+	
+	//Ready.
+	Ready:
+		LEVG Q 0 {
+			If(CountInv("EliminatorPickupCounter") >= 2) {
+				A_Overlay(-3,"LReady");
+			}
+		}
+		LEVG Q 1;
+		LEVG R 1; 
+		LEVG S 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG T 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG U 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 0 { If(CountInv("EliminatorPickupCounter") >= 2) { A_Overlay(-3,"LIdle"); } Else { A_Overlay(-3,"SingleLIdle"); } }
+		TNT1 A 0 { If(CountInv("EliminatorPickupCounter") >= 2) { A_Overlay(2,"RIdle"); } Else { A_Overlay(2,"SingleRIdle"); } }
+	ReadyMain:
+		TNT1 A 1 A_WeaponReady;
+		Loop;
+	Fire:
+		TNT1 A 0;
+		GOto ReadyMain;
+	LReady:
+		TNT1 A 0 A_OverlayFlags(OverlayID(),PSPF_FLIP|PSPF_MIRROR,1);
+		LEVG Q 1;
+		LEVG R 1; 
+		LEVG S 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG T 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG U 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		Stop;
+	
+	//Deselect
+	Deselect:
+		TNT1 A 3 {
+			A_Overlay(9,"None");
+			A_ZoomFactor(1.0);
+			A_TakeInventory("ShotsWereFired",1);
+			A_TakeInventory("EliminatorSelected",1);
+			A_TakeInventory("PowerCrafterTimer",1);
+			SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
+			A_Overlay(2,"RDeselectMain");
+			If(CountInv("EliminatorPickupCounter") >= 2) {
+				A_Overlay(-3,"LDeselectMain");
+			}
+			if(CountInv("HexenCounter")) {
+				invoker.AmmoType1 = "GreenMana";
+				invoker.AmmoType2 = "BlueMana";
+				invoker.Ammo1 = Ammo(invoker.owner.FindInventory("GreenMana"));
+				invoker.Ammo2 = Ammo(invoker.owner.FindInventory("BlueMana"));
+			} else {
+				invoker.AmmoType1 = "DemShellsAmmo";
+				invoker.AmmoType2 = "BulletAmmo";
+				invoker.Ammo1 = Ammo(invoker.owner.FindInventory("DemShellsAmmo"));
+				invoker.Ammo2 = Ammo(invoker.owner.FindInventory("BulletAmmo"));
+			}
+		}
+		TNT1 A 1 A_Lower(18);
+		Wait;
+	LDeselectMain:
+		TNT1 A 0 A_OverlayFlags(OverlayID(),PSPF_FLIP|PSPF_MIRROR,1);
+	RDeselectMain:
+		LEVG SRQ 1;
+		Stop;
+		
+	//Select
+	Select:
+		TNT1 A 0 { 
+			A_GiveInventory("EliminatorSelected",1);
+			SetPlayerProperty(0, 1, PROP_INSTANTWEAPONSWITCH);
+			A_Overlay(9,"FocusHandler");
+			A_Overlay(2,"RSelectMain");
+			If(CountInv("EliminatorPickupCounter") >= 2) {
+				A_Overlay(-3,"LSelectMain");
+				
+			}
+		}
+		TNT1 A 1 A_Raise(12);
+		Wait;
+	LDSelectMain:
+		TNT1 A 0 A_OverlayFlags(OverlayID(),PSPF_FLIP|PSPF_MIRROR,1);
+	RSelectMain:
+		LEVG QRS 1;
+		Stop;
+	
+	//Single L Idle.
+	SingleLIdle:
+		TNT1 A 0 A_JumpIfInventory("EliminatorPickupCounter",2,"LIdle");
+		TNT1 A 1;
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "Punch");
+		Loop;
+	Punch:
+		QML1 A 0 {
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+			A_PlaySound("Punch/Swing",6,1.0);
+			Return A_JumpIf(!CountInv("PowerStrength2"),2);
+		}
+		FML1 A 0 {
+			A_SetBlend("Orange",0.05,10);
+			A_PlaySound("Melee/Firepunch",5);
+		}
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" B 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		"####" C 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" D 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 {
+			If(CountInv("PowerStrength2")) {
+				A_CustomPunch(90, 1, 0, "FlamePunchCracker", 150 + (CountInv("KineticFist") ? 200 : 0),0.06);
+			} Else {
+				A_CustomPunch(30, 1, 0, "PunchCracker", 100 + (CountInv("KineticFist") ? 200 : 0));
+			}
+		}
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		"####" E 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" F 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		"####" G 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" H 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		"####" I 1;
+		"####" J 1;
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		"####" K 1;
+		TNT1 A 5;
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "Punch");
+		Goto SingleLIdle;
+	
+	//Single R Idle.
+	SingleRIdle:
+		TNT1 A 0 A_JumpIfInventory("EliminatorPickupCounter",2,"RIdle");
+		LEVG A 1;
+		LEVG A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "SingleCaberToss");
+		LEVG A 0 A_JumpIf(!CountInv("LeftCycle") && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "SingleRFire");
+		Loop;
+	SingleCaberToss:
+		LEVG SRQ 1;
+	SingleCaberMain:
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 0 {
+			A_PlaySound("Machete1/Slash",1,0.9);
+			A_PlaySound("Machete2/Slash",5,0.2);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1;
+		TNT1 A 0 {
+			A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE);
+			If(CountInv("PowerStrength2")) {
+				If(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			} Else {
+				If(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			}
+		}
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		MCHT E 1;
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		MCHT G 1;
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		MCHT I 1;
+		TNT1 A 3;
+		TNT1 A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "SingleCaberMain");
+		LEVG QRS 1;
+		Goto SingleRIdle;
+	
+	//Single R Fire.	
+	SingleRFire:
+		LEVG A 0 {
+			If(GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD && ((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,1); }
+			If(GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD && !((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,"SingleRNope"); }
+			If((!CountInv("DemShellsAmmo") && !CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5) || (CountInv("GreenMana") < 8 && CountInv("HexenCounter") && CountInv("BlueMana") >= 3)) { Return A_Jump(256,1); }
+			If((CountInv("HexenCounter") && CountInv("GreenMana") >= 8) || (!CountInv("HexenCounter") && CountInv("DemShellsAmmo"))) { Return A_Jump(256,1); }
+			Return ResolveState("SingleRNope");
+		}
+	SingleRMain:
+		LEVG A 0 {
+			A_PlaySound("Eliminator/Fire",1,0.5);
+			A_PlaySound("Eliminator/AddFire",6,0.7);
+			A_FireProjectile("GunsmokeSpawner_Medium",0,0,7,1,FPF_NOAUTOAIM);
+			A_AlertMonsters();
+			A_Recoil(4.0);
+			A_Overlay(3,"RGunflash");
+			//I love nesting shitload of states. Not.
+			If((GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD) || (!CountInv("DemShellsAmmo") && !CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5) || (CountInv("GreenMana") < 8 && CountInv("HexenCounter") && CountInv("BlueMana") >= 3)) {
+				invoker.BulletShotRight = 1;
+				If(CountInv("EliminatorUpgrade")) {
+					If(CountInv("UraniumShot")) { A_RailAttack((80+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorUraniumPuffRail",0,0,0,0,0,0,"none",0,0,6); }
+					Else						{ A_RailAttack((80+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorPuffRail",0,0,0,0,0,0,"none",0,0,6); }
+				}
+				Else {
+					If(CountInv("UraniumShot")) { A_RailAttack((50+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorUraniumPuffRail",0,0,0,0,0,0,"none",0,0,3); }
+					Else 						{ A_RailAttack((50+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorPuffRail",0,0,0,0,0,0,"none",0,0,3); }
+				}
+			} Else {
+				If(CountInv("EliminatorUpgrade")) {
+					If(CountInv("UraniumShot")) { A_RailAttack(12,0,1,"","",RGF_SILENT,0,"EliminatorUraniumPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2);
+												  for(int butterspread = 0; butterspread < 9; butterspread++) { A_RailAttack(12,0,0,"","",RGF_SILENT,0,"EliminatorUraniumPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2); } }
+					Else						{ A_RailAttack(12,0,1,"","",RGF_SILENT,0,"EliminatorPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2);
+												  for(int butterspread = 0; butterspread < 9; butterspread++) { A_RailAttack(12,0,0,"","",RGF_SILENT,0,"EliminatorPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2); } }
+				}
+				Else {
+					If(CountInv("UraniumShot")) { A_FireBullets (7.0, 0.25, 12, 10, "EliminatorUraniumPuff", FBF_USEAMMO); }
+					Else 						{ A_FireBullets (7.0, 0.25, 12, 10, "EliminatorPuff", FBF_USEAMMO); }
+				}
+			}
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 5);
+				A_SetBlend("Blue",0.1,15);
+			}
+		}
+		LEVG A 1 A_SetPitch(pitch-2.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		LEVR A 1 A_SetPitch(pitch-1.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		LEVR B 1;
+		LEVR C 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVR D 1;
+		LEVR E 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVR F 1;
+		LEVR G 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVR H 1;
+		LEVR I 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG B 1;
+		LEVG C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG D 1;
+		LEVG E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVG F 1;
+		LEVG F 0 A_PlaySound("Eliminator/Open",4,0.8);
+		LE2G A 0 A_JumpIf(invoker.BulletShotRight,2);
+		LEVG A 0;
+		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		"####" H 1;
+		"####" I 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG J 1 {
+			if(invoker.BulletShotRight) { A_FireProjectile("RifleCasingSpawner",0,0,3,0,FPF_NOAUTOAIM); invoker.BulletShotRight = 0; }
+			else { A_FireProjectile("DatShottyCasingSpawner",0,0,0,0,FPF_NOAUTOAIM); }
+		}
+		LEVG K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVG L 1;
+		LEVG F 0 A_PlaySound("Eliminator/Close",4,0.8);
+		LEVG M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG N 1;
+		LEVG O 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG P 1;
+		LEVG Q 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		LEVG R 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG S 1;
+		LEVG T 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG U 1;
+		LEVG A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		//LEVG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "SingleRFire");
+		Goto SingleRIdle;
+	SingleRNope:
+		LEVG A 0 A_PlaySound("Eliminator/DryFire",4,0.6);
+		LEVG A 1 A_OverlayOffset(OverlayID(),3,3);
+		LEVG A 1 A_OverlayOffset(OverlayID(),2,2);
+		LEVG A 1 A_OverlayOffset(OverlayID(),1,1);
+		LEVG A 5 A_OverlayOffset(OverlayID(),0,0);
+		Goto SingleRIdle;
+	
+	//Left Idle.
+	LIdle:
+		LEVG A 1 A_OverlayFlags(OverlayID(),PSPF_FLIP|PSPF_MIRROR,1);
+		LEVG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "LFire");
+		LEVG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "TwinPunch");
+		Loop;
+	TwinPunch:
+		LEVG SRQ 1;
+	PunchFleshAndBlood:
+		QML1 A 0 {
+			A_OverlayFlags(OverlayID(),PSPF_FLIP|PSPF_MIRROR,0);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+			A_PlaySound("Punch/Swing",6,1.0);
+			Return A_JumpIf(!CountInv("PowerStrength2"),2);
+		}
+		FML1 A 0 {
+			A_SetBlend("Orange",0.05,10);
+			A_PlaySound("Melee/Firepunch",5);
+		}
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" B 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		"####" C 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" D 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 {
+			If(CountInv("PowerStrength2")) {
+				A_CustomPunch(90, 1, 0, "FlamePunchCracker", 150 + (CountInv("KineticFist") ? 200 : 0),0.06);
+			} Else {
+				A_CustomPunch(30, 1, 0, "PunchCracker", 100 + (CountInv("KineticFist") ? 200 : 0));
+			}
+		}
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		"####" E 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" F 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		"####" G 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" H 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		"####" I 1;
+		"####" J 1;
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		"####" K 1;
+		TNT1 A 5 A_OverlayFlags(OverlayID(),PSPF_FLIP|PSPF_MIRROR,1);
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "PunchFleshAndBlood");
+		LEVG QRS 1;
+		Goto LIdle;
+	
+	//Left fire.
+	LFire:
+		LEVG A 0 {
+			If(GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD && ((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,1); }
+			If(GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD && !((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,"SingleRNope"); }
+			If((!CountInv("DemShellsAmmo") && CountInv("BulletAmmo") >= 5) && ((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,1); }
+			Else If((CountInv("HexenCounter") && CountInv("GreenMana") >= 8) || (!CountInv("HexenCounter") && CountInv("DemShellsAmmo"))) { Return A_Jump(256,1); }
+			Return ResolveState("LNope");
+		}
+	LMain:
+		LEVG A 0 {
+			A_GiveInventory("LeftCycle",1);
+			A_PlaySound("Eliminator/Fire",1,0.5);
+			A_PlaySound("Eliminator/AddFire",6,0.7);
+			A_FireProjectile("GunsmokeSpawner_Medium",0,0,-7,1,FPF_NOAUTOAIM);
+			A_AlertMonsters();
+			A_Recoil(4.0);
+			A_Overlay(3,"LGunflash");
+			If((GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD) || (!CountInv("DemShellsAmmo") && !CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5) || (CountInv("GreenMana") < 8 && CountInv("HexenCounter") && CountInv("BlueMana") >= 3)) {
+				invoker.BulletShotLeft = 1;
+				If(CountInv("EliminatorUpgrade")) {
+					If(CountInv("UraniumShot")) { A_RailAttack((80+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorUraniumPuffRail",0,0,0,0,0,0,"none",0,0,6); }
+					Else						{ A_RailAttack((80+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorPuffRail",0,0,0,0,0,0,"none",0,0,6); }
+				}
+				Else {
+					If(CountInv("UraniumShot")) { A_RailAttack((50+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorUraniumPuffRail",0,0,0,0,0,0,"none",0,0,3); }
+					Else 						{ A_RailAttack((50+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorPuffRail",0,0,0,0,0,0,"none",0,0,3); }
+				}
+			} Else {
+				If(CountInv("EliminatorUpgrade")) {
+					If(CountInv("UraniumShot")) { A_RailAttack(12,0,1,"","",RGF_SILENT,0,"EliminatorUraniumPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2);
+												  for(int butterspread = 0; butterspread < 9; butterspread++) { A_RailAttack(12,0,0,"","",RGF_SILENT,0,"EliminatorUraniumPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2); } }
+					Else						{ A_RailAttack(12,0,1,"","",RGF_SILENT,0,"EliminatorPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2);
+												  for(int butterspread = 0; butterspread < 9; butterspread++) { A_RailAttack(12,0,0,"","",RGF_SILENT,0,"EliminatorPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2); } }
+				}
+				Else {
+					If(CountInv("UraniumShot")) { A_FireBullets (7.0, 0.25, 12, 10, "EliminatorUraniumPuff", FBF_USEAMMO); }
+					Else 						{ A_FireBullets (7.0, 0.25, 12, 10, "EliminatorPuff", FBF_USEAMMO); }
+				}
+			}
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 5);
+				A_SetBlend("Blue",0.1,15);
+			}
+		}
+		LEVG A 1 A_SetPitch(pitch-2.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		LEVR A 1 A_SetPitch(pitch-1.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		LEVR B 1;
+		LEVR C 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVR D 1;
+		LEVR E 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVR F 1;
+		LEVR G 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVR H 1;
+		LEVR I 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG B 1;
+		LEVG C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG D 1;
+		LEVG E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVG F 1;
+		LEVG F 0 A_PlaySound("Eliminator/Open",4,0.8);
+		LE2G A 0 A_JumpIf(invoker.BulletShotLeft,2);
+		LEVG A 0;
+		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		"####" H 1;
+		"####" I 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG J 1 {
+			if(invoker.BulletShotLeft) { A_FireProjectile("RifleCasingSpawnerReversed",0,0,3,0,FPF_NOAUTOAIM); invoker.BulletShotLeft = 0; }
+			else { A_FireProjectile("DatShottyCasingSpawnerReversed",0,0,0,0,FPF_NOAUTOAIM); }
+		}
+		LEVG K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVG L 1;
+		LEVG F 0 A_PlaySound("Eliminator/Close",4,0.8);
+		LEVG M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG N 1;
+		LEVG O 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG P 1;
+		LEVG Q 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		LEVG R 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG S 1;
+		LEVG T 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG U 1;
+		LEVG A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		"####" B 0 A_TakeInventory("ShotsWereFired",1);
+		//LEVG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "LFire");
+		Goto LIdle;
+	LGunflash:
+		TNT1 A 0 {
+			A_OverlayFlags(OverlayID(),PSPF_RENDERSTYLE|PSPF_FLIP|PSPF_MIRROR,1);
+			A_OverlayRenderstyle(OverlayID(),STYLE_Add);
+		}
+		LEVF A 1 Bright A_Light2;
+		LEVF B 1 Bright;
+		TNT1 A 2;
+		TNT1 A 5 A_Light1;
+		TNT1 A 0 A_Light0;
+		Stop;
+	LNope:
+		LEVG A 0 A_PlaySound("Eliminator/DryFire",4,0.6);
+		LEVG A 1 A_OverlayOffset(OverlayID(),3,3);
+		LEVG A 1 A_OverlayOffset(OverlayID(),2,2);
+		LEVG A 1 A_OverlayOffset(OverlayID(),1,1);
+		LEVG A 5 A_OverlayOffset(OverlayID(),0,0);
+		Goto LIdle;
+	
+	//Right fire.
+	RIdle:
+		LEVG A 1;
+		LEVG A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "CaberToss");
+		LEVG A 0 {
+			If(CountInv("ShotsWereFired") && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK)) { Return ResolveState("RFire"); }
+			If(GetPlayerInput(INPUT_BUTTONS) & (BT_ALTATTACK)) { Return ResolveState("RFire"); }
+			Return ResolveState(Null);
+		}
+		Loop;
+	CaberToss:
+		LEVG SRQ 1;
+	CaberMain:
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1;
+		TNT1 A 0 {
+			A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE);
+			If(CountInv("PowerStrength2")) {
+				If(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			} Else {
+				If(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			}
+		}
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		MCHT E 1;
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		MCHT G 1;
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		MCHT I 1;
+		TNT1 A 3;
+		TNT1 A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "CaberMain");
+		LEVG QRS 1;
+		Goto RIdle;
+		
+	RFire:
+		LEVG A 0 {
+			If(GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD && ((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,1); }
+			If(GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD && !((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,"SingleRNope"); }
+			If((!CountInv("DemShellsAmmo") && CountInv("BulletAmmo") >= 5) && ((CountInv("HexenCounter") && CountInv("BlueMana") >= 3) || (!CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5))) { Return A_Jump(256,1); }
+			Else If((CountInv("HexenCounter") && CountInv("GreenMana") >= 8) || (!CountInv("HexenCounter") && CountInv("DemShellsAmmo"))) { Return A_Jump(256,1); }
+			Return ResolveState("RNope");
+		}
+	RMain:
+		LEVG A 0 {
+			A_PlaySound("Eliminator/Fire",1,0.5);
+			A_PlaySound("Eliminator/AddFire",6,0.7);
+			A_FireProjectile("GunsmokeSpawner_Medium",0,0,7,1,FPF_NOAUTOAIM);
+			A_AlertMonsters();
+			A_Recoil(4.0);
+			A_Overlay(3,"RGunflash");
+			If((GetPlayerInput(INPUT_BUTTONS) & BT_RELOAD) || (!CountInv("DemShellsAmmo") && !CountInv("HexenCounter") && CountInv("BulletAmmo") >= 5) || (CountInv("GreenMana") < 8 && CountInv("HexenCounter") && CountInv("BlueMana") >= 3)) {
+				invoker.BulletShotRight = 1;
+				If(CountInv("EliminatorUpgrade")) {
+					If(CountInv("UraniumShot")) { A_RailAttack((80+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorUraniumPuffRail",0,0,0,0,0,0,"none",0,0,6); }
+					Else						{ A_RailAttack((80+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorPuffRail",0,0,0,0,0,0,"none",0,0,6); }
+				}
+				Else {
+					If(CountInv("UraniumShot")) { A_RailAttack((50+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorUraniumPuffRail",0,0,0,0,0,0,"none",0,0,3); }
+					Else 						{ A_RailAttack((50+5*random(1,6)),6,1,"","",RGF_SILENT|RGF_EXPLICITANGLE,0,"EliminatorPuffRail",0,0,0,0,0,0,"none",0,0,3); }
+				}
+			} Else {
+				If(CountInv("EliminatorUpgrade")) {
+					If(CountInv("UraniumShot")) { A_RailAttack(12,0,1,"","",RGF_SILENT,0,"EliminatorUraniumPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2);
+												  for(int butterspread = 0; butterspread < 9; butterspread++) { A_RailAttack(12,0,0,"","",RGF_SILENT,0,"EliminatorUraniumPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2); } }
+					Else						{ A_RailAttack(12,0,1,"","",RGF_SILENT,0,"EliminatorPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2);
+												  for(int butterspread = 0; butterspread < 9; butterspread++) { A_RailAttack(12,0,0,"","",RGF_SILENT,0,"EliminatorPuffRail",7.0,0.25,0,0,0,0,"none",0,0,2); } }
+				}
+				Else {
+					If(CountInv("UraniumShot")) { A_FireBullets (7.0, 0.25, 12, 10, "EliminatorUraniumPuff", FBF_USEAMMO); }
+					Else 						{ A_FireBullets (7.0, 0.25, 12, 10, "EliminatorPuff", FBF_USEAMMO); }
+				}
+			}
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 5);
+				A_SetBlend("Blue",0.1,15);
+			}
+		}
+		LEVG A 1 A_SetPitch(pitch-2.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		LEVR A 1 A_SetPitch(pitch-1.25 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
+		LEVR B 1;
+		LEVR C 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVR D 1;
+		LEVR E 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVR F 1;
+		LEVR G 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVR H 1;
+		LEVR I 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG B 1;
+		LEVG C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG D 1;
+		LEVG E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVG F 1;
+		LEVG F 0 A_PlaySound("Eliminator/Open",4,0.8);
+		LE2G A 0 A_JumpIf(invoker.BulletShotRight,2);
+		LEVG A 0;
+		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		"####" H 1;
+		"####" I 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG J 1 {
+			if(invoker.BulletShotRight) { A_FireProjectile("RifleCasingSpawner",0,0,3,0,FPF_NOAUTOAIM); invoker.BulletShotRight = 0; }
+			else { A_FireProjectile("DatShottyCasingSpawner",0,0,0,0,FPF_NOAUTOAIM); }
+		}
+		LEVG K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVG L 1;
+		LEVG F 0 A_PlaySound("Eliminator/Close",4,0.8);
+		LEVG M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG N 1;
+		LEVG O 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG P 1;
+		LEVG Q 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		LEVG R 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG S 1;
+		LEVG T 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG U 1;
+		LEVG A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
+		LEVG A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		LEVG A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		LEVG A 0 {
+			If(CountInv("ShotsWereFired") && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK)) { Return ResolveState("RFire"); }
+			//If(GetPlayerInput(INPUT_BUTTONS) & (BT_ALTATTACK)) { Return ResolveState("RFire"); }
+			Return ResolveState(Null);
+		}
+		Goto SingleRIdle;
+	RGunflash:
+		TNT1 A 0 {
+			A_OverlayFlags(OverlayID(),PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(OverlayID(),STYLE_Add);
+		}
+		LEVF A 1 Bright A_Light2;
+		LEVF B 1 Bright;
+		TNT1 A 2;
+		TNT1 A 5 A_Light1;
+		TNT1 A 0 A_Light0;
+		Stop;
+	RNope:
+		LEVG A 0 A_PlaySound("Eliminator/DryFire",4,0.6);
+		LEVG A 1 A_OverlayOffset(OverlayID(),3,3);
+		LEVG A 1 A_OverlayOffset(OverlayID(),2,2);
+		LEVG A 1 A_OverlayOffset(OverlayID(),1,1);
+		LEVG A 5 A_OverlayOffset(OverlayID(),0,0);
+		Goto RIdle;
+	}
+}

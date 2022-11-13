@@ -1,0 +1,36 @@
+// A 3D distance check, specifically for the spikebomb (but still utilitarian).
+// By Zhs2.
+
+#library "bombsbombsdonteverfearthemoreyouseethemoreyoucheer"
+#include "zcommon.acs"
+
+script "Pipe Blockade" (void)
+{
+	while(CheckInventory("PipeTossTimer"))
+	{
+		TakeInventory("PipeTossTimer",1);
+		delay(const:1);
+		restart;
+	}
+	TakeInventory("PipeTossCounter",1);
+}
+
+script "TargetDistance3D" (int radiuscheck, int heightcheck)
+{
+	int projx, projy, projz, targx, targy, targz, finalx, finaly, finalz;
+	projx = GetActorX(0);
+	projy = GetActorY(0);
+	projz = GetActorZ(0);
+	SetActivatorToTarget(0); // Same as the machete check, get our player's data
+	targx = GetActorX(0);
+	targy = GetActorY(0);
+	targz = GetActorZ(0);
+	finalx = (projx - targx) >> 16; // Fixed point gtfo
+	finaly = (projy - targy) >> 16;
+	finalz = (projz - targz) >> 16;
+	if((sqrt(finalx*finalx + finaly*finaly) <= radiuscheck) && (sqrt(finalz*finalz) <= heightcheck))
+	{
+		SetResultValue(true);
+	}
+	else {SetResultValue(false);}
+}

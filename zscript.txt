@@ -1,0 +1,45 @@
+version "3.7"
+
+// for anything related to praising Mima or the Moon.
+#include "moonspeak/crazy_dark_reincarnated_sunset_crawling_lunatic_science.txt"
+
+#include "zscript/Blazer.txt"
+#include "zscript/Spawners.txt"
+#include "zscript/Puffs.txt"
+#include "zscript/Props.txt"
+#include "zscript/CheatersSuffering.txt"
+
+#include "zscript/events/playerhandler.txt"
+#include "zscript/events/keyhandler.txt"
+
+//weapons
+#include "zscript/weapons/Macheterang.txt"
+#include "zscript/weapons/Colts.txt"
+#include "zscript/weapons/Sidekick.txt"
+#include "zscript/weapons/Fleshrend.txt"
+#include "zscript/weapons/ChromeJustice.txt"
+#include "zscript/weapons/Eliminator.txt"
+#include "zscript/weapons/FMG.txt"
+#include "zscript/weapons/Leadspitter.txt"
+#include "zscript/weapons/Patriarch.txt"
+#include "zscript/weapons/Bitchmaker.txt"
+#include "zscript/weapons/Spikebomb.txt"
+#include "zscript/weapons/Skullthrottle.txt"
+#include "zscript/weapons/Paintrain.txt"
+#include "zscript/weapons/Conqueror.txt"
+#include "zscript/weapons/Nutcracker.txt"
+#include "zscript/weapons/DoubleDeuce.txt"
+
+//items
+#include "zscript/items/Hazmat.txt"
+#include "zscript/items/Keyz.txt"
+
+//powerups
+#include "zscript/powerups/PowerupBase.txt"
+#include "zscript/powerups/Soulsphere.txt"
+#include "zscript/powerups/QuadDamage.txt"
+#include "zscript/powerups/Megasphere.txt"
+#include "zscript/powerups/Invulsphere.txt"
+#include "zscript/powerups/Blazingsphere.txt"
+#include "zscript/powerups/AmmoJunkie.txt"
+#include "zscript/powerups/Blastsphere.txt"

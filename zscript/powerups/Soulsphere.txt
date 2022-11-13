@@ -1,0 +1,201 @@
+class SoulsphereItem : TBPowerupBase
+{
+	Default
+	{
+		Inventory.PickupMessage "$GOTSOULSPHERE";
+		Inventory.PickupSound "Soulsphere/Pickup";
+	}
+	
+	States
+	{
+	Spawn:
+		TBSS AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(Invoker.User_Count % 4 == 0)
+				{
+					A_SpawnItemEx("SoulFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					Invoker.User_Count = 0;
+				}
+				Invoker.User_Count = Invoker.User_Count + 1;
+				A_SpawnItemEx("SoulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop;
+		
+	Pickup:
+		TNT1 A 0 {
+			//Alchemist's Dream storing.
+			if(CountInv("AlchemistsDream") &&
+			  (CountInv("SoulspherePortable") < 3) &&
+			   GetPlayerInput(INPUT_BUTTONS) & BT_USE)
+			{
+				A_Print("$SOULSPHERESTORED");
+				A_GiveInventory("SoulspherePortable",1);
+				Return ResolveState("Null");
+			}
+			//Stuff.
+			A_GiveInventory("Soulsphere2");
+			A_SpawnItemEx("SoulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("SoulsphereBoost");
+			}
+			Return ResolveState(null);
+		}
+		Stop;
+	}
+}
+
+class Soulsphere2 : Soulsphere
+{
+	Default
+	{
+		Inventory.PickupMessage "$GOTSOULSPHERE";
+		Inventory.MaxAmount 999;
+		Inventory.PickupSound "Soulsphere/Pickup";
+		Renderstyle 'Add';
+		+FLOATBOB
+	}
+	
+	Int User_Count;
+	
+	States
+	{
+	Spawn:
+		TBSS AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(Invoker.User_Count % 4 == 0)
+				{
+					A_SpawnItemEx("SoulFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					Invoker.User_Count = 0;
+				}
+				Invoker.User_Count = Invoker.User_Count + 1;
+				A_SpawnItemEx("SoulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop;
+	}
+}
+
+//Potency upgrade
+class SoulsphereBoost : Soulsphere2
+{
+	Default
+	{
+		Inventory.Amount 25;
+	}
+}
+
+//Stored powerup
+class SoulspherePortable : TBPowerupPortableBase
+{
+	Default
+	{
+		Inventory.PickupMessage "$GOTSOULSPHERE";
+		Inventory.Icon 'ARTITBSS';
+		Inventory.PickupSound "Soulsphere/Pickup";
+		Tag "Soulsphere";
+	}
+	
+	States
+	{
+	Spawn:
+		TBSS AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(Invoker.User_Count % 4 == 0)
+				{
+					A_SpawnItemEx("SoulFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					Invoker.User_Count = 0;
+				}
+				Invoker.User_Count = Invoker.User_Count + 1;
+				A_SpawnItemEx("SoulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop;
+	Use:
+		TNT1 A 0 {
+			//Stuff.
+			A_SetBlend("Blue",0.3,70);
+			A_PlaySound("Soulsphere/Pickup",3);
+			A_GiveInventory("Soulsphere2");
+			A_SpawnItemEx("SoulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("SoulsphereBoost");
+			}
+		}
+		Stop;
+	} 
+}
+
+//Eyecandy
+class SoulFade : TBFadeBase
+{
+	States
+	{
+	Spawn:
+		TBSS C 0;
+		Goto Super::Fade;
+	}
+}
+
+class SoulsphereParticle : TBItemParticle
+{
+	States
+	{
+	Spawn:
+		BPRT A 0;
+	SetScale:
+		"####" "#" 0 A_SetScale(0.1);
+	Main:
+		"####" "#" 1 Bright {
+			A_FadeOut(frandom(0.02,0.04));
+			A_ChangeVelocity(0,0,frandom(-0.1,0.15),CVF_RELATIVE);
+			A_SetScale(Scale.X-frandom(-0.01,0.02));
+			Return A_JumpIf(Scale.X <= 0,"Null");
+		}
+		Loop;
+	}
+}
+
+class SoulsphereEffect : TBPowerupEffect
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay
+		{
+			for (User_Counter = 0; User_Counter < 6; User_Counter = User_Counter + 1)
+			{
+				A_SetAngle(frandom(0.0,360.0));
+				A_SpawnItemEx("SoulspherePart",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS);
+			}
+			User_Counter = 40;
+		}
+		Goto Super::Loop2;
+	}
+}
+
+class SoulspherePart : TBPowerupPart
+{
+	States
+	{
+	Spawn:
+		NTCT C 0;
+		Goto Super::Setup;
+	}
+}

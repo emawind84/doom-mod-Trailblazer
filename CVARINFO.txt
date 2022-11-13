@@ -1,0 +1,41 @@
+server 	int TB_SmokeReduction = 0;
+server 	int TB_ParticleReduction = 0;
+
+user	int TB_QuakeRecoil = 1;
+user	float TB_WeaponRecoil = 1.0;
+user	int TB_ZoomRecoil = 1;
+
+user	int TB_Scores = 0;
+
+user	int TB_SequentialShot = 0;
+user 	int TB_TraditionalQuickToss = 0;
+user 	int TB_DashFrames = 7;
+user 	int TB_DashCooldown = 30;
+user 	bool tb_dashholdspeed = false;
+user 	int TB_MinigunMode = 0;
+user 	int TB_ConquerorMode = 0;
+user 	int TB_ReloadMode = 1;
+user 	int TB_CrafterWarning = 0;
+user 	int TB_SightsReturn = 1;
+user 	int TB_JusticeSwap = 0;
+
+user 	int TB_LeftHanded = 0; //C4 not included~
+user	int TB_NapoleonDynamite = 0;
+
+server	int TB_Hammerspace = 1;
+server	int TB_KeyShare = 1;
+server	int TB_SSGSpawner = 0;
+server	int TB_ChainSpawner = 0;
+server	int TB_RocketSpawner = 0;
+server	int TB_BFGSpawner = 0;
+server	int TB_NoCrafting = 0;
+user	bool TB_MasochistMode = false;
+server	float TB_PlayerAttackMult = 1.0;
+server	float TB_PlayerDefenseMult = 1.0;
+
+// KeksDose's Moonspeak tilt options.
+user float	tb_tilt_looksway		= 1.337;
+user float	tb_tilt_movesway		= 0.69;
+user float	tb_tilt_sidesway		= 0.420;
+user bool	tb_tilt_pitchsway_on	= true;
+user bool	tb_tilt_enabled			= true;

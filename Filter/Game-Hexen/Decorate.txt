@@ -1,0 +1,72 @@
+ACTOR Trailblazer_Hexen : Trailblazer
+{
+	Player.StartItem "HexenCounter"
+	
+	Player.StartItem Macheterang
+	Player.StartItem SpikebombWeapon
+	Player.StartItem SpikebombTossWeapon
+	Player.StartItem PipeQuickToss
+	Player.StartItem TinkerItem
+	Player.StartItem AmmoCrafterItem
+	//Player.StartItem HammerSpaceCounter 10
+	
+	//Machete Quick-Toss stuff
+	Player.StartItem MacheteIn
+	Player.StartItem MacheteOut
+	
+	//Hexen stuff
+	Player.SpawnClass Any
+	Player.StartItem Sidekick
+	Player.StartItem BlueMana 60
+	
+	//Gun clips
+	Player.StartItem MacheteAmmo 1
+	Player.StartItem CradleClip 6
+	Player.StartItem GraveClip 6
+	Player.StartItem UziClipLeft 30
+	Player.StartItem UziClipRight 30
+	Player.StartItem MagnumClip 6
+	Player.StartItem SidekickClip 16
+	Player.StartItem ChromeJusticeClip 8
+	Player.StartItem FMGClip 70
+	Player.StartItem PatriarchClip 12
+	Player.StartItem DoubleDeuceClip 2
+	
+	Player.ColorRange 187, 202
+	
+	Player.ColorSet 0, "Classic", 146, 161, 155
+	Player.ColorSet 1, "Pimp-ass Golden", 122, 145, 138
+	Player.ColorSet 2, "Sonny Crockett", 33, 44, 39
+	Player.ColorSet 3, "Red Robin", 164, 171, 169
+	Player.ColorSet 4, "Dragonscale", 164, 182, 176
+	Player.ColorSet 5, "Doomguy", 186, 195, 191
+	Player.ColorSet 6, "Edgelord", 0, 15, 0
+	Player.ColorSet 7, "Manly-ass", 231, 239, 239
+}
+//For now, there is no need to exclude anything.
+
+/*
+ACTOR BlueprintSpawner2 : RandomSpawner replaces BlueprintSpawner
+{
+	DropItem "RiftbombsBlueprintBringer"
+	DropItem "WhiskeyBlueprintBringer"
+	DropItem "NutForceOneBlueprintBringer"
+	DropItem "StriploaderBlueprintBringer"
+	DropItem "KineticFistBlueprintBringer"
+	DropItem "BlazingBlueprintBringer"
+	DropItem "UraniumShotBlueprintBringer"
+	DropItem "LuckyStrikeBlueprintBringer"
+	DropItem "KeepShootingBlueprintBringer"
+	DropItem "HomingGrenadesBlueprintBringer"
+	DropItem "ThrottleInstaspinBlueprintBringer"
+	DropItem "TricorneShotBlueprintBringer"
+	DropItem "MasterExploderBlueprintBringer"
+	DropItem "AlchemistsPotencyBlueprintBringer"
+	DropItem "AlchemistsDreamBlueprintBringer"
+	DropItem "AlchemistsPotencyBlueprintBringer"
+	DropItem "AlchemistsDreamBlueprintBringer"
+	DropItem "ArmoredMeasuresBlueprintBringer"
+	DropItem "SpontaneousFreedomBlueprintBringer"
+	DropItem "HeavyMachinegunBlueprintBringer"
+	DropItem "ColtBurstshotBlueprintBringer"
+}*/

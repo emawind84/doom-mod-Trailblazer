@@ -1,0 +1,642 @@
+class Trailblazer : PlayerPawn
+{
+	double aircontrol;
+	int jumpwaittime, jumpboosttime, boosttics;
+	double jumpvelscale, jumpvellimit, jumpvelcontrol, jumpvelpenal;
+	
+	property AirControl: aircontrol;
+	property JumpWaitTime: jumpwaittime;
+	property JumpBoostTime: jumpboosttime;
+	property JumpSpeedScale: jumpvelscale;
+	property JumpSpeedLimit: jumpvellimit;
+	property JumpSpeedControl: jumpvelcontrol;
+	property JumpSpeedPenalty: jumpvelpenal;
+	
+	tb_Swagger view_tilt; // View tilt control.
+	
+	Default
+	{
+		Health 100;
+		Player.maxhealth 100;
+		Radius 16;
+		Height 56;
+		Mass 100;
+		PainChance 255;
+		Player.SoundClass "Trailblazer";
+		Player.forwardmove 1;//.25
+		Player.sidemove 1;//.25
+		Player.JumpZ 9.0;
+		Player.GruntSpeed 16.0;
+		Player.DisplayName "Malcolm";
+		Player.Face "BAD";
+		Player.ColorRange 112, 127;
+		Player.AttackZOffset 13;
+		
+		// Custom properties. Set to defaults for now.
+		Trailblazer.AirControl 0.4; // 0.00390625 is default Doom air control.
+		Trailblazer.JumpWaitTime 7; // In tics. Default 18.
+		Trailblazer.JumpBoostTime 4; // Horizontal boost time after jumping, in tics.
+		Trailblazer.JumpSpeedScale 0.9; // Scales horizontal movement speed while jumping.
+		Trailblazer.JumpSpeedLimit 50.0; // The upper limit for boost velocity. If speed is higher than this, no boost occurs. Default Doomguy can hit circa ~21 velocity on an axis while straferunning.
+		//Trailblazer.JumpSpeedCurve 8.0; // The greater the number, the harsher the curve on which the player gains horizontal speed midair (a.k.a. the slower he gains speed.)
+		Trailblazer.JumpSpeedControl 2.0; // Amount of velocity added to normal movement for mid-air control after a jump.
+		Trailblazer.JumpSpeedPenalty 0.999; // Total velocity is slowed by this much when Boost tics run out and the player is below the speed limit. Above the speed limit, we are slowed by air control's magic formula.
+		
+		Player.ColorSet 0, "Classic", 240, 247, 207;
+		Player.ColorSet 1, "Ashtray", 96, 111, 103;
+		Player.ColorSet 2, "Redscale", 176, 191, 176;
+		Player.ColorSet 3, "Manly-ass", 250, 254, 251;
+
+		Player.StartItem 'Sidekick';
+		Player.StartItem 'BulletAmmo', 60;
+		//Player.StartItem 'CustomPain'; // THIS DOES NOT WORK FOR NO APPARENT REASON, AAAAAAAAAAAAAAAAAAAAAAHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH~
+		Player.StartItem 'Macheterang';
+		Player.StartItem 'SpikebombWeapon';
+		Player.StartItem 'SpikebombTossWeapon';
+		Player.StartItem 'PipeQuickToss';
+		Player.StartItem 'TinkerItem';
+		Player.StartItem 'AmmoCrafterItem';
+		
+		//Player.StartItem 'HammerSpaceCounter', 10; // obsolete.
+		
+		//Machete Quick-Toss stuff
+		Player.StartItem 'MacheteIn';
+		Player.StartItem 'MacheteOut';
+		
+		//Hexen stuff
+		Player.SpawnClass "Any";
+		Player.StartItem 'Sidekick';
+		Player.StartItem 'BlueMana', 60;
+		
+		//Gun clips
+		Player.StartItem 'MacheteAmmo', 1;
+		Player.StartItem 'CradleClip', 6;
+		Player.StartItem 'GraveClip', 6;
+		Player.StartItem 'UziClipLeft', 30;
+		Player.StartItem 'UziClipRight', 30;
+		Player.StartItem 'MagnumClip', 6;
+		Player.StartItem 'SidekickClip', 16;
+		Player.StartItem 'ChromeJusticeClip', 8;
+		Player.StartItem 'FMGClip', 70;
+		Player.StartItem 'PatriarchClip', 12;
+		Player.StartItem 'DoubleDeuceClip', 2;
+		
+		Player.WeaponSlot 1, "SpikebombWeapon", "Macheterang";
+		Player.WeaponSlot 2, "Sidekick", "Colts";
+		Player.WeaponSlot 3, "Fleshrend", "Eliminator", "ChromeJustice";
+		Player.WeaponSlot 4, "FMG", "Leadspitter";
+		Player.WeaponSlot 5, "Patriarch", "Bitchmaker";
+		Player.WeaponSlot 6, "Paintrain", "Skullthrottle", "Skullthrottle2";
+		Player.WeaponSlot 7, "Nutcracker", "DoubleDeuce";
+		Player.WeaponSlot 8, "Conqueror";
+		
+		+DONTBLAST //For future use, usually
+		+THRUSPECIES
+		
+		Species "Chainsmoker";
+		
+		DamageFactor "Normal", 0.8; //Manly jacket and manly resistance!
+		DamageFactor "Patriarch", 0.1; //He shouldn't get so damaged by his own gun, babe - too action hero'y for that!
+		DamageFactor "MasteringExplosions", 0.0; //EXPLOSIVO!
+	}
+	
+	// Stuff that should be handled immediately after existing.
+	override void PostBeginPlay()
+	{
+		// Brotip: PostBeginPlay runs only when the player actor (or a voodoo doll) is created
+		// (even on multiplayer respawn), not guaranteed once every map. If something needs to
+		// be reinitialized every map, toss it into HandleItemReset().
+		// (Yes, the Chillgrasp thinker's user is lost between map changes in multiplayer.)
+		// Chillgrasp initialization is now done in OnRespawn.
+	
+		if (!player || !player.mo || player.mo != self || gamestate == GS_TITLELEVEL)
+		{ // For voodoo dolls and titlemaps.
+			Super.PostBeginPlay();
+			return;
+		}
+		
+		GiveInventory("CustomPain", 1);
+		Super.PostBeginPlay();
+	}
+	
+	// handled by event handler to reset stuff after every map switch.
+	void HandlePlayerReset()
+	{
+		view_tilt.Init(player);
+	}
+	
+	// what says on the tin.
+	override void OnRespawn()
+	{
+		// Zhs2, probably: Fun fact: this function fires at the beginning of a game too.
+
+		// kd: LET'S HEAD OVER THERE REALLY REALLY FAST. IF SOMETHING GETS IN OUR
+		// WAY - SHOOT IT!
+		
+		view_tilt.Init(player);
+		
+		// player_data = VarStorage;
+		super.onrespawn();
+		return;
+	}
+	
+	// stuff that should be handled every tic.
+	override void Tick()
+	{
+		if (!player || !player.mo || player.mo != self || health <= 0)
+		{ // My point with fucking voodoo dolls still stands.
+			Super.Tick();
+			return;
+		}
+		view_tilt.tick();		// kd: Don't rock the boat and keep on your swim vests!
+		super.tick();
+	}
+	
+	// view tilt stuff.
+	vector2 weapon_bob_offset;
+	vector2 old_weapon_bob_offset;
+	double old_delta_view;
+	double delta_view;
+	
+	override vector2 BobWeapon (double t) {
+		if(!player || !player.readyweapon) {
+			return (0, 0);
+		}
+		
+		if(!view_tilt.IsEnabled()) {
+			return super.BobWeapon(t);
+		}
+		
+		// kd: For some reason, interpolation jitters in net play, so I turn it
+		// off altogether.
+		if(multiplayer) {
+			t = 1;
+		}
+		
+		let weapon		= player.readyweapon;
+		let vel_sq		= vel dot vel;
+		let left		= (-sin(angle), cos(angle));
+		let vel_side	= left dot vel.xy;
+		
+		let bob_force	= 60 * (weapon.bobrangex, weapon.bobrangey);
+		let forw_f		= view_tilt.MovingPhase();
+		let side_f		= view_tilt.SidewaysPhase();
+		
+		let bob_f	= (
+			clamp(vel_side / 20, -1, 1),
+			clamp(vel_sq / 400, -1, 1));
+			
+		let pend_ang = 30 * sin(view_tilt.BobAngle()) + 90;
+		
+		old_weapon_bob_offset	= weapon_bob_offset;
+		weapon_bob_offset		= forw_f * (
+			bob_force.x * bob_f.y * cos(pend_ang) * 0.4,
+			bob_force.y * bob_f.y * (1 - sin(pend_ang)));
+		
+		weapon_bob_offset += (
+			0.23 * side_f * bob_force.x,
+			0.125 * abs(side_f) * bob_force.y);
+		
+		return t * weapon_bob_offset + (1 - t) * old_weapon_bob_offset;
+	}
+	
+	// Copying whole functions to change one or two lines! Yay! ᕕ( ᐛ )ᕗ
+	
+	override void MovePlayer ()
+	{
+		let player = self.player;
+		UserCmd cmd = player.cmd;
+
+		// [RH] 180-degree turn overrides all other yaws
+		if (player.turnticks)
+		{
+			player.turnticks--;
+			Angle += (180. / TURN180_TICKS);
+		}
+		else
+		{
+			Angle += cmd.yaw * (360./65536.);
+		}
+
+		player.onground = (pos.z <= floorz) || bOnMobj || bMBFBouncer || (player.cheats & CF_NOCLIP2);
+
+		// killough 10/98:
+		//
+		// We must apply thrust to the player and bobbing separately, to avoid
+		// anomalies. The thrust applied to bobbing is always the same strength on
+		// ice, because the player still "works just as hard" to move, while the
+		// thrust applied to the movement varies with 'movefactor'.
+
+		if (cmd.forwardmove | cmd.sidemove)
+		{
+			double forwardmove, sidemove;
+			double bobfactor;
+			double friction, movefactor;
+			double fm, sm;
+
+			[friction, movefactor] = GetFriction();
+			bobfactor = friction < ORIG_FRICTION ? movefactor : ORIG_FRICTION_FACTOR;
+			if (!player.onground && !bNoGravity && !waterlevel)
+			{
+				// [RH] allow very limited movement if not on ground.
+				// Zhs2: Or whatever the heck the property is set to.
+				movefactor *= self.aircontrol ? self.aircontrol : level.aircontrol;
+				bobfactor *= self.aircontrol ? self.aircontrol : level.aircontrol;
+			}
+
+			fm = cmd.forwardmove;
+			sm = cmd.sidemove;
+			[fm, sm] = TweakSpeeds (fm, sm);
+			fm *= Speed / 256;
+			sm *= Speed / 256;
+
+			// When crouching, speed and bobbing have to be reduced
+			if (CanCrouch() && player.crouchfactor != 1)
+			{
+				fm *= player.crouchfactor;
+				sm *= player.crouchfactor;
+				bobfactor *= player.crouchfactor;
+			}
+
+			forwardmove = fm * movefactor * (35 / TICRATE);
+			sidemove = sm * movefactor * (35 / TICRATE);
+
+			if (forwardmove)
+			{
+				Bob(Angle, cmd.forwardmove * bobfactor / 256., true);
+				ForwardThrust(forwardmove, Angle);
+			}
+			if (sidemove)
+			{
+				let a = Angle - 90;
+				Bob(a, cmd.sidemove * bobfactor / 256., false);
+				Thrust(sidemove, a);
+			}
+
+			if (!(player.cheats & CF_PREDICTING) && (forwardmove != 0 || sidemove != 0))
+			{
+				PlayRunning ();
+			}
+
+			if (player.cheats & CF_REVERTPLEASE)
+			{
+				player.cheats &= ~CF_REVERTPLEASE;
+				player.camera = player.mo;
+			}
+			
+			if(!player.onground && !bNoGravity && !waterlevel)
+			{
+				/* This didn't really work, it was too fast...
+				// Zhs2: Scale movement velocity midair for that Quake feel, apparently.
+				// Do this after air control has worked its speed magic, instead of boosting it.
+				if(vel.length() > 0)
+				{
+					airspeedfactor = clamp(-jumphorizvelcurve/min(vel.length(), jumphorizvellimit))+jumphorizvelscale; // Phew. (-a/x)+b
+					airspeedfactor = clamp(airspeedfactor,1.0,jumphorizvelscale); // So we never escape our acceptable range.
+				}
+				else
+				{
+					airspeedfactor = 1.0; // In case we're starting from zero velocity.
+				}
+				
+				// Straight up lazy multiplication. :P
+				//vel.x *= airspeedfactor;
+				//vel.y *= airspeedfactor;
+				//
+				//if(jumphorizvelclamp > 0)
+				//{
+				//	vel.x = clamp(vel.x, -jumphorizvellimit, jumphorizvellimit);
+				//	vel.y = clamp(vel.y, -jumphorizvellimit, jumphorizvellimit);
+				//}
+				
+				bool xpenalzone, ypenalzone;
+				
+				if(((abs(vel.x)*airspeedfactor) + (abs(vel.y)*airspeedfactor)) > jumphorizvellimit)
+				{ // If our speed is high enough, no boost.
+					if(abs(vel.x) > (jumphorizvellimit-abs(vel.y) > 0 ? jumphorizvellimit-abs(vel.y) : 1.0))
+					{ // If either speed is too high, penalize it.
+						xpenalzone = true;
+					}
+					if(abs(vel.y) > (jumphorizvellimit-abs(vel.x) > 0 ? jumphorizvellimit-abs(vel.x) : 1.0))
+					{
+						ypenalzone = true;
+					}
+					
+					if(xpenalzone)
+					{ // I would do this in the checks above, but that might place unfair decrease on y velocity.
+						vel.x *= jumphorizvelpenal;
+						xpenalzone = false;
+					}
+					if(ypenalzone)
+					{
+						vel.y *= jumphorizvelpenal;
+						ypenalzone = false;
+					}
+				}
+				else
+				{ // Allow the boost.
+					vel.x *= airspeedfactor;
+					vel.y *= airspeedfactor;
+				}
+				*/
+				
+				if(boosttics && vel.length() < jumpvellimit)
+				{
+					// Air control phase.
+					A_ChangeVelocity((cmd.forwardmove/0x3200) * jumpvelcontrol, (cmd.sidemove/-0x2800) * jumpvelcontrol, 0, CVF_RELATIVE);
+					// Movement scaling phase.
+					A_ChangeVelocity(Vel.X * jumpvelscale, Vel.Y * jumpvelscale, Vel.Z, CVF_REPLACE);
+				}
+			}
+		}
+	}
+	
+	override void PlayerThink()
+	{
+		double airfriction;
+		let player = self.player;
+		UserCmd cmd = player.cmd;
+		
+		CheckFOV();
+
+		if (player.inventorytics)
+		{
+			player.inventorytics--;
+		}
+		CheckCheats();
+
+		if (bJustAttacked)
+		{ // Chainsaw/Gauntlets attack auto forward motion
+			cmd.yaw = 0;
+			cmd.forwardmove = 0xc800/2;
+			cmd.sidemove = 0;
+			bJustAttacked = false;
+		}
+
+		bool totallyfrozen = CheckFrozen();
+
+		// Handle crouching
+		CheckCrouch(totallyfrozen);
+		CheckMusicChange();
+
+		if (player.playerstate == PST_DEAD)
+		{
+			DeathThink ();
+			return;
+		}
+		if (player.jumpTics != 0)
+		{ // Zhs2: DON'T MIND ME, I'M JUST INVERTING THIS jumpTics CHECK TO MAKE MORE SENSE
+			player.jumpTics++;
+			if (player.onground && (player.jumpTics > (JumpWaitTime > 0 ? JumpWaitTime : 18)))
+			{
+				player.jumpTics = 0;
+			}
+		}
+		if (boosttics != 0)
+		{
+			boosttics--;
+		}
+		if (player.morphTics && !(player.cheats & CF_PREDICTING))
+		{
+			MorphPlayerThink ();
+		}
+		
+		// Player speed reduction in mid-air.
+		if(!boosttics && player.jumpTics)
+		{
+		
+			if(self.aircontrol && vel.length() > jumpvellimit)
+			{
+				// Friction seems to be a thing that is applied based on level settings.
+				if(self.aircontrol <= 1/256.)
+				{
+					airfriction = 1.;
+				}
+				else
+				{
+					// Friction is inversely proportional to the amount of control
+					airfriction = self.aircontrol * -0.0941 + 1.0004;
+				}
+				// It was never externalized for actor use. So, let's apply it here.
+				if (player && player.mo && player.mo == self && airfriction != 1.)
+				{
+					// Apply only to players, not voodoo dolls.
+					Vel.X *= airfriction;
+					Vel.Y *= airfriction;
+				}
+			}
+			else
+			{
+				// Constant penalty.
+				A_ChangeVelocity(Vel.X * jumpvelpenal, Vel.Y * jumpvelpenal, Vel.Z, CVF_REPLACE);
+			}
+		}
+		
+		CheckPitch();
+		HandleMovement();
+		CalcHeight ();
+
+		if (!(player.cheats & CF_PREDICTING))
+		{
+			CheckEnvironment();
+			CheckUse();
+			CheckUndoMorph();
+			// Cycle psprites.
+			// Note that after this point the PlayerPawn may have changed due to getting unmorphed so 'self' is no longer safe to use.
+			player.mo.TickPSprites();
+			// Other Counters
+			if (player.damagecount)	player.damagecount--;
+			if (player.bonuscount) player.bonuscount--;
+
+			if (player.hazardcount)
+			{
+				player.hazardcount--;
+				if (!(level.time % player.hazardinterval) && player.hazardcount > 16*TICRATE)
+					player.mo.DamageMobj (NULL, NULL, 5, player.hazardtype);
+			}
+			player.mo.CheckPoison();
+			player.mo.CheckDegeneration();
+			player.mo.CheckAirSupply();
+		}
+	}
+	
+	override void CheckJump()
+	{
+		let player = self.player;
+		// [RH] check for jump
+		if (player.cmd.buttons & BT_JUMP)
+		{
+			if (player.crouchoffset != 0)
+			{
+				// Jumping while crouching will force an un-crouch but not jump
+				player.crouching = 1;
+			}
+			else if (waterlevel >= 2)
+			{
+				Vel.Z = 4 * Speed;
+			}
+			else if (bNoGravity)
+			{
+				Vel.Z = 3.;
+			}
+			else if (level.IsJumpingAllowed() && player.onground && player.jumpTics == 0)
+			{
+				double jumpvelz = JumpZ * 35 / TICRATE;
+				double jumpfac = 0;
+
+				// [BC] If the player has the high jump power, double his jump velocity.
+				// (actually, pick the best factors from all active items.)
+				for (let p = Inv; p != null; p = p.Inv)
+				{
+					let pp = PowerHighJump(p);
+					if (pp)
+					{
+						double f = pp.Strength;
+						if (f > jumpfac) jumpfac = f;
+					}
+				}
+				if (jumpfac > 0) jumpvelz *= jumpfac;
+
+				Vel.Z += jumpvelz;
+				bOnMobj = false;
+				player.jumpTics = 1; // Zhs2: DON'T MIND ME, STILL INVERTING
+				boosttics = JumpBoostTime; // Also boost timer
+				if (!(player.cheats & CF_PREDICTING)) A_PlaySound("*jump", CHAN_BODY);
+			}
+		}
+	}
+	
+	// Zhs2: Override for causing players to deal full damage to other players imported from Talon1024's fixpack. I can't see much wrong with it.
+	override int DamageMobj(Actor inflictor, Actor source, int damage, Name mod, int flags, double angle)
+	{
+		if (deathmatch && (source != self) && (source is "PlayerPawn"))
+		{
+			return Super.DamageMobj(inflictor, source, damage, mod, flags | DMG_NO_FACTOR, angle); // Makes other players do full damage to you
+		}
+		else
+		{
+			return Super.DamageMobj(inflictor, source, damage, mod, flags, angle);
+		}
+	}
+	
+	States
+	{
+	Spawn:
+		BLAZ A -1;
+		Stop;
+ 	 See:
+ 		BLAZ A 0 A_SpawnItemEx("TrailblazerStep", 0, 0, 0, 0, 0, -10, 0, SXF_SETMASTER, 0);
+		BLAZ AB 5;
+ 		BLAZ A 0 A_SpawnItemEx("TrailblazerStep", 0, 0, 0, 0, 0, -10, 0, SXF_SETMASTER, 0);
+		BLAZ CD 5;
+		Goto Spawn;
+	Melee:
+		BLAZ F 6 Bright;
+		Goto Missile;
+	Missile:
+		BLAZ E 12;
+		Goto Spawn;
+	Pain:
+		BLAZ G 3;
+		BLAZ G 3 A_Pain;
+		Goto Spawn;
+	Death:
+	AltSkinDeath:
+		BLAZ H 5;
+		BLAZ I 5 A_PlayerScream;
+		BLAZ J 5 A_NoBlocking;
+		BLAZ K 5;
+		BLAZ L -1;
+		Stop;
+	XDeath:
+	AltSkinXDeath:
+		BLAZ O 5;
+		BLAZ P 5 A_PlayerScream;
+		BLAZ Q 5 A_NoBlocking;
+		BLAZ RSTUV 5;
+		BLAZ W -1;
+		Stop;
+	}
+}
+
+// Custom damage multipliers, woo
+class CustomPain : Inventory
+{
+	Default
+	{
+		+INVENTORY.UNTOSSABLE
+	}
+
+	override void ModifyDamage(int damage, Name damageType, out int newdamage, bool passive)
+	{
+		// Attack damage
+		if(!passive && damage > 0)
+		{
+			newdamage = damage * GetCvar("TB_PlayerAttackMult");
+		}
+		// Defense damage
+		if(passive && damage > 0)
+		{
+			newdamage = damage * GetCvar("TB_PlayerDefenseMult");
+		}
+	}
+}
+
+class TrailblazerStep : actor
+{
+	Default
+	{
+		PROJECTILE;
+		+NOBLOOD;
+		+DONTBLAST;
+		damage 0;
+		radius 10;
+		deathsound "Move/Step";
+	}
+	States
+	{
+	Spawn:
+		TNT1 A 1;
+		Stop;
+	Death:
+		TNT1 A 1;
+		Stop;
+	}
+}
+
+class DashMaster : PowerupGiver
+{
+	Default
+	{
+		Inventory.MaxAmount 0;
+		Powerup.Type "PowerInvincibilityFrames";
+		Powerup.Color "None";
+		+INVENTORY.AUTOACTIVATE
+		+INVENTORY.ALWAYSPICKUP
+	}
+}
+
+class PowerInvincibilityFrames : PowerProtection
+{
+	Default
+	{
+		Powerup.Duration 15;
+		DamageFactor "Normal", 0.2;
+	}
+	
+	/*override void AttachToOwner(Actor user)
+	{
+		user.bNoDamage = TRUE;
+		user.bNoPain = TRUE;
+		Super.AttachToOwner(user);
+		return;
+	}
+	
+	override void DetachFromOwner()
+	{
+		owner.bNoDamage = FALSE;
+		owner.bNoPain = FALSE;
+		Super.DetachFromOwner();
+		return;
+	}*/
+}

@@ -1,0 +1,13 @@
+//Map
+ACTOR Fullmap : Allmap replaces Allmap
+{
+  Inventory.MaxAmount 0
+  Inventory.PickupSound "Fullmap/Pickup"
+  Inventory.PickupMessage "Got a PDA chock-full of vertices!"
+  States
+  {
+  Spawn:
+    PMAP ABCDCB 5
+    Loop
+  }
+}

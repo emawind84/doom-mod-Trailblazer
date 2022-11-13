@@ -1,0 +1,240 @@
+ACTOR BlazingsphereItem : TBPowerupBase// replaces BlurSphere
+{
+	Inventory.PickupMessage "$GOTBLAZINGSPHERE"
+	Inventory.PickupSound "Blazingsphere/Pickup"
+	States
+	{
+	Spawn:
+		TBC2 A 0 NoDelay A_Jump(2,2) //A rather rare occurance.
+		TBCS A 0
+	Looplet:
+		"####" AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("BlazingFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("BlazingsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	LiteSpawn:
+		"####" ABCDEFEDCB 4 Bright
+		Goto Looplet
+	Pickup:
+		TNT1 A 0 {
+			//Alchemist's Dream storing.
+			if(CountInv("AlchemistsDream") && (CountInv("BlazingspherePortable") < 3) && GetPlayerInput(INPUT_BUTTONS) & BT_USE)
+			{
+				A_Print("$BLAZINGSPHERESTORED");
+				A_GiveInventory("BlazingspherePortable",1);
+				Return State("Null");
+			}
+			//Nicotine rush warnings.
+			If(CountInv("NicotineToken") >= 75 && !CountInv("NicotineAchtung1")) { A_Print("\c[white]about 25 cigs to nicotine rush."); A_GiveInventory("NicotineAchtung1",1); }
+			If(CountInv("NicotineToken") >= 90 && !CountInv("NicotineAchtung2")) { A_Print("\c[white]about 10 cigs to nicotine rush."); A_GiveInventory("NicotineAchtung2",1); }
+			If(CountInv("NicotineToken") >= 95 && !CountInv("NicotineAchtung3")) { A_Print("\c[gold]about 5 cigs to nicotine rush!");   A_GiveInventory("NicotineAchtung3",1); }
+			
+			//Blazing Booster bonus.
+			If(CountInv("BlazingBooster")) {
+				A_GiveInventory("NicotineToken",5);
+			}
+			//Stuff.
+			A_SetMugshotState("Grin");
+			A_GiveInventory("Blazingsphere");
+			A_GiveInventory("NicotineToken",15);
+			A_SpawnItemEx("BlazingsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("BlazingsphereBoost");
+			}
+			//Nicotine Rush.
+			If(CountInv("NicotineToken") >= 100) {
+				A_TakeInventory("NicotineAchtung1",1);
+				A_TakeInventory("NicotineAchtung2",1);
+				A_TakeInventory("NicotineAchtung3",1);
+				A_TakeInventory("NicotineToken",100); //You do not want this in the item, trust me on this one.
+				A_GiveInventory("NicotineRushItem");
+			}
+			Return State("");
+		}
+		Stop
+	}
+}
+
+ACTOR Blazingsphere : PowerupGiver
+{
+	Inventory.PickupMessage "$GOTBLAZINGSPHERE"
+	Inventory.PickupSound "Blazingsphere/Pickup"
+	Powerup.Type "Blazing"
+	Powerup.Color Purple, 0.05
+	Powerup.Duration -45
+	Renderstyle Add
+	+FLOATBOB
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.ADDITIVETIME
+	Var Int User_Count;
+	States
+	{
+	Spawn:
+		TBC2 A 0 NoDelay A_Jump(2,2)
+		TBCS A 0
+	Looplet:
+		"####" AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("BlazingFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("BlazingsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	}
+}
+
+actor PowerBlazing : PowerSpeed
+{	
+	Inventory.Icon "SPMMODE0"
+	Speed 1.0 //It's handled via script now.
+}
+
+//Potency upgrade
+ACTOR BlazingsphereBoost : PowerupGiver
+{
+	Powerup.Duration -15
+	Powerup.Type "Blazing"
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ADDITIVETIME
+}
+
+//Stored powerup
+ACTOR BlazingspherePortable : TBPowerupPortableBase
+{
+	Inventory.PickupMessage "$GOTBLAZINGSPHERE"
+	Inventory.Icon ARTITBCS
+	Inventory.PickupSound "Blazingsphere/Pickup"
+	Tag "Blazingsphere"
+	States
+	{
+	Spawn:
+		TBC2 A 0 NoDelay A_Jump(2,2)
+		TBCS A 0
+	Looplet:
+		"####" AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("BlazingFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("BlazingsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	LiteSpawn:
+		"####" ABCDEFEDCB 4 Bright
+		Goto Looplet
+	Use:
+		TNT1 A 0 {
+			//Blazing Booster bonus.
+			If(CountInv("BlazingBooster")) {
+				A_GiveInventory("NicotineToken",5);
+			}
+			//Stuff.
+			A_SetMugshotState("Grin");
+			A_SetBlend("Purple",0.3,70);
+			A_PlaySound("Blazingsphere/Pickup",3);
+			A_GiveInventory("Blazingsphere");
+			A_GiveInventory("NicotineToken",15);
+			A_SpawnItemEx("BlazingsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("BlazingsphereBoost");
+			}
+			//Nicotine Rush.
+			If(CountInv("NicotineToken") >= 100) {
+				A_TakeInventory("NicotineToken",100); //You do not want this in the item, trust me on this one.
+				A_GiveInventory("NicotineRushItem");
+			}
+		}
+		Stop
+	} 
+}
+
+//Eyecandy
+ACTOR BlazingFade : TBFadeBase
+{
+	States
+	{
+	Spawn:
+		TBCS C 0
+		Goto Super::Fade
+	}
+}
+
+ACTOR BlazingsphereParticle : TBItemParticle
+{
+	States
+	{
+	Spawn:
+		PPRT A 0
+	SetScale:
+		"####" "#" 0 A_SetScale(0.1)
+	Main:
+		"####" "#" 0 A_JumpIf(ScaleX <= 0,"NULL")
+		"####" "#" 0 A_FadeOut(frandom(0.02,0.04))
+		"####" "#" 0 A_ChangeVelocity(0,0,frandom(-0.1,0.15),CVF_RELATIVE)
+		"####" "#" 1 Bright A_SetScale(ScaleX-frandom(-0.01,0.02))
+		Loop
+	}
+}
+
+Actor BlazingsphereEffect : TBPowerupEffect
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay
+		{
+			for (A_SetUserVar(User_Counter, 0); User_Counter < 6; A_SetUserVar(User_Counter, User_Counter + 1))
+			{
+				A_SetAngle(frandom(0.0,360.0));
+				A_SpawnItemEx("BlazingspherePart",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS);
+			}
+		}
+		TNT1 A 0 A_SetUserVar("User_Counter", 40)
+		Goto Super::Loop2
+	}
+}
+
+Actor BlazingspherePart : TBPowerupPart
+{
+	States
+	{
+	Spawn:
+		PSHK B 0
+		Goto Super::Setup
+	}
+}

@@ -1,0 +1,1513 @@
+class PipeSelected : Inventory { Default { Inventory.MaxAmount 1; } }
+class SpikebombTrigger : PipeSelected {}
+class PipeUpgrade : PipeSelected {}
+class PipeMode : PipeSelected {}
+class TossPower : Inventory { Default { Inventory.MaxAmount 30; } }
+
+//Quick-throw item
+class PipeTossTimer : Inventory { Default { Inventory.MaxAmount 280; } } //8 seconds.
+class PipeTossCounter : PipeSelected {}
+
+class PipeRiftToggler : CustomInventory
+{
+	Default
+	{
+		Inventory.Amount 1;
+		Inventory.MaxAmount 1;
+		Inventory.InterHubAmount 1;
+		Inventory.PickupMessage "You shouldn't drop this in the first place, dummy.";
+		Inventory.Icon "ARTIPIPE";
+		Tag "Riftbomb Toggle";
+		+INVENTORY.INVBAR
+		+INVENTORY.UNDROPPABLE
+	}
+	States
+	{
+	Spawn:
+		PBMB A -1;
+		Stop;
+	Use:
+		TNT1 A 0 {
+			A_PlaySound("Tinker/Tink",4,0.7);
+			If(!CountInv("RiftbombActive")) {
+				A_Print("\c[white]Riftbomb\n\c[green]Engaged.",2);
+				A_GiveInventory("RiftbombActive",1);
+			} Else {
+				A_Print("\c[white]Riftbomb\n\c[red]Disengaged.",2);
+				A_TakeInventory("RiftbombActive",1);
+			}
+		}
+		Fail;
+	}
+}
+
+//Switch tokens.
+class GoForRang : Inventory { Default { Inventory.MaxAmount 1; } }
+class GoForKick : GoForRang {}
+class GoForColts : GoForRang {}
+class GoForFlesh : GoForRang {}
+class GoForJustice : GoForRang {}
+class GoForZZTop : GoForRang {}
+class GoForFMG : GoForRang {}
+class GoForSpitter : GoForRang {}
+class GoForDaddy : GoForRang {}
+class GoForMaker : GoForRang {}
+class GoForBombs : GoForRang {}
+class GoForSkull : GoForRang {}
+class GoForCracker : GoForRang {}
+class GoForPain : GoForRang {}
+class GoForConka : GoForRang {}
+class GoForTwiceFU : GoForRang {}
+
+class PipeQuickToss : CustomInventory
+{
+	Default
+	{
+		Inventory.Amount 1;
+		Inventory.MaxAmount 1;
+		Inventory.InterHubAmount 1;
+		Inventory.PickupMessage "I kill bugs!... Dead.";
+		-INVENTORY.INVBAR
+		+INVENTORY.UNDROPPABLE
+	}
+	
+	States
+	{
+	Spawn:
+		PBMB A -1;
+		Stop;
+	Use:
+		TNT1 A 0 A_JumpIfInventory("SpikebombAmmo",1,1);
+		Fail;
+	
+		TNT1 A 0 {
+			if(CountInv("SpikebombAmmo") && GetCvar("TB_TraditionalQuickToss") && !CountInv("PipeTossCounter"))
+			{
+				Return ResolveState("OyMatey");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("MacheteSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForRang");
+				Return ResolveState("Bazinga"); //Read each Bazinga slightly different for maximum effect.
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("SideSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForKick");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("ColtsSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForColts");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("RendSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForFlesh");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("ChromeSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForJustice");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("EliminatorSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForZZTop");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("FMGSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForFMG");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("LeadSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForSpitter");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("PattySelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForDaddy");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("BitchSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForMaker");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("PipeSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForBombs");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("ThrottleSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForSkull");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("NutterSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForCracker");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("PaintrainSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForPain");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("ConquerorSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForConka");
+				Return ResolveState("Bazinga");
+			}
+			else if(CountInv("SpikebombAmmo") && CountInv("DeuceSelected") && !CountInv("PipeTossCounter"))
+			{
+				A_GiveInventory("GoForTwiceFU");
+				Return ResolveState("Bazinga");
+			}
+			else
+			{
+				Return ResolveState("Nope");
+			}
+			Return ResolveState("Nope");
+		} 
+		Fail;
+	Bazinga:
+		TNT1 A 0 {
+			//Flush tokens.
+			A_TakeInventory("MacheteSelected",1);
+			A_TakeInventory("SideSelected",1);
+			A_TakeInventory("ColtsSelected",1);
+			A_TakeInventory("RendSelected",1);
+			A_TakeInventory("ChromeSelected",1);
+			A_TakeInventory("FMGSelected",1);
+			A_TakeInventory("LeadSelected",1);
+			A_TakeInventory("PattySelected",1);
+			A_TakeInventory("BitchSelected",1);
+			A_TakeInventory("PipeSelected",1);
+			A_TakeInventory("ThrottleSelected",1);
+			A_TakeInventory("NutterSelected",1);
+			A_TakeInventory("PaintrainSelected",1);
+			A_TakeInventory("ConquerorSelected",1);
+			A_TakeInventory("EliminatorSelected",1);
+			A_TakeInventory("DeuceSelected",1);
+			
+			A_SelectWeapon("SpikebombTossWeapon");
+		}
+		Fail;
+	OyMatey:
+		//TNT1 A 0 A_JumpIfInventory("Mana",25,1)
+		//Fail
+		TNT1 A 0 A_JumpIfInventory("PipeTossCounter",1,"Nope");
+		TNT1 A 0 {
+			A_GiveInventory("PipeTossCounter",1);
+			if(!GetCvar("TB_NapoleonDynamite")) {
+				A_GiveInventory("PipeTossTimer",280);
+			}
+			A_TakeInventory("SpikebombAmmo",1,TIF_NOTAKEINFINITE);
+			ACS_NamedExecuteAlways("Pipe Blockade");
+			A_PlaySound("Flechette/Throw");
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 5);
+			}
+		}
+		TNT1 A 0 A_GiveInventory("TossPower",3);
+		TNT1 A 0 {
+			if(!CountInv("RiftbombActive")) {
+				A_FireProjectile("SpikebombProjectile2",0,0,0,-5,FPF_NOAUTOAIM);
+			} else {
+				A_FireProjectile("RiftbombProjectile",0,0,0,-5,FPF_NOAUTOAIM);
+			}
+		}
+		Fail;
+	Nope:
+		TNT1 A 0;
+		Fail;
+	}
+}
+
+class SpikebombTossWeapon : Weapon
+{
+	Default
+	{
+			Weapon.SelectionOrder 9;
+	+WEAPON.CHEATNOTWEAPON
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A -1;
+		Loop;
+	Select:
+		TNT1 A 0 {
+			A_Overlay(-21,"none");
+			A_Overlay(-25,"none");
+			
+			A_Overlay(-12,"none");
+			A_Overlay(-11,"none");
+			A_Overlay(-10,"none");
+			A_Overlay(-6,"none");
+			A_Overlay(-5,"none");
+			A_Overlay(-4,"none");
+			A_Overlay(-3,"none");
+		}
+		TNT1 A 0 A_Raise(99);
+		Goto Ready;
+		
+	Ready:
+		TNT1 A 0 {
+			A_PlaySound("General/Toss",1,0.9);
+			A_PlaySound("Machete2/Slash",5,0.2);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1;
+		TNT1 A 0 {
+			A_GiveInventory("PipeTossCounter",1);
+			A_GiveInventory("PipeTossTimer",280);
+			A_TakeInventory("SpikebombAmmo",1,TIF_NOTAKEINFINITE);
+			ACS_NamedExecuteAlways("Pipe Blockade");
+			If(!CountInv("RiftbombActive")) {
+				A_FireProjectile("SpikebombProjectile2",0,0,10,-5,FPF_NOAUTOAIM);
+			} Else {
+				A_FireProjectile("RiftbombProjectile",0,0,10,-5,FPF_NOAUTOAIM);
+			}
+		}
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		MCHT E 1;
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		MCHT G 1;
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		MCHT I 1;
+		TNT1 A 3;
+		Goto GoOn;
+		
+	GoOn:
+		TNT1 A 0 {
+			
+			//Machete.
+			if(CountInv("GoForRang"))
+			{
+				A_TakeInventory("GoForRang");
+				A_SelectWeapon("Macheterang");
+			}
+			
+			//Sidekick.
+			else if(CountInv("GoForKick"))
+			{
+				A_TakeInventory("GoForKick");
+				A_SelectWeapon("Sidekick");
+			}
+			
+			//Colts.
+			else if(CountInv("GoForColts"))
+			{
+				A_TakeInventory("GoForColts");
+				A_SelectWeapon("Colts");
+			}
+			
+			//Fleshrend.
+			else if(CountInv("GoForFlesh"))
+			{
+				A_TakeInventory("GoForFlesh");
+				A_SelectWeapon("Fleshrend");
+			}
+			
+			//Chrome Justice.
+			else if(CountInv("GoForJustice"))
+			{
+				A_TakeInventory("GoForJustice");
+				A_SelectWeapon("ChromeJustice");
+			}
+			
+			//FMG.
+			else if(CountInv("GoForFMG"))
+			{
+				A_TakeInventory("GoForFMG");
+				A_SelectWeapon("FMG");
+			}
+			
+			//Leadspitter.
+			else if(CountInv("GoForSpitter"))
+			{
+				A_TakeInventory("GoForSpitter");
+				A_SelectWeapon("Leadspitter");
+			}
+			
+			//Patriarch.
+			else if(CountInv("GoForDaddy"))
+			{
+				A_TakeInventory("GoForDaddy");
+				A_SelectWeapon("Patriarch");
+			}
+			
+			//Bitchmaker.
+			else if(CountInv("GoForMaker"))
+			{
+				A_TakeInventory("GoForMaker");
+				A_SelectWeapon("Bitchmaker");
+			}
+			
+			//Spikebombs.
+			else if(CountInv("GoForBombs"))
+			{
+				A_TakeInventory("GoForBombs");
+				A_SelectWeapon("SpikebombWeapon");
+			}
+			
+			//Throttle.
+			else if(CountInv("GoForSkull"))
+			{
+				A_TakeInventory("GoForSkull");
+				A_SelectWeapon("Skullthrottle");
+			}
+			
+			//Nutcracker.
+			else if(CountInv("GoForCracker"))
+			{
+				A_TakeInventory("GoForCracker");
+				A_SelectWeapon("Nutcracker");
+			}
+			
+			//Paintrain.
+			else if(CountInv("GoForPain"))
+			{
+				A_TakeInventory("GoForPain");
+				A_SelectWeapon("Paintrain");
+			}
+			
+			//Conqueror.
+			else if(CountInv("GoForConka"))
+			{
+				A_TakeInventory("GoForConka");
+				A_SelectWeapon("Conqueror");
+			}
+			
+			//Eliminator.
+			else if(CountInv("GoForZZTop"))
+			{
+				A_TakeInventory("GoForZZTop");
+				A_SelectWeapon("Eliminator");
+			}
+			
+			//Double Deuce.
+			else if(CountInv("GoForTwiceFU"))
+			{
+				A_TakeInventory("GoForTwiceFU");
+				A_SelectWeapon("DoubleDeuce");
+			}
+		}
+		
+		TNT1 A 1;
+	Deselect:
+		TNT1 A 0 A_Lower(99);
+		Goto Ready;
+	Fire:
+		TNT1 A 1;
+		Goto GoOn;
+	}
+}
+
+class SpikebombWeapon : Weapon
+{
+	Default
+	{
+		Weapon.AmmoUse 1;
+		Weapon.AmmoGive 0;
+		Weapon.AmmoType "SpikebombAmmo";
+		Weapon.SlotNumber 5;
+		Weapon.SelectionOrder 8;
+		Weapon.UpSound "Spikebomb/Up";
+		Weapon.Kickback 350;
+		Inventory.PickupSound "misc/w_pkup";
+		Inventory.PickupMessage "Son, I have become blender - destroyer of worlds.";
+		Obituary "%o should've had not trod near %k's extreme toilet plunger.";
+		Weapon.BobStyle "InverseSmooth";
+		Weapon.BobSpeed 2.1;
+		Weapon.BobRangeY 0.3;
+		Weapon.BobRangeX 0.6;
+		Tag "Master Exploder";
+		+WEAPON.NOALERT
+		+WEAPON.AMMO_OPTIONAL
+		+INVENTORY.UNDROPPABLE
+	}
+	
+	States
+	{
+	//Shared stuff
+	Ready:
+		TNT1 A 0 A_Overlay(-3,"PipeUp"); //Had to swap them as the toss animation, as funky as it is, looks even odder when it's clipping above the detonator.
+		TNT1 A 0 A_Overlay(2,"DetonatorUp");
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+	ReadyMain:
+		TNT1 A 1 A_WeaponReady(WRF_ALLOWRELOAD);
+		Loop;
+	Fire:
+		TNT1 A 0;
+		Goto ReadyMain;
+	Reload:
+		"####" A 0 A_JumpIfInventory("PipeUpgrade",1,1);
+		Goto ReadyMain;
+		"####" A 20 {
+			A_PlaySound("Tinker/Tink",4,0.7);
+			If(!CountInv("PipeMode")) {
+				A_Print("\c[white]Vacuum Imploder\n\c[green]Engaged.",1);
+				A_GiveInventory("PipeMode",1);
+			} Else {
+				A_Print("\c[white]Vacuum Imploder\n\c[red]Disengaged.",1);
+				A_TakeInventory("PipeMode",1);
+			}
+			A_WeaponReady(WRF_NOFIRE);
+		}
+		Goto ReadyMain;
+	Deselect:
+		TNT1 A 0 {
+			A_TakeInventory("PipeSelected");
+			A_TakeInventory("PowerCrafterTimer");
+			A_Overlay(-3,"PipeDown");
+			A_Overlay(2,"DetonatorDown");
+			A_TakeInventory("SpikebombTrigger");
+			A_ZoomFactor(1.0);
+		}
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 0 SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
+		TNT1 A 1 A_Lower(18);
+		Wait;
+	Select:
+		TNT1 A 0 A_GiveInventory("PipeSelected");
+		TNT1 A 0 SetPlayerProperty(0, 1, PROP_INSTANTWEAPONSWITCH);
+		TNT1 A 1 A_Raise(12);
+		Wait;
+
+	//Right side
+	PipeUp:
+		PIPS A 0 A_JumpIfInventory("SpikebombAmmo",1,2);
+		TNT1 A 0;
+		"####" A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		"####" B 1;
+		"####" C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		"####" D 1;
+		"####" E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		"####" F 1;
+		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		"####" H 1;
+		Goto PipeIdle;
+	PipeIdle:
+		PIPG A 0 A_JumpIfInventory("SpikebombAmmo",1,1);
+		Goto PipeEmpty;
+		PIPG A 1;
+		PIPG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ALTATTACK), "Throw");
+		PIPG A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "CaberToss");
+		Loop;
+	PipeEmpty:
+		TNT1 A 0 A_JumpIfInventory("SpikebombAmmo",1,"PipeUp");
+		TNT1 A 1;
+		TNT1 A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "CaberTossEmpty");
+		Loop;
+	PipeDown:
+		PIPS A 0 A_JumpIfInventory("SpikebombAmmo",1,2);
+		TNT1 A 0;
+		"####" H 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		"####" G 1;
+		"####" F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		"####" E 1;
+		"####" D 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		"####" C 1;
+		"####" B 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		"####" A 1;
+		Stop;
+	Throw:
+		DETG A 1 A_JumpIfInventory("SpikebombAmmo",1,1);
+		Goto ReadyMain;
+		PIPT A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		PIPT B 1;
+		PIPT C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		PIPT D 1;
+		PIPT E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		PIPT F 1;
+		PIPT G 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		PIPT H 1;
+		PIPT I 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		PIPT J 1;
+	ThrowHold: 
+		TNT1 A 3;
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,2);
+		TNT1 A 0 A_JumpIfInventory("TossPower",20,2);
+		TNT1 A 0 A_GiveInventory("TossPower",1);
+		DETG A 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ALTATTACK), "ThrowHold");
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 0 {
+			A_PlaySound("General/Toss",1,0.9);
+			A_PlaySound("Machete2/Slash",5,0.2);
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1;
+		MCHT A 0 A_TakeInventory("SpikebombAmmo", 1, TIF_NOTAKEINFINITE);
+		MCHT A 0 {
+			If(!CountInv("RiftbombActive")) {
+				A_FireProjectile("SpikebombProjectile",0,0,10,-5,FPF_NOAUTOAIM);
+			} Else {
+				A_FireProjectile("RiftbombProjectile",0,0,10,-5,FPF_NOAUTOAIM);
+			}
+		}
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		MCHT E 1;
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		MCHT G 1;
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		MCHT I 1;
+		TNT1 A 3;
+		TNT1 A 0 A_JumpIfInventory("SpikebombAmmo",1,1);
+		Goto PipeEmpty;
+		PIPT J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		PIPT I 1;
+		PIPT H 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		PIPT G 1;
+		PIPT F 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		PIPT E 1;
+		PIPT D 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		PIPT C 1;
+		PIPT B 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		PIPT A 1;
+		Goto PipeIdle;
+	CaberTossEmpty:
+		TNT1 A 0 A_JumpIfInventory("MacheteAmmo",1,8);
+		Goto PipeEmpty;
+	CaberToss:
+		TNT1 A 0 A_JumpIfInventory("SpikebombAmmo",1,2);
+		TNT1 A 0 A_Jump(256,6);
+		PIPS HFDBA 1;
+	CaberMain:
+		TNT1 A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		TNT1 A 1;
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1;
+		MCHT A 0 {
+			A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE);
+			if(CountInv("PowerStrength2")) {
+				if(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			} Else {
+				if(CountInv("PowerAmmoJunkie")) {
+					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				} Else {
+					A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				}
+			}
+		}
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		MCHT E 1;
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		MCHT G 1;
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		MCHT I 1;
+		TNT1 A 3;
+		TNT1 A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "CaberMain");
+		TNT1 A 0 A_JumpIfInventory("SpikebombAmmo",1,2);
+		TNT1 A 0 A_Jump(256,"PipeEmpty");
+		PIPS ACEGH 1;
+		Goto PipeIdle;
+	
+	//Left side
+	DetonatorUp:
+		DETS A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETS B 1;
+		DETS C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		DETS D 1;
+		DETS E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		DETS F 1;
+		DETS G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETS H 1;
+	DetonatorIdle:
+		DETG A 1;
+		DETG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "Detonate");
+		DETG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "Punch");
+		Loop;
+	DetonatorDown:
+		DETS H 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETS G 1;
+		DETS F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		DETS E 1;
+		DETS D 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		DETS C 1;
+		DETS B 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETS A 1;
+		Stop;
+	Detonate:
+		DETC A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETC B 1;
+		DETC C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		DETC D 1;
+		DETC E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		DETC E 1;
+		DETC F 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETC G 1;
+		DETC H 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		DETC I 1;
+		DETC I 0 {
+			A_PlaySound("Spikebomb/Detonate",5);
+			A_GiveInventory("SpikebombTrigger");
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		DETC J 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		DETC K 1;
+		DETC L 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETC M 1;
+		DETC N 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		DETC N 2;
+		DETC I 0 A_TakeInventory("SpikebombTrigger");
+		DETC M 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		DETC L 1;
+		DETC K 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETC J 1;
+		DETC I 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
+		DETC HA 1;
+		DETG A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
+		DETG A 1;
+		DETG A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);
+		DETG A 2;
+		Goto DetonatorIdle;
+	Punch:
+		DETS HFDBA 1;
+	PunchLoop:
+		QML1 A 0 {
+			If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+			A_PlaySound("Punch/Swing",6,1.0);
+			Return A_JumpIf(!CountInv("PowerStrength2"),2);
+		}
+		FML1 A 0 {
+			A_SetBlend("Orange",0.05,10);
+			A_PlaySound("Melee/Firepunch",5);
+		}
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" A 1 A_SetPitch(pitch-0.3, SPF_INTERPOLATE);
+		"####" B 1 A_SetPitch(pitch-0.3, SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" C 1 A_SetPitch(pitch-0.3, SPF_INTERPOLATE);
+		"####" D 1 A_SetPitch(pitch-0.3, SPF_INTERPOLATE);
+		"####" A 0 {
+			If(CountInv("PowerStrength2")) {
+				A_CustomPunch(90, 1, 0, "FlamePunchCracker", 150 + (CountInv("KineticFist") ? 200 : 0),0.06);
+			} Else {
+				A_CustomPunch(30, 1, 0, "PunchCracker", 100 + (CountInv("KineticFist") ? 200 : 0));
+			}
+		}
+	PunchContinue:
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" E 1 A_SetPitch(pitch+0.3, SPF_INTERPOLATE);
+		"####" F 1 A_SetPitch(pitch+0.3, SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
+		"####" G 1 A_SetPitch(pitch+0.3, SPF_INTERPOLATE);
+		"####" H 1 A_SetPitch(pitch+0.3, SPF_INTERPOLATE);
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
+		"####" I 1;
+		"####" J 1;
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
+		"####" K 1;
+		TNT1 A 5;
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "PunchLoop");
+		DETS ACEGH 1;
+		Goto DetonatorIdle;
+	Spawn:
+		PBMB A -1;
+		Stop;
+	}
+}
+
+class RiftbombProjectile : FastProjectile
+{
+	Default
+	{
+		Radius 11;
+		Height 7;
+		MissileHeight 20;
+		Speed 500;
+		DamageType "Patriarch";
+		Scale 0.3;
+		MissileType "SpikebombTrail";
+	}
+	
+	Int User_Blastspan;
+	
+	States
+	{
+	Spawn:
+		TNT1 A 1; //PBMB A 1 //If only the MissileHeight would work as intended.
+		Loop;
+	Death:
+		TNT1 A 0 {
+			if(CountInv("MasterExploder", AAPTR_TARGET))
+			{
+				A_SetDamageType("MasteringExplosions");
+			}
+			A_Stop();
+			bNOGRAVITY = 1;
+			bNOINTERACTION = 1;
+		}
+		TNT1 A 0 A_JumpIfInTargetInventory("PipeMode",1,2);
+		TNT1 A 0 A_Jump(256,2);
+		PBMB A 47 A_SpawnItemEx("SpikebombImplosion",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
+			
+		TNT1 A 0 {
+			User_Blastspan = 14;
+			
+			A_PlaySound("Spikebomb/Explosion",5,0.9);
+			A_PlaySound("Spikebomb/Add",7);
+			A_PlaySound("Spikebomb/Far",6,0.8);
+			
+			A_SpawnItemEx("SpikebombBurst",0,0,5,0,0,0,0,SXF_TRANSFERPOINTERS);
+			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			
+			A_QuakeEx(3,3,3,55,0,768,"none",QF_SCALEDOWN);
+			A_QuakeEx(3,3,3,55,0,768,"none",QF_SCALEDOWN|QF_WAVE,0.75,0.75,0.75);
+			A_QuakeEx(7,7,7,55,0,384,"none",QF_SCALEDOWN);
+			A_QuakeEx(7,7,7,55,0,384,"none",QF_SCALEDOWN|QF_WAVE,0.75,0.75,0.75);
+			
+			A_Explode(250,364,0,1);
+			A_Explode(150,256,1,1);
+		}
+	DeathLoop:
+		TNT1 A 4 {
+			A_Explode(20,364,0,1);
+			A_Explode(10,256,1,1);
+			User_Blastspan--;
+			Return A_JumpIf(User_Blastspan <= 0, 1);
+		}
+		Loop;
+		TNT1 A 6;
+		Stop;
+	}
+}
+
+class SpikebombTrail : Actor
+{
+	Default
+	{
+		Renderstyle "Translucent";
+		Scale 0.3;
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		PBMB A 1 A_FadeOut(0.1);
+		Loop;
+	}
+}
+
+class SpikebombProjectile : Actor // : SpikebombAmmo
+{
+	Default
+	{
+		Radius 11;
+		Height 7;
+		Speed 3;
+		Damage 0;
+		Health 30;
+		//Inventory.MaxAmount 0;
+		//Inventory.PickupSound "Spikebomb/Pick";
+		BounceSound "Spikebomb/Bounce";
+		BounceFactor 0.4;
+		WallBounceFactor 0.8;
+		BounceType "Doom";
+		Gravity 0.7;
+		DamageType "Patriarch";
+		Scale 0.3;
+		ProjectileKickback 300;
+		Projectile;
+		//+INVENTORY.AUTOACTIVATE
+		//+INVENTORY.ALWAYSPICKUP
+		//-INVENTORY.INVBAR
+		+NOBLOOD +NOICEDEATH +CANBOUNCEWATER
+		+BOUNCEONWALLS +BOUNCEONCEILINGS +BOUNCEONFLOORS
+		-NOGRAVITY +FORCERADIUSDMG
+		+THRUGHOST +BLOODLESSIMPACT
+	}
+	
+	Int User_ThrowPower;
+	Int User_Blastspan;
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			User_ThrowPower = 8; // Initial, additional power.
+		}
+	SetCycle:
+		TNT1 A 0 {
+			A_TakeInventory("TossPower",1,0,AAPTR_TARGET); // Takes the token it generated during the hold.
+			User_ThrowPower = User_ThrowPower + random(2,3); // Add the throwing power.
+		}
+		TNT1 A 0 A_JumpIf(CountInv("TossPower",AAPTR_TARGET),"SetCycle"); // Do we still have any tokens? If so, repeat the process!
+		TNT1 A 0 A_JumpIf(CountInv("PowerStrength2",AAPTR_TARGET),"SuperThrow"); // In case of strength increase, let's make it fly at lightning speed, heh.
+		Goto ApplyPower;
+	SuperThrow:
+		TNT1 A 0 { User_ThrowPower = User_ThrowPower + 8; }
+	ApplyPower: // Let's add the extra speed to it.
+		TNT1 A 0 {
+			A_ScaleVelocity(1.0 + (User_ThrowPower / 2)); // Praytell this won't ever be zero, lol.
+			A_ChangeVelocity(0, 0, 6 + (User_ThrowPower / 3));
+		}
+		Goto Main;
+	ImpactBlast:
+		TNT1 A 0 {
+			bBOUNCEONWALLS = 0;
+			bBOUNCEONCEILINGS = 0;
+			bBOUNCEONFLOORS = 0;
+		}
+	Main:
+		PBMB A 1 A_JumpIf(CountInv("SpikebombTrigger",AAPTR_TARGET),"Detonate");
+		Loop;
+	Death:
+		TNT1 A 0 A_SpawnItemEx("SpikebombProjectileFloor",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
+		Stop;
+	//XDeath:
+	Detonate:
+		TNT1 A 0 {
+			if(CountInv("MasterExploder", AAPTR_TARGET))
+			{
+				A_SetDamageType("MasteringExplosions");
+			}
+			A_Stop();
+			bNOGRAVITY = 1;
+			bNOINTERACTION = 1;
+		}
+		TNT1 A 0 A_JumpIf(CountInv("PipeMode",AAPTR_TARGET),2);
+		TNT1 A 0 A_Jump(256,2);
+		PBMB A 47 A_SpawnItemEx("SpikebombImplosion",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);	
+		TNT1 A 0 {
+			User_Blastspan = 14;
+			
+			A_PlaySound("Spikebomb/Explosion",5,0.9);
+			A_PlaySound("Spikebomb/Add",7);
+			A_PlaySound("Spikebomb/Far",6,0.8);
+			
+			A_SpawnItemEx("SpikebombBurst",0,0,5,0,0,0,0,SXF_TRANSFERPOINTERS);
+			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+			
+			A_QuakeEx(3,3,3,55,0,768,"none",QF_SCALEDOWN);
+			A_QuakeEx(3,3,3,55,0,768,"none",QF_SCALEDOWN|QF_WAVE,0.75,0.75,0.75);
+			A_QuakeEx(7,7,7,55,0,384,"none",QF_SCALEDOWN);
+			A_QuakeEx(7,7,7,55,0,384,"none",QF_SCALEDOWN|QF_WAVE,0.75,0.75,0.75);
+			
+			A_Explode(250,364,0,1);
+			A_Explode(150,256,1,1);
+		}
+	DeathLoop:
+		TNT1 A 4 {
+			A_Explode(20,364,0,1);
+			A_Explode(10,256,1,1);
+			User_Blastspan--;
+			Return A_JumpIf(User_Blastspan <= 0, 1);
+		}
+		Loop;
+		TNT1 A 6;
+		Stop;
+	}
+}
+
+class SpikebombProjectile2 : SpikebombProjectile
+{
+	States
+	{
+	Death:
+		TNT1 A 0;
+		Goto Detonate;
+	}
+}
+
+class SpikebombProjectileFloor : SpikebombProjectile
+{
+	Default
+	{
+		BounceSound "";
+		BounceType "None";
+		+THRUACTORS
+		-NOBLOCKMAP
+		-BOUNCEONFLOORS
+		+NOEXPLODEFLOOR
+	}
+	
+	States
+	{
+	Spawn:
+		PBMB A 1 NoDelay A_JumpIf(CallACS("TargetDistance3D", radius, height), "ReturnTheBomb");
+		PBMB A 0 A_JumpIf(CountInv("SpikebombTrigger",AAPTR_TARGET),"Detonate");
+		Loop;
+	ReturnTheBomb:
+		PBMB A 1;
+		PBMB A 0 A_JumpIfInTargetInventory("SpikebombAmmo",0,"Spawn");
+		PBMB A 0 A_SpawnItemEx("SpikebombAmmo");
+		Stop;
+	Death:
+		TNT1 A 0;
+		Goto Detonate;
+	}
+}
+
+class SpikebombBurst : Actor
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 4;
+		TNT1 A 0 {
+			For(int Kumkaczinka = 12; Kumkaczinka > 0; Kumkaczinka--) {
+				A_SpawnItemEx("SpikebombBomb",frandom(5.0,-5.0),frandom(5.0,-5.0),
+					frandom(5.0,-5.0),frandom(5.0,9.0),frandom(5.0,9.0),
+					frandom(8.0,15.0),frandom(0.0,360.0),SXF_TRANSFERPOINTERS);
+			}
+		}
+		Stop;
+	}
+}
+
+class SpikebombBomb : Actor
+{
+	Default
+	{
+		Radius 11;
+		Height 7;
+		Speed 30;
+		Damage 20;
+		DamageType "Patriarch";
+		Gravity 0.8;
+		Scale 0.15;
+		Projectile;
+		-NOGRAVITY
+	}
+	
+	States
+	{
+	Spawn:
+		PSBM ABCDE 2 A_SpawnItemEx("Patriarch_Trail",frandom(-2, 2),
+									frandom(-2, 2), frandom(-2, 2),
+									frandom(1.5, -2.5), frandom(-1.0, 1.0),
+									frandom(-1.0, 1.0), 0, SXF_CLIENTSIDE, 10);					
+		Loop;
+	Death:
+		TNT1 A 28 {
+			if(CountInv("MasterExploder", AAPTR_TARGET))
+			{
+				A_SetDamageType("MasteringExplosions");
+			}
+			A_PlaySound("Explosion/Init",5,0.6);
+			A_PlaySound("Explosion/Main",6,0.6);
+			A_PlaySound("Explosion/Layer",4,0.6);
+			A_PlaySound("Explosion/Flavor",7,0.6);
+			A_SpawnItemEx("Patriarch_Main",0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS,0);
+			A_Explode(175,148);
+			A_QuakeEx(3,3,3,12,0,512,"none",QF_SCALEDOWN);
+		}
+		Stop;
+	}
+}
+
+class SpipeBase : Actor
+{ 
+    Default
+	{
+		Alpha 0.0;
+		Scale 0.0;
+		Renderstyle "Add";
+		+NOINTERACTION
+		+NOTONAUTOMAP
+		+FORCEXYBILLBOARD
+	}
+}
+
+class SpipeFX : SpipeBase
+{ 
+	States
+	{
+	Spawn:
+		TNT1 A 75;
+		Stop;
+	}
+}
+
+class SpipeSmoke : SpipeBase
+{
+	Default
+	{
+		Renderstyle "Translucent";
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A random(12,17);
+		TNT1 A 0;
+	SetupSprite:
+		TNT1 A 0 A_Jump(256, "SpriteA", "SpriteB", "SpriteC", "SpriteD");
+	SpriteA:
+		DYMI A 0;
+		Goto SetupScale;
+	SpriteB:
+		DYMI B 0;
+		Goto SetupScale;
+	SpriteC:
+		DYMI C 0;
+		Goto SetupScale;
+	SpriteD:
+		DYMI D 0;
+		Goto SetupScale;
+	SetupScale:
+		"####" "#" 0 A_SetScale(frandom(0.9, 1.1));
+	FadeIn:
+		"####" "#" 1 {
+			A_FadeIn(frandom(0.01, 0.04));
+			A_ChangeVelocity(frandom(-0.02, 0.02), frandom(-0.02, 0.02), frandom(-0.02, 0.03), 0);
+			A_SetScale(Scale.X + frandom(0.01, 0.02));
+			Return A_JumpIf(Alpha >= 0.4, "Inter");
+		}
+		Loop;
+	Inter:
+		"####" "#" 1 {
+			A_ChangeVelocity(frandom(-0.02, 0.02), frandom(-0.02, 0.02), frandom(-0.02, 0.03), 0);
+			A_SetScale(Scale.X + frandom(0.01, 0.02));
+			Return A_Jump(24,"FadeOut");
+		}
+		Loop;
+	FadeOut:
+		"####" "#" 1 {
+			A_FadeOut(frandom(0.01,0.02));
+			A_ChangeVelocity(frandom(-0.02, 0.02), frandom(-0.02, 0.02), frandom(-0.02, 0.03), 0);
+			A_SetScale(Scale.X + frandom(0.01, 0.02));
+		}
+		Loop;
+	}
+}
+
+class SpipeCloud : SpipeBase
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_Jump(256, "SpriteA", "SpriteB", "SpriteC", "SpriteD",
+									 "SpriteE", "SpriteF", "SpriteG", "SpriteH");
+	SpriteA:
+		CLOD A 0;
+		Goto SetupScale;
+	SpriteB:
+		CLOD B 0;
+		Goto SetupScale;
+	SpriteC:
+		CLOD C 0;
+		Goto SetupScale;
+	SpriteD:
+		CLOD D 0;
+		Goto SetupScale;
+	SpriteE:
+		CLOD E 0;
+		Goto SetupScale;
+	SpriteF:
+		CLOD F 0;
+		Goto SetupScale;
+	SpriteG:
+		CLOD G 0;
+		Goto SetupScale;
+	SpriteH:
+		CLOD H 0;
+		Goto SetupScale;
+	SetupScale:
+		"####" "#" 0 A_SetScale(frandom(1.2, 1.65));
+	FadeIn:
+		"####" "#" 1 {
+			A_FadeIn(frandom(0.15, 0.1));
+			A_ChangeVelocity(frandom(-0.06, 0.06), frandom(-0.06, 0.06), frandom(-0.06, 0.07), 0);
+			A_SetScale(Scale.X + frandom(0.01, 0.025));
+			Return A_JumpIf(Alpha >= 0.8, "FadeOut");
+		}
+		Loop;
+	FadeOut:
+		"####" "#" 1 {
+			A_FadeOut(frandom(0.05,0.02));
+			A_ChangeVelocity(frandom(-0.06, 0.06), frandom(-0.06, 0.06), frandom(-0.06, 0.07), 0);
+			A_SetScale(Scale.X + frandom(0.025, 0.05));
+		}
+		Loop;
+	}
+}
+
+class SpipeBlast : SpipeBase
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_Jump(256, "SpriteA", "SpriteB", "SpriteC", "SpriteD",
+									 "SpriteE", "SpriteF", "SpriteG", "SpriteH");
+	SpriteA:
+		BLAS A 0 A_Jump(256,"SetupScale");
+	SpriteB:
+		BLAS B 0 A_Jump(256,"SetupScale");
+	SpriteC:
+		BLAS C 0 A_Jump(256,"SetupScale");
+	SpriteD:
+		BLAS D 0 A_Jump(256,"SetupScale");
+	SpriteE:
+		BLAS E 0 A_Jump(256,"SetupScale");
+	SpriteF:
+		BLAS F 0 A_Jump(256,"SetupScale");
+	SpriteG:
+		BLAS G 0 A_Jump(256,"SetupScale");
+	SpriteH:
+		BLAS H 0 A_Jump(256,"SetupScale");
+	SetupScale:
+		"####" "#" 0 A_SetScale(frandom(1.6, 1.75));
+	FadeIn:
+		"####" "#" 1 {
+			A_FadeIn(frandom(0.15, 0.1));
+			A_ChangeVelocity(frandom(-0.06, 0.06), frandom(-0.06, 0.06), frandom(-0.06, 0.07), 0);
+			A_SetScale(Scale.X + frandom(0.02, 0.01));
+			Return A_JumpIf(Alpha >= 0.8, "FadeOut");
+		}
+		Loop;
+	FadeOut:
+		"####" "#" 1 {
+			A_FadeOut(frandom(0.05,0.02));
+			A_ChangeVelocity(frandom(-0.06, 0.06), frandom(-0.06, 0.06), frandom(-0.06, 0.07), 0);
+			A_SetScale(Scale.X + frandom(0.02, 0.01));
+		}
+		Loop;
+	}
+}
+
+class SpipeBlastMain : SpipeBlast
+{
+	States
+	{
+	SetupScale:
+		"####" "#" 0 A_SetScale(frandom(2.3, 2.45));
+	FadeIn:
+		"####" "#" 1 {
+			A_FadeIn(frandom(0.15, 0.1));
+			A_SetScale(Scale.X + frandom(0.03, 0.04));
+			Return A_JumpIf(Alpha >= 0.99, "FadeOut");
+		}
+		Loop;
+	FadeOut:
+		"####" "#" 1 {
+			A_FadeOut(frandom(0.03,0.02));
+			A_SetScale(Scale.X + frandom(0.04, 0.05));
+		}
+		Loop;
+	}
+}
+
+class SpipeEmber : SpipeBase
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_Jump(256, "SpriteA", "SpriteB", "SpriteC", "SpriteD","SpriteE", "SpriteF");
+	SpriteA:
+		EMBR A 0;
+		Goto SetupScale;
+	SpriteB:
+		EMBR B 0;
+		Goto SetupScale;
+	SpriteC:
+		EMBR C 0;
+		Goto SetupScale;
+	SpriteD:
+		EMBR D 0;
+		Goto SetupScale;
+	SpriteE:
+		EMBR E 0;
+		Goto SetupScale;
+	SpriteF:
+		EMBR F 0;
+		Goto SetupScale;
+	SetupScale:
+		"####" "#" 0 A_SetScale(frandom(0.04, 0.1));
+	FadeIn:
+		"####" "#" 1 A_FadeIn(frandom(0.99, 0.9));
+	Intern:
+		"####" "#" 3 Bright A_Jump(200, "FadeOut");
+		Loop;
+	FadeOut:
+		"####" "#" 1 {
+			A_Weave(frandom(0.9, 1.0), frandom(0.9, 1.0),
+				frandom(70.0, 90.0), frandom(70.0, 90.0));
+			A_ChangeVelocity(Vel.X * frandom(0.93, 0.99),
+							 Vel.Y * frandom(0.93, 0.99),
+							 Vel.Z - frandom(0.1, 0.2),
+							 CVF_REPLACE);
+			A_SetScale(Scale.X - frandom(0.002, 0.001));
+			Return A_JumpIf(Scale.X <= 0.0, "Null");
+		}
+		Loop;
+	}
+}
+
+class SpipeShockwave : SpipeBase
+{
+	Default
+	{
+		Alpha 0.99;
+		Scale 0.9;
+	}
+	
+	States
+	{
+	Spawn:
+		SHCK A 1 Bright {
+			A_SetScale(Scale.X + frandom(0.12, 0.09));
+			A_FadeOut(frandom(0.02,0.05));
+		}
+		Loop;
+	}
+}
+
+class SpipeFlare : SpipeBase
+{
+	Default
+	{
+		Alpha 0.99;
+		Scale 7.5;
+	}
+	
+	States
+	{
+	Spawn:
+		FLER A 1 Bright {
+			A_FadeOut(0.02);
+			A_SetScale(Scale.X - frandom(0.05, 0.15));
+			Return A_JumpIf(Scale.X <= 0.0, "Null");
+		}
+		Loop;
+	}
+}
+
+class SpipeExplosionMain : SpipeBase
+{
+	Int ToasterSmoke;
+	Int User_Counter;
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			User_Counter = 30;
+			if(GetCvar("TB_SmokeReduction") >= 2) { ToasterSmoke = 100; }
+			else if(GetCvar("TB_SmokeReduction") == 1) { ToasterSmoke = 50; }
+			else { ToasterSmoke = 0; }
+		}
+	SpoyperIsAGoodJobMate:
+		TNT1 A 1 {
+			A_SpawnItemEx("SpipeCloud", frandom(-45.0, 45.0),
+					frandom(-45.0, 45.0), frandom(-45.0, 45.0),
+					frandom(1.0, 3.5), 0,
+					frandom(-1.0, 4.5), frandom(0.0,360.0), SXF_CLIENTSIDE, 60);
+			A_SpawnItemEx("SpipeBlast", frandom(-45.0, 45.0),
+					frandom(-45.0, 45.0), frandom(-45.0, 45.0),
+					frandom(1.0, 3.5), 0,
+					frandom(-2.0, 2.5), frandom(0.0,360.0), SXF_CLIENTSIDE, 60);
+			A_SpawnItemEx("SpipeSmoke", frandom(-45.0, 45.0),
+					frandom(-45.0, 45.0), frandom(-45.0, 45.0),
+					frandom(0.5, 2.5), 0,
+					frandom(-2.0, 2.5), frandom(0.0,360.0), SXF_CLIENTSIDE, 100 + ToasterSmoke);
+			for(int Jabroni = 0; Jabroni > 2; Jabroni++) {
+				A_SpawnItemEx("SpipeEmber", frandom(-35.0, 35.0),
+						frandom(-35.0, 35.0), frandom(-45.0, 45.0),
+						frandom(5.0, 17.0), 0,
+						frandom(2.0, 9.0), frandom(0.0,360.0), SXF_CLIENTSIDE, 40);
+			}
+			User_Counter--;
+			Return A_JumpIf(User_Counter <= 0,"Null");
+		}
+		Loop;
+	}
+}
+
+class SpipeMain : SpipeBase
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			A_SpawnItemEx("SpipeExplosionMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_SpawnItemEx("SpipeBlastMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_SpawnItemEx("SpipeFlare",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_SpawnItemEx("SpipeShockwave",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_SpawnItemEx("SpipeFX",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+		}
+		Stop;
+	}
+}
+
+//Upgraded
+class SpikebombImplosion : Actor
+{
+	Default
+	{
+		Projectile;
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			A_PlaySound("Spikebomb/Implosion");
+			A_AlertMonsters();
+			A_SpawnItemEx("SpipeImplosionDuster",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+			A_SpawnItemEx("SpipeImplosionRing",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
+		}
+		TNT1 AAAAAAAAAAAAAAAAAAAAAAAAA 1 A_RadiusThrust(-700,640,RTF_NOIMPACTDAMAGE|RTF_THRUSTZ);
+		Stop;
+	}
+}
+
+class SpipeImplosionRing : Actor
+{
+	Default
+	{
+		Renderstyle "Add";
+		Alpha 0.0;
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		SHCK B 0 NoDelay A_SetScale(3.5);
+	Enter:
+		SHCK B 1 {
+			A_SetScale(Scale.X - 0.015);
+			A_FadeIn(0.017);
+			Return A_JumpIf(Alpha >= 0.7, "Main");
+		}
+		Loop;
+	Main:
+		SHCK B 1 {
+			A_SetScale(Scale.X - 0.35);
+			A_FadeOut(0.05);
+			Return A_JumpIf(Scale.X <= 0.5, "Null");
+		}
+		Loop;
+	}
+}
+
+class SpipeImplosionDuster : Actor
+{
+	Default
+	{
+		+NOINTERACTION
+	}
+	
+	int User_DustMode;
+	int User_Counter;
+	
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay {
+			If(GetCvar("TB_SmokeReduction") >= 2) { Return ResolveState(Null); }
+			Else If(GetCvar("TB_SmokeReduction") == 1) { User_DustMode = 4; }
+			Else { User_DustMode = 8; }
+			User_Counter = 30;
+			Return ResolveState(Null);
+		}
+	Main:
+		TNT1 A 1 {
+			for(int DustBegone = User_DustMode; DustBegone > 0; DustBegone--) {
+				A_SpawnItemEx("SpipeImplosionDust",frandom(5.0,-5.0),frandom(5.0,-5.0),
+					frandom(5.0,-5.0),frandom(25.0,20.0),frandom(25.0,20.0),
+					frandom(35.0,0.0)*randompick(1,-1),frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+			User_Counter--;
+			Return A_JumpIf(User_Counter <= 0, "Null");
+		}
+		Loop;
+	}
+}
+
+class SpipeImplosionDust : Actor
+{
+	Default
+	{
+		Renderstyle "Add";
+		Alpha 0.0;
+		+NOINTERACTION
+	}
+	
+	States
+	{
+	Spawn:
+		"####" "#" random(5,7) NoDelay A_SetScale(frandom(0.2,0.35));
+	ReverseSetup:
+		"####" "#" 0 A_ScaleVelocity(-0.18);
+		"####" "#" 0 A_Jump(256,"FrameE","FrameF","FrameG","FrameH");
+	FrameE:
+		DYMI E 0 A_Jump(256,"FadeIn");
+	FrameF:
+		DYMI F 0 A_Jump(256,"FadeIn");
+	FrameG:
+		DYMI G 0 A_Jump(256,"FadeIn");
+	FrameH:
+		DYMI H 0 A_Jump(256,"FadeIn");
+	FadeIn:
+		"####" "#" 1 {
+			A_FadeIn(frandom(0.01,0.02));
+			A_SetScale(Scale.X - 0.005);
+			If(Scale.X <= 0) { Return ResolveState("Null"); }
+			Return A_JumpIf(Alpha >= 0.25, "FadeOut");
+		}
+		Loop;
+	FadeOut:
+		"####" "#" 1 {
+			A_FadeOut(frandom(0.01,0.02));
+			A_SetScale(Scale.X - 0.005);
+			Return A_JumpIf(Scale.X <= 0, "Null");
+		}
+		Loop;
+	}
+}

@@ -1,0 +1,41 @@
+ACTOR Shell_Spawner_Doom1 : RandomSpawner replaces Shell_Spawner
+{
+	Dropitem "ShellsAmmo" 255 3
+	DropItem "MinorJunkSpawner" 255 1
+}
+
+ACTOR ShellBox_Spawner_Doom1 : RandomSpawner replaces ShellBox
+{
+	Dropitem "ShellsBox" 255 3
+	DropItem "MajorJunkSpawner" 255 1
+}
+
+ACTOR Chaingun_Spawner_Doom1 : RandomSpawner replaces Chaingun
+{
+	Dropitem "FMG_Spawner"
+	Dropitem "LeadspitterPickup"
+}
+
+ACTOR BlueprintSpawner2 : RandomSpawner replaces BlueprintSpawner
+{
+	DropItem "RiftbombsBlueprintBringer"
+	DropItem "WhiskeyBlueprintBringer"
+	DropItem "NutForceOneBlueprintBringer"
+	//DropItem "StriploaderBlueprintBringer" //There's no SSG in Doom 1.
+	DropItem "KineticFistBlueprintBringer"
+	DropItem "BlazingBlueprintBringer"
+	DropItem "UraniumShotBlueprintBringer"
+	DropItem "LuckyStrikeBlueprintBringer"
+	DropItem "KeepShootingBlueprintBringer"
+	DropItem "HomingGrenadesBlueprintBringer"
+	DropItem "ThrottleInstaspinBlueprintBringer"
+	DropItem "TricorneShotBlueprintBringer"
+	DropItem "MasterExploderBlueprintBringer"
+	DropItem "AlchemistsPotencyBlueprintBringer"
+	DropItem "AlchemistsDreamBlueprintBringer"
+	DropItem "ArmoredMeasuresBlueprintBringer"
+	DropItem "SpontaneousFreedomBlueprintBringer"
+	DropItem "HeavyMachinegunBlueprintBringer"
+	DropItem "ColtBurstshotBlueprintBringer"
+	//DropItem "PaintrainBlueprintBringer"
+}

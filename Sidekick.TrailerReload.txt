@@ -1,0 +1,457 @@
+//As badass as it looks, it's... pretty impractical. Left just in case.
+
+Sprite SDKOA0, 320, 200
+{
+	Patch RELPIST1, 160, 62
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKOB0, 320, 200
+{
+	Patch RELPIST2, 163, 59
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKOC0, 320, 200
+{
+	Patch MAGEMPTY, 189, 126
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST3, 169, 55
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKOD0, 320, 200
+{
+	Patch MAGEMPTY, 189, 132
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST4, 172, 49
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKOE0, 320, 200
+{
+	Patch MAGEMPTY, 189, 142
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST5, 180, 43
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKOF0, 320, 200
+{
+	Patch MAGEMPTY, 189, 151
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST6, 187, 37
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKOG0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCA0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG, 122, 155
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCB0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG2, 99, 117
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCC0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG3, 99, 101
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 69, 160
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCD0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG4, 99, 80
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 72, 151
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCE0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG5, 99, 60
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 75, 144
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCF0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG6, 99, 40
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 78, 140
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCG0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG7, 99, 20
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 80, 138
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCH0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG8, 99, 10
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 81, 138
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCI0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG1, 99, 15
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 81, 138
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCJ0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG2, 99, 20
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 81, 138
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCK0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG3, 99, 30
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 81, 138
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCL0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG4, 99, 50
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 81, 138
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCM0, 320, 200
+{
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG5, 99, 60
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 81, 138
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCN0, 320, 200
+{
+	Patch HAND6, 81, 138
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST7, 189, 34
+	{
+		Style CopyAlpha
+	}
+	Patch MAG6, 99, 80
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCO0, 320, 200
+{
+	Patch RELPIST7, 187, 32
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 79, 135
+	{
+		Style CopyAlpha
+	}
+	Patch MAG7, 102, 97
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCP0, 320, 200
+{
+	Patch RELPIST7, 184, 30
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 76, 125
+	{
+		Style CopyAlpha
+	}
+	Patch MAG8, 96, 86
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKCQ0, 320, 200
+{
+	Patch RELPIST7, 181, 29
+	{
+		Style CopyAlpha
+	}
+	Patch HAND6, 74, 119
+	{
+		Style CopyAlpha
+	}
+	Patch MAG8, 95, 76
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNA0, 320, 200
+{
+	Patch RELPIST7, 179, 28
+	{
+		Style CopyAlpha
+	}
+	Patch MAGHAND, 58, 44
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNB0, 320, 200
+{
+	Patch RELPIST7, 175, 25
+	{
+		Style CopyAlpha
+	}
+	Patch MAGHAND, 66, 48
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNC0, 320, 200
+{
+	Patch RELPIST7, 168, 19
+	{
+		Style CopyAlpha
+	}
+	Patch MAGHAND, 76, 57
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKND0, 320, 200
+{
+	Patch RELPIST7, 161, 16
+	{
+		Style CopyAlpha
+	}
+	Patch MAGHAND, 83, 64
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNE0, 320, 200
+{
+	Patch RELPIST7, 151, 10
+	{
+		Style CopyAlpha
+	}
+	Patch MAGHAND, 89, 70
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNF0, 320, 200
+{
+	Patch RELPIST7, 139, 7
+	{
+		Style CopyAlpha
+	}
+	Patch MAGHAND, 97, 80
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNG0, 320, 200
+{
+	Patch MAGHAND, 101, 88
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST7, 129, 9
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNH0, 320, 200
+{
+	Patch MAGHAND, 106, 84
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST7, 127, 12
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNI0, 320, 200
+{
+	Patch MAGHAND, 106, 74
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST7, 127, 18
+	{
+		Style CopyAlpha
+	}
+}
+
+Sprite SDKNJ0, 320, 200
+{
+	Patch MAGHAND, 104, 69
+	{
+		Style CopyAlpha
+	}
+	Patch RELPIST7, 124, 23
+	{
+		Style CopyAlpha
+	}
+}

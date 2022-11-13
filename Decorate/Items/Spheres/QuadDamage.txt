@@ -1,0 +1,186 @@
+ACTOR QuadDamageItem : TBPowerupBase
+{
+	Inventory.PickupMessage "$GOTQUADDAMAGE"
+	Inventory.PickupSound "" //QuadDamage/Pickup
+	States
+	{
+	Spawn:
+		TBQD AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(User_Count % 4 == 0)
+				{
+					A_SpawnItemEx("QuadFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("SoulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	Pickup:
+		TNT1 A 0 {
+			A_PlaySound("QuadDamage/Pickup",0);
+			//Alchemist's Dream storing.
+			if(CountInv("AlchemistsDream") && (CountInv("QuadDamagePortable") < 3) && GetPlayerInput(INPUT_BUTTONS) & BT_USE)
+			{
+				A_Print("$QUADDAMAGESTORED");
+				A_GiveInventory("QuadDamagePortable",1);
+				Return State("Null");
+			}
+			//Stuff.
+			A_SetMugshotState("Grin");
+			A_SpawnItemEx("SoulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			A_SpawnItemEx("QuadAnnounce",0,0,0,0,0,0,0,SXF_SETTARGET);
+			A_QuakeEx(1,1,1,60,0,192,"none",QF_SCALEDOWN);
+			ACS_NamedExecute("Quad Decay");
+			A_GiveInventory("QuadDamage");
+			A_SetBlend("Blue",0.3,70);
+			
+			//Alchemist's Potency bonus.
+			If(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("QuadDamageBoost");
+			}
+			Return State("");
+		}
+		Stop	
+	}
+}
+
+ACTOR QuadDamage : PowerupGiver
+{
+	Inventory.PickupMessage "$GOTQUADDAMAGE"
+	Inventory.PickupSound "QuadDamage/Pickup"
+	Powerup.Type "QuadDamage"
+	Powerup.Color Blue, 0.05
+	Powerup.Duration -45
+	Renderstyle Add
+	+FLOATBOB
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.ADDITIVETIME
+	Var Int User_Count;
+	States
+	{
+	Spawn:
+		TBQD AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("QuadFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("SoulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	}
+}
+
+actor PowerQuadDamage : PowerDamage
+{	
+	Inventory.Icon "QUADDMG0"
+	DamageFactor "Normal", 4.0
+	DamageFactor "Patriarch", 4.0
+	DamageFactor "IncreasedRange", 4.0
+	DamageFactor "MasteringExplosions", 4.0
+	Powerup.Duration -45
+	Powerup.Color "1010FF" 0.1
+	+Inventory.AdditiveTime
+}
+
+//Potency upgrade
+ACTOR QuadDamageBoost : PowerupGiver
+{
+	Powerup.Duration -15
+	Powerup.Type "QuadDamage"
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ADDITIVETIME
+}
+
+//Stored powerup
+ACTOR QuadDamagePortable : TBPowerupPortableBase
+{
+	Inventory.PickupMessage "$GOTQUADDAMAGE"
+	Inventory.Icon ARTITBQD
+	Inventory.PickupSound "QuadDamage/Pickup"
+	Tag "Quad Damage"
+	States
+	{
+	Spawn:
+		TBQD AAAABBBBCCCCDDDDEEEEFFFFEEEEDDDDCCCCBBBB 1 Bright {
+			If(!(A_CheckSight("Null") || GetCVar("TB_ParticleReduction")))
+			{
+				If(A_JumpIf(User_Count % 4 == 0, "Null"))
+				{
+					A_SpawnItemEx("QuadFade",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
+					A_SetUserVar(User_Count, 0);
+				}
+				A_SetUserVar(User_Count, User_Count + 1);
+				A_SpawnItemEx("SoulsphereParticle",
+				frandom(10.0,-10.0),frandom(10.0,-10.0),35+frandom(10.0,-10.0),
+				frandom(0.6,-0.6),frandom(0.6,-0.6),frandom(1.2,0.4),
+				frandom(0.0,360.0),SXF_CLIENTSIDE,64);
+			}
+		}
+		Loop
+	Use:
+		TNT1 A 0 {
+			A_SetMugshotState("Grin");
+			A_PlaySound("QuadDamage/Pickup",0);
+			A_SpawnItemEx("SoulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
+			A_SpawnItemEx("QuadAnnounce",0,0,0,0,0,0,0,SXF_SETTARGET);
+			A_QuakeEx(1,1,1,60,0,192,"none",QF_SCALEDOWN);
+			ACS_NamedExecute("Quad Decay");
+			A_GiveInventory("QuadDamage");
+			A_SetBlend("Blue",0.3,70);
+		}
+		TNT1 A 0 A_JumpIf(CountInv("AlchemistsPotency") > 0, "Boost")
+		Stop
+	Boost:
+		TNT1 A 0 A_GiveInventory("QuadDamageBoost")
+		Stop	
+	} 
+}
+
+//Eyecandy
+ACTOR QuadFade : TBFadeBase
+{
+	States
+	{
+	Spawn:
+		TBQD C 0
+		Goto Super::Fade
+	}
+}
+
+Actor QuadAnnounce
+{
+	ReactionTime 70
+	Projectile
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		TNT1 A 10 NoDelay {
+			A_PlaySound("Soulsphere/Pickup",6);
+			A_QuakeEx(4,4,4,70,0,768,"none",QF_SCALEDOWN);
+		}
+		TNT1 A 0 A_PlaySound("QuadDamage/Announcer",5)
+	Looplet:
+		TNT1 A 1 { A_Countdown; A_Warp(AAPTR_TARGET,0,0,0,0,WARPF_NOCHECKPOSITION); }
+		Loop
+	Death:
+		TNT1 A 0
+		Stop
+	}
+}

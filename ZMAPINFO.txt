@@ -1,0 +1,95 @@
+gameinfo
+{
+	titlemusic = "KICKSTRT"
+	playerclasses = "Trailblazer"
+	menufontcolor_title = "Untranslated" 
+	menufontcolor_label = "Untranslated"
+	menufontcolor_value = "Untranslated"
+	menufontcolor_action = "Untranslated"
+	menufontcolor_header = "Orange" 
+	menufontcolor_highlight = "White"
+	menufontcolor_selection = "Orange"
+	titlepage = "TBTITLE"
+	creditpage = "TBTITLE"
+	infopage = "TBTITLE"
+	dimcolor = "Orange"
+	dimamount = 0.2
+	backpacktype = "Backpack"
+	addeventhandlers = "tb_playerhandler", "tb_keyhandler"
+	ForceKillScripts = True
+	
+	quitmessages = "$EXITMSG1","$EXITMSG2","$EXITMSG3","$EXITMSG4","$EXITMSG5",
+	"$EXITMSG6","$EXITMSG7","$EXITMSG8","$EXITMSG9","$EXITMSG10","$EXITMSG11",
+	"$EXITMSG12","$EXITMSG13","$EXITMSG14","$EXITMSG15","$EXITMSG16","$EXITMSG17",
+	"$EXITMSG18","$EXITMSG19","$EXITMSG20","$EXITMSG21","$EXITMSG22","$EXITMSG23",
+	"$EXITMSG24","$EXITMSG25","$EXITMSG25","$EXITMSG26","$EXITMSG27","$EXITMSG28",
+	"$EXITMSG29","$EXITMSG30","$EXITMSG31","$EXITMSG32","$EXITMSG33","$EXITMSG34",
+	"$EXITMSG35","$EXITMSG36","$EXITMSG37","$EXITMSG38","$EXITMSG39","$EXITMSG40",
+	"$EXITMSG41","$EXITMSG42","$EXITMSG43","$EXITMSG44","$EXITMSG45","$EXITMSG46",
+	"$EXITMSG47","$EXITMSG48","$EXITMSG49","$EXITMSG50","$EXITMSG51","$EXITMSG52",
+	"$EXITMSG53","$EXITMSG54"
+}
+
+ClearSkills
+
+Skill Worthless
+{
+	SpawnFilter = Baby
+	Name = "Worthless."
+	TextColor = Black
+	AmmoFactor = 2.0
+	MustConfirm = "That's who you are - no one."
+	EasyKey
+}
+
+Skill Loner
+{
+	SpawnFilter = Easy
+	Name = "Worthwhile."
+	TextColor = Black
+	EasyKey
+}
+
+Skill Chosen
+{
+	SpawnFilter = Normal
+	Name = "Formidable."
+	TextColor = Black
+	EasyKey
+}
+
+Skill Badass
+{
+	SpawnFilter = Hard
+	Name = "Truly Badass."
+	TextColor = Black
+	EasyKey
+}
+
+Skill Knightmare
+{
+	SpawnFilter = Nightmare
+	Name = "Worst Nightmare!"
+	TextColor = Orange
+	MustConfirm = "So you have the guts to show those ninnies how shit gets done?"
+	MonsterHealth = 1.4
+	DamageFactor = 1.2
+	AmmoFactor = 2.0
+	Aggressiveness = 0.05
+	EasyKey
+}
+
+Skill Hitbong
+{
+	SpawnFilter = Nightmare
+	Name = "The Edgelord."
+	TextColor = Red
+	MustConfirm = "Warning: This difficulty is supposed to be unfair. If you feel oppressed by it, go cry in another corner. [/edge]"
+	MonsterHealth = 1.4
+	DamageFactor = 1.2
+	AmmoFactor = 0.5
+	ArmorFactor = 0.5
+	HealthFactor = 0.5
+	Aggressiveness = 0.05
+	EasyKey
+}

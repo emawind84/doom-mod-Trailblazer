@@ -1,0 +1,136 @@
+// A script that shares keys with everyone because they're awesome.
+// By Zhs2.
+
+// 5/20/2016: This script works great! The only thing that's missing
+// is a compromise that allows maps with scripts that check for key
+// *classes* (as opposed to using ACS_LockedExecute with a sensible
+// god damn LOCKDEFS entry, you fucking mapping cunts) to also work
+// correctly. Really, this is just a workaround for maps that are,
+// shall we say, self-contained.
+
+// Pillow: Indeed. That's what the third slot of the array below is for.
+// Thank goodness for that, as some maps drove me nuts with it, rofl.
+
+#library "FEATURESPILLOWWILLNOTSHUTUPABOUT.txt"
+#include "zcommon.acs"
+
+#define MAX_PLAYERS 8
+#define MAX_KEY_TYPES 20
+
+str keydb[MAX_KEY_TYPES][3] = {
+// Class name | Nice name | Base class
+// Doom
+{ "BlueCard2",	"\c[Blue]Blue Cardkey\c-",		"BlueCard"	},
+{ "BlueSkull2",	"\c[LightBlue]Blue Skullkey\c-","BlueSkull"	},
+{ "RedCard2",	"\c[Red]Red Cardkey\c-",		"RedCard"	},
+{ "RedSkull2",	"\c[Brick]Red Skullkey\c-",		"RedSkull"	},
+{ "YellowCard2","\c[Yellow]Yellow Cardkey\c-",	"YellowCard"},
+{ "YellowSkull2","\c[Gold]Yellow Skullkey\c-",	"YellowSkull"},
+// Heretic
+{ "KeyBlue",	"\c[Blue]Blue Gemkey\c-",		"KeyBlue"	},
+{ "KeyGreen",	"\c[Green]Green Gemkey\c-",		"KeyGreen"	},
+{ "KeyYellow",	"\c[Yellow]Yellow Gemkey\c-",	"KeyYellow"	},
+// Hexen
+{ "KeyAxe",		"\c[Brown]Axe Key\c-",			"KeyAxe"	},
+{ "KeyCastle",	"\c[Gold]Castle Key\c-",		"KeyCastle"	},
+{ "KeyCave",	"\c[DarkBrown]Cave Key\c-",		"KeyCave"	},
+{ "KeyDungeon",	"\c[Grey]Dungeon Key\c-",		"KeyDungeon"},
+{ "KeyEmerald",	"\c[Green]Emerald Key\c-",		"KeyEmerald"},
+{ "KeyFire",	"\c[Red]Fire Key\c-",			"KeyFire"	},
+{ "KeyHorn",	"\c[Olive]Horn Key\c-",			"KeyHorn"	},
+{ "KeyRusted",	"\c[Tan]Rusted Key\c-",			"KeyRusted"	},
+{ "KeySilver",	"\c[White]Silver Key\c-",		"KeySilver"	},
+{ "KeySteel",	"\c[DarkGrey]Steel Key\c-",		"KeySteel"	},
+{ "KeySwamp",	"\c[DarkGreen]Swamp Key\c-",	"KeySwamp"	},
+};
+
+bool keysfound[MAX_KEY_TYPES];
+
+script "Key Sharer" OPEN
+{
+	int firstrun;
+	
+	if(GameType() == GAME_SINGLE_PLAYER)
+	{
+		// We still probably want to give the player base key classes
+		// in SP. Just because.
+		if(SetActivator(0, AAPTR_PLAYER1)) // If something fails here, there is something horrible going on
+		{
+			for(int s = 0; s < MAX_KEY_TYPES; s++)
+			{
+				if(CheckInventory(keydb[s][0]) && !keysfound[s])
+				{
+					GiveInventory(keydb[s][2], 1);
+					keysfound[s] = TRUE;
+				}
+			}
+		}
+	}
+	
+	else if(GameType() == GAME_NET_COOPERATIVE)
+	{
+		if(!firstrun)
+		{
+			delay(35*3); // Wait a few seconds for everything to get started
+			++firstrun; // I sure hope players don't immediately find keys anyway
+		}
+	
+		if(GetCVar("GC_KeyShare"))
+		{
+			for(int i = 0; i < MAX_KEY_TYPES; i++) // Key possession check.
+			{
+				for(int j = 0; j < MAX_PLAYERS; j++) // Swapping players.
+				{
+					if(!SetActivator(0, AAPTR_PLAYER1<<j))
+					{
+						continue; // Can't set our player so keep going
+					}
+				
+					if(CheckInventory(keydb[i][0]) && !keysfound[i])
+					{
+						SetActivator(0, AAPTR_PLAYER1<<j);
+						SetFont("SMALLFNT");
+						HUDMessageBold(n:0, s:"\c- acquired the ", s:keydb[i][1], s:"\c-.";HUDMSG_FADEOUT|HUDMSG_LOG, 900, CR_UNTRANSLATED, 0.5, 0.1, 3.0, 0.5);
+						for(int k = 0; k < MAX_PLAYERS; k++)
+						{
+							if(SetActivator(0, AAPTR_PLAYER1<<k))
+							{
+								if(!CheckInventory(keydb[i][0]))
+								{
+									GiveInventory(keydb[i][0], 1);
+									GiveInventory(keydb[i][2], 1); // Also give the base key class.
+								}
+							}
+						}
+						keysfound[i] = TRUE;
+					}
+				}
+			}
+		}
+	}
+	
+	else
+	{
+		// Deathmatch, Titlemap
+		terminate;
+	}
+	
+	SetActivator(0,AAPTR_NULL); // Probably would be bad if a player took this script with them when they left the game.
+	delay(1);
+	restart;
+}
+
+script "Key Equalizer" ENTER // Give the gift of key this season!
+{
+	if(GetCVar("GC_KeyShare"))
+	{
+		for(int i = 0; i < MAX_KEY_TYPES; i++)
+		{
+			if(keysfound[i])
+			{
+				GiveInventory(keydb[i][0], 1);
+				GiveInventory(keydb[i][2], 1); // Also give the base key class.
+			}
+		}
+	}
+}

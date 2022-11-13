@@ -1,0 +1,698 @@
+[enr]
+
+[enu default]
+
+//Tinker's toolbelt lines
+TINKERWARNING = "\c[white]You are about to spend your junk points on currently held weapon.\n\c[white]The amount spent/required is shown below weapon icon.\n\c[white]Use this item again to continue.";
+TINKERWRONGWEAPON = "\c[white]This weapon cannot be upgraded!";
+TINKERALREADYUPG = "\c[white]This weapon has already been upgraded!";
+TINKERNOJUNK = "\c[white]You have no junk to begin tinkering with!";
+
+PIPEUPGRADE = "\c[gold]''Spikebombs'' have been upgraded!\n\c[white]Acquired ''Vacuum Imploder'' module.\n\n\c[green]+Sucks monsters into epicenter of explosion before going off.\n\n\c[white]What says on the tin. Works best on light-weighted targets.\n\c[white]Press reload while having the weapon out to toggle,\n\c[white]in case you need instantenous blasts.";
+MACHETEUPGRADE = "\c[gold]''Macheterang'' has been upgraded!\n\c[white]It's like a slasher movie (or bowling even), except cooler.\n\n\c[green]+Your machete releases power slashes.";
+SIDEUPGRADE = "\c[gold]''Sidekick'' has been upgraded!\n\c[white]Acquired silencer and laser sight.\n\n\c[green]+Perfect accuracy.\n\c[green]+Silent killer.";
+COLTSUPGRADE = "\c[gold]''Cradle & Grave'' have been upgraded!\n\c[white]Born to spam, baby.\n\n\c[green]+Bottomless capacity.\n\c[green]+No physical recoil.\n\c[green]+Nominal damage boost.";
+//RENDUPGRADE = "\c[gold]''Fleshrend'' has been upgraded!\n\c[white]Adds extra barrel on top.\n\n\c[green]+More pellets.\n\c[red]-Bigger ammo consumption.\n\n\c[white]The upgrade can be attached/detached at the user's leisure.\n\c[white]Use the Tinker's Toolbelt while currently holding that weapon.";
+RENDUPGRADE = "\c[gold]''Fleshrend'' has been upgraded!\n\c[white]Adds extra barrel on top.\n\n\c[green]+More pellets.\n\c[green]+By the power of videogame logic and pillowbalance\n\c[green](ergo - nonsense) - doesn't use more ammo.";
+CHROMEUPGRADE = "\c[gold]''Chrome Justice'' has been upgraded!\n\c[white]The weapon is now ''Auto Justice''.\n\n\c[green]+Becomes automatic.\n\c[green]+Bigger clip capacity.\n\c[green]+Free refill.\n\n\c[white]Tapping firing buttons makes it fire even faster.";
+FMGUPGRADE = "\c[gold]''FMG'' has been upgraded!\n\c[white]Received a sniper mode.\n\n\c[green]+25% damage while shooting in regular firing mode.\n\c[green]+50% damage while shooting in sniper mode.\n\n\c[white]Press the punch button while iron sights are engaged to activate it.\n\c[white]While aiming down sights, you can shoot single, powerful shots.";
+LEADUPGRADE = "\c[gold]''Leadspitter'' has been upgraded!\n\c[white]Received new barrel and extended mag.\n\n\c[green]+Better accuracy.\n\c[green]+Bigger capacity.\n\c[green]+Minimal damage boost.\n\c[green]+Free refill.";
+PATTYUPGRADE = "\c[gold]''Patriarch'' has been upgraded!\n\c[white]Received new muzzle and mag.\n\n\c[green]+Nullified spread and decreased recoil.\n\c[green]+Bigger capacity.\n\c[green]+Faster projectile.\n\c[green]+More impact damage.\n\c[green]+Free refill.";
+BITCHUPGRADE = "\c[gold]''Bitchmaker'' has been upgraded!\n\c[white]Received modified barrel and new cylinder.\n\n\c[green]+Nullified recoil.\n\c[green]+Bigger capacity.\n\c[green]+Faster projectile\n\c[green]+Tightened alt-fire spread.\n\c[green]+More impact damage\n\c[green]+Free refill.\n\n\c[gold]Greater Magnumball\n\c[white]Hold reload with a full clip to cast a Greater Magnumball.\n\c[white]Powerful, but leaves you helpless while charging.";
+THROTTLEUPGRADE = "\c[gold]''Skullthrottle'' has been upgraded!\n\c[white]''Browning'' machinegun crafted.\n\n\c[green]+More dakka.\n\c[green]+Browning fires instantly.";
+NUTTERUPGRADE = "\c[gold]''Nutcracker'' has been upgraded!\n\c[white]This gun reeks of Freedom now...\n\n\c[green]+Alt fire busts out a Glory Shot.\n\n\c[white]This firing mode is so epic it stops time during the projectile's flight,\n\c[white]causes all the monsters around affected by the ''Freedom Spirit'' to explode.\n\c[white]It takes 30 seconds to recharge after each shot.";
+PAINTRAINUPGRADE = "\c[gold]''Paintrain'' has been upgraded!\n\c[white]The pain train has no brakes.\n\n\c[green]+Paintrain slowly regenerates its ammo.\n\c[green]+Faster warm-up to fire.\n\c[green]+Damage bonus.";
+CONQUERORUPGRADE = "\c[gold]''Conqueror'' has been upgraded!\n\c[white]HERE COME DAT DESTRUCTION.\n\n\c[green]+More gun.\n\c[green]+Why would you need so much gun?\n\c[green]+Unlocks ammo switch [reload button].\n\c[green]+Unlocks mortar shot [zoom button].";
+ELIMINATORUPGRADE = "\c[gold]''Eliminator'' has been upgraded!\n\c[white]Dressed to kill.\n\c[green]+Limited penetration.\n\c[green]+Damage boost.\n\c[green]+What else do you really need? This gun kills with stylishness!";
+DEUCEUPGRADE = "\c[gold]''Double Deuce'' has been upgraded!\n\c[white]Leadstorm engaged.\n\n\c[green]+Increases bounce count on projectiles.\n\c[green]+Projectiles bounce into nearby enemies.";
+
+RENDDETACH = "\c[white]''Fleshrend'' upgrade has been detached.";
+RENDATTACH = "\c[white]''Fleshrend'' upgrade has been attached.";
+
+//Ammo crafter's kit lines
+CRAFTERWRONGWEAPON = "\c[white]This is not a valid weapon to craft ammo for!";
+CRAFTERFULLAMMO = "\c[white]Your ammo for this particular weapon is full!";
+CRAFTERNOJUNK = "\c[white]You don't have enough stuff to craft ammo for this weapon!";
+CRAFTERSUCCESS = "\c[green]Crafting successful!";
+
+CRAFTERCOLTS = "\c[white]You can't craft ammo to a weapon which doesn't require such.";
+CRAFTERMACHETE = "\c[white]Crafting another Machete requires 40 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERSPIKEBOMB = "\c[white]Crafting a spikebomb requires 12 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERBULLET = "\c[white]Crafting bullets requires 2 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERSHELLS = "\c[white]Crafting shells requires 2 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERDEMSHELLS = "\c[white]Crafting dem shells requires 4 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERGRENADE = "\c[white]Crafting grenades requires 4 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERMAGNUM = "\c[white]Crafting hellraiser rounds requires 6 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERMINIGUN = "\c[white]Crafting minigun bullets requires 4 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERNUTTER = "\c[white]Crafting 2bore slug requires 15 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERRAILGUN  = "\c[white]Crafting railgun slugs requires 15 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERCONQUEROR  = "\c[white]Cannot craft ammo for this weapon, it's self-sustained.\n\c[white]Use other weapons to fill in proper ammo for it's pallet of barrels!";
+
+CRAFTERBLUEMANA = "\c[white]Crafting blue gun juice requires 2 junk.\n\c[white]Use the item again to continue.";
+CRAFTERGREENMANA = "\c[white]Crafting green gun juice requires 3 junk points.\n\c[white]Use the item again to continue.";
+CRAFTERCOMBINEDMANA = "\c[white]Crafting both gun juices requires 5 junk points.\n\c[white]Use the item again to continue.";
+
+//Blueprints lines
+BLUEPRINTNOJUNK = "\c[white]You don't have enough junk for this blueprint!";
+BLUEPRINTSUCCESS = "\c[white]Blueprint craft succesful!";
+BLUEPRINTALREADYIN = "\c[white]You already have this item!";
+BLUEPRINTITEMFULL = "\c[white]You are full on this particular item!";
+
+GOTWHISKEYBLUEPRINT = "You've got the ''Whiskey'' blueprint!";
+BLUEPRINTWHISKEY = "\c[white]Whiskey takes 50 junk to craft it. Do you wish to continue?";
+BLUEPRINTWHISKEYCRAFTED = "\c[gold]''Whiskey'' has been crafted!\n\c[white]Can't say no to extra booze.\n\n\c[green]+Fresh bottle'o'piss.";
+
+GOTRIFTBOMBSBLUEPRINT = "You've got the ''Riftbombs'' blueprint!";
+BLUEPRINTRIFTBOMBS = "\c[white]''Riftbombs'' takes 60 junk to craft it. Do you wish to continue?";
+BLUEPRINTRIFTBOMBSCRAFTED = "\c[gold]''Riftbombs'' has been crafted!\n\c[white]''Spikebombs'' get special mode!\n\c[white]Can be toggled via inventory item.\n\n\c[green]+Near instantenous impact.\n\c[green]+Bombs ignore gravity.\n\c[green]+Explodes on impact.";
+
+GOTNUTFORCEONEBLUEPRINT = "You've got the ''Nut Force One'' blueprint!";
+BLUEPRINTNUTFORCEONE = "\c[white]''Nut Force One'' takes 200 junk to craft it. Do you wish to continue?";
+BLUEPRINTNUTFORCEONECRAFTED = "\c[gold]''Nut Force One'' has been crafted!\n\c[white]''Nutcracker'' received a spreadshot upgrade!\n\n\c[green]+Engage air raid pattern.";
+
+GOTSTRIPLOADERBLUEPRINT = "You've got the ''Justice Striploader'' blueprint!";
+BLUEPRINTSTRIPLOADER = "\c[white]''Justice Striploader'' takes 60 junk to craft it. Do you wish to continue?";
+BLUEPRINTSTRIPLOADERCRAFTED = "\c[gold]''Justice Striploader'' has been crafted!\n\c[white]You fill the Chrome-Auto Justice to the brim.\n\n\c[green]+Full clip load.";
+
+GOTKINETICFISTBLUEPRINT = "You've got the ''Kinetic Fist'' blueprint!";
+BLUEPRINTKINETICFIST = "\c[white]''Kinetic Fist'' takes 50 junk to craft it. Do you wish to continue?";
+BLUEPRINTKINETICFISTCRAFTED = "\c[gold]''Kinetic Fist'' has been crafted!\n\c[white]Your punches received severe effective range increase.\n\n\c[green]+Berserk punches explode regardless of impact.";
+
+GOTBLAZINGBLUEPRINT = "You've got the ''Blazing Booster'' blueprint!";
+BLUEPRINTBLAZING = "\c[white]''Blazing Booster'' takes 150 junk to craft it. Do you wish to continue?";
+BLUEPRINTBLAZINGCRAFTED = "\c[gold]''Blazing Booster'' has been crafted!\n\c[white]Permanent tier 1 blazingsphere effect.\n\n\c[green]+Weapon action speed is increased.\n\c[green]+Bonus nicotine points from all viable sources.\n\n\c[gold][Heretic / Hexen only]\n\c[green]+Doubles the cigs drop rate from monsters.";
+
+GOTURANIUMSHOTBLUEPRINT = "You've got the ''Uranium Shot'' blueprint!"; //Straight from Uranus HOHOHOHOHO SO MATURE~ brick'd.
+BLUEPRINTURANIUMSHOT = "\c[white]''Uranium Shot'' takes 50 junk to craft it. Do you wish to continue?";
+BLUEPRINTURANIUMSHOTCRAFTED = "\c[gold]''Uranium Shot'' has been crafted!\n\c[white]Sidekick's got a kick now. Oh my sides!\n\n\c[green]+Explosive shots are applied on your pistol.\n\c[green]+And the Eliminator.";
+
+GOTLUCKYSTRIKEBLUEPRINT = "You've got the ''Lucky Strike'' blueprint!";
+BLUEPRINTLUCKYSTRIKE = "\c[white]''Lucky Strike'' takes 80 junk to craft it. Do you wish to continue?";
+BLUEPRINTLUCKYSTRIKECRAFTED = "\c[gold]''Lucky Strike'' has been crafted!\n\c[white]There's a 2% chance that while picking up cigarettes,\n\c[white]you can earn huge bonuses, depending on the type of cigs.\n\n\c[green]+A chance for a Lucky Strike.\n\c[green]+Empowers the cig bonuses with small, random boosts.\n\n\c[gold][Heretic / Hexen only]\n\c[green]+Triples the chance for a cig drop jackpot.";
+
+GOTKEEPSHOOTINGBLUEPRINT = "You've got the ''Keep Shooting! Module'' blueprint!";
+BLUEPRINTKEEPSHOOTING = "\c[white]''Keep Shooting! Module'' takes 70 junk to craft it. Do you wish to continue?";
+BLUEPRINTKEEPSHOOTINGCRAFTED = "\c[gold]''Keep Shooting! Module'' has been crafted!\n\c[white]If you run out of shots while using Bitchmaker's alt-fire,\n\c[white]it'll start drawing ammo from your reserve, if available.\n\n\c[green]Keep shooting!\n\c[green]+25% chance per shot that it will not consume ammo.";
+
+GOTHOMINGGRENADESBLUEPRINT = "You've got the ''Homing Grenades'' blueprint!";
+BLUEPRINTHOMINGGRENADES = "\c[white]''Homing Grenades'' takes 60 junk to craft it. Do you wish to continue?";
+BLUEPRINTHOMINGGRENADESCRAFTED = "\c[gold]''Homing Grenades'' has been crafted!\n\c[white]What says on the tin. Toggle-able via item.\n\c[white]Bouncing grenades will bounce into nearest enemies.\n\n\c[green]+I could aim! But with this thing, I don't have to.";
+
+GOTINSTASPINBLUEPRINT = "You've got the ''Throttle Instaspin'' blueprint!";
+BLUEPRINTINSTASPIN = "\c[white]''Throttle Instaspin'' takes 40 junk to craft it. Do you wish to continue?";
+BLUEPRINTINSTASPINCRAFTED = "\c[gold]''Throttle Instaspin'' has been crafted!\n\c[white]What says on the tin.\n\n\c[green]Skullthrottle spins up and fires instantly.";
+
+GOTTRICORNEBLUEPRINT = "You've got the ''Tricorne Shot'' blueprint!";
+BLUEPRINTTRICORNE = "\c[white]''Tricorne Shot'' takes 90 junk to craft it. Do you wish to continue?";
+BLUEPRINTTRICORNECRAFTED = "\c[gold]''Tricorne Shot'' has been crafted!\n\c[white]Adds underbarrel to Fleshrend(s). Stacks with toolbelt upgrade.\n\n\c[green]+More pellets.\n\c[green]+By the power of videogame logic and pillowbalance\n\c[green](ergo - nonsense) - doesn't use more ammo.";
+
+GOTEXPLODERBLUEPRINT = "You've got the ''Master Exploder'' blueprint!";
+BLUEPRINTEXPLODER = "\c[white]''Master Exploder'' takes 120 junk to craft it. Do you wish to continue?";
+BLUEPRINTEXPLODERCRAFTED = "\c[gold]''Master Exploder'' has been crafted!\n\c[white]I did not mean, to blow your mind. But that shit happens to me, all the time!\n\n\c[green]+Barrels you detonate do not hurt you... and occasionally, explode way more violently.\n\c[green]+Impervious to own explosions.\n\c[green]+Monsters can drop blastspheres when killed.\n\n\c[white]Protip: Blastphere's shrapnel takes your view pitch into account.";
+
+GOTALCHEMISTBLUEPRINT = "You've got the ''Alchemist's Potency'' blueprint!";
+BLUEPRINTALCHEMIST = "\c[white]''Alchemist's Potency'' takes 50 junk to craft it. Do you wish to continue?";
+BLUEPRINTALCHEMISTCRAFTED = "\c[gold]''Alchemist's Potency'' has been crafted!\n\c[white]Damn, this stuff has a kicker.\n\n\c[green]+All timed powerups last longer.\n\c[green]+Bonus to Soulspheres/Cigspheres/Lucky Strikes.";
+
+GOTALCHDREAMBLUEPRINT = "You've got the ''Alchemist's Dream'' blueprint!";
+BLUEPRINTALCHDREAM = "\c[white]''Alchemist's Dream'' takes 200 junk to craft it. Do you wish to continue?";
+BLUEPRINTALCHDREAMCRAFTED = "\c[gold]''Alchemist's Dream'' has been crafted!\n\c[white]While holding use/open doors button and picking powerups up,\n\c[white]you can store them, up to three at a time.\n\c[white]Take note that the excess will still be used upon pickup.\n\n\c[green]+Store powerups for later.";
+
+GOTARMEASURESBLUEPRINT = "You've got the ''Armored Measures'' blueprint!";
+BLUEPRINTARMEASURES = "\c[white]''Armored Measures'' takes 50 junk to craft it. Do you wish to continue?";
+BLUEPRINTARMEASURESCRAFTED = "\c[gold]''Armored Measures'' have been crafted!\n\c[white]Now that's a protection.\n\n\c[green]+400 points worth of a very resilient armor.";
+
+GOTSPONTFREEBLUEPRINT = "You've got the ''Spontaneous Freedom'' blueprint!";
+BLUEPRINTSPONTFREE = "\c[white]''Spontaneous Freedom'' takes 60 junk to craft it. Do you wish to continue?";
+BLUEPRINTSPONTFREECRAFTED = "\c[gold]''Spontaneous Freedom'' has been crafted!\n\c[white]America! fuck yeah!\n\n\c[green]+Leadspitters tend to fire out... firework missiles.";
+
+GOTFLARESBLUEPRINT = "You've got the flare box blueprint!";
+BLUEPRINTFLARES = "\c[white]Flare box takes 20 junk to craft it. Do you wish to continue?";
+BLUEPRINTFLARESCRAFTED = "\c[gold]Flare box has been crafted!\n\c[white]Illuminator 1984... Would be a nice name for retrowave artist.\n\n\c[white]Use the item to throw a flare.\n\c[white]Holding 'use \ open doors' key while using it will make it stick around with you.\n\c[white]One flare lasts two minutes, stacks time-wise on each use.\n\n\c[green]+5 flares.";
+
+GOTHMGBLUEPRINT = "You've got the ''Heavy Machinegun'' blueprint!";
+BLUEPRINTHMG = "\c[white]''Heavy Machinegun'' takes 60 junk to craft it. Do you wish to continue?";
+BLUEPRINTHMGCRAFTED = "\c[gold]''Heavy Machinegun'' has been crafted!\n\n\c[white]Okay!\n\n\c[green]+Doubles the bullet capacity.\n\c[green]+Adds fancy tracers, they don't affect weapon's performance.";
+
+GOTBURSTSHOTBLUEPRINT = "You've got the ''Colt Burstshot'' blueprint!";
+BLUEPRINTBURSTSHOT = "\c[white]''Colt Burstshot'' takes 30 junk to craft it. Do you wish to continue?";
+BLUEPRINTBURSTSHOTCRAFTED = "\c[gold]''Colt Burstshot'' has been crafted!\n\n\c[white]Pew pew pew! Pew pew pew-\n\n\c[green]+Colts shoot in three-round bursts.";
+
+GOTPAINTRAINBLUEPRINT = "You've got the ''Paintrain'' blueprint!";
+BLUEPRINTPAINTRAIN = "\c[white]''Paintrain'' takes 100 junk to craft it. Do you wish to continue?";
+BLUEPRINTPAINTRAINCRAFTED = "\c[gold]''Paintrain'' Railgun has been crafted!\n\n\c[white]The pain train has no brakes.";
+
+GOTHAZMATBLUEPRINT = "You've got the Hazmat suit blueprint!";
+BLUEPRINTHAZMAT = "\c[white]Hazmat suit takes 20 junk to craft it. Do you wish to continue?";
+BLUEPRINTHAZMATCRAFTED = "\c[gold]Hazmat suit has been crafted!\n\n\c[white]Provides protection through hazardous floors.";
+
+//Powerups
+GOTSOULSPHERE = "\c[lightblue]Soulsphere!";
+GOTMEGASPHERE = "\c[Tan]Cigsphere!";
+GOTINVULSPHERE = "\c[green]Invulnerability!";
+GOTBLAZINGSPHERE = "\c[purple]Blazingsphere!";
+GOTQUADDAMAGE = "\c[blue]Quad Damage!";
+GOTAMMOJUNKIE = "\c[gold]Ammo Junkie!";
+GOTBLASTSPHERE = "\c[orange]Blastsphere!";
+GOTBERSERK = "\c[DarkRed]Berserk!";
+
+SOULSPHERESTORED = "\c[lightblue]Soulsphere stored.";
+MEGASPHERESTORED = "\c[Tan]Cigsphere stored.";
+INVULSPHERESTORED = "\c[green]Invulnerability stored.";
+BLAZINGSPHERESTORED = "\c[purple]Blazingsphere stored.";
+QUADDAMAGESTORED = "\c[blue]Quad Damage stored.";
+AMMOJUNKIESTORED = "\c[gold]Ammo Junkie stored.";
+BLASTSPHERESTORED = "\c[orange]Blastsphere stored.";
+BERSERKSTORED = "\c[DarkRed]Berserk stored.";
+
+//Standard language stuff
+STSTR_DQDON = "Rambo mode on";
+STSTR_DQDOFF = "Rambo mode off";
+STSTR_NCON = "Going through walls? Well, that gives some possibilities.";
+STSTR_NCOFF = "Oh cool, I wanted to pick some cigs, after all.";
+TXT_BUDDHAON = "Death-impervious mode on";
+TXT_BUDDHAOFF = "Death-impervious mode off";
+STSTR_KFAADDED	= "Oh cool, keys'n'stuff!";
+STSTR_FAADDED = "Oh cool, stuff!";
+MSGOFF = "Ability to read has been suspended";
+MSGON = "Ability to read has been restored";
+NETEND = "Get your guts together and man up for that multiplay, bro.";
+ENDGAME = "Come back when you grow some hair on your chest.\n(Unless you're a woman - that's highly unadvised!)";
+GGSAVED = "Shaving in progress... Done!";
+TXT_DEFAULTPICKUPMSG = "Have fun picking up things with undefined strings!";
+
+STARTUP1 = "Cause I'm a - Heatseeker, burning up the town!";
+STARTUP2 = "And I'm a - Heatseeker, I don't need no life preserver,";
+STARTUP3 = "I don't need no one to hose me down!";
+STARTUP4 = "Don't hose me down!";
+STARTUP5 = "Out on the street - feel the heat!";
+
+OB_SUICIDE = "%o went straight to Hell.";
+OB_FALLING = "%o should have grown some wings.";
+OB_CRUSH = "%o became his own, favorite vinyl record.";
+OB_EXIT = "%o tried to escape from his fate - just to run right into it.";
+OB_WATER = "%o didn't have enough air support.";
+OB_SLIME = "%o went full toxic avenger.";
+OB_LAVA = "In terms of being hot, %o couldn't outmatch lava.";
+OB_BARREL = "%o's best, explosive friend betrayed %h.";
+OB_KILLEDSELF = "%o was so awesome that %g had to kill %hself for the good of the universe.\nElse the universe would explode.";
+OB_VOODOO = "''THERE CAN BE ONLY ONE %o!!'' -\nsaid %o before finishing %hself off.";
+OB_DEFAULT = "%o's heat was too much to handle, even for %hself.";
+
+//Exit messages
+EXITMSG1 = "I don't like the cigs but the cigs like me.";
+EXITMSG2 = "I wouldn't mind a smoke break.";
+EXITMSG3 = "Don't be crazy; this mod does not propagate smoking in any way.";
+EXITMSG4 = "Smoking kills. And so do I.";
+EXITMSG5 = "Do I look like I wanna talk about my addictions?";
+EXITMSG6 = "Too much, too young, too fast!\nI'm gonna drink it up while it lasts!";
+EXITMSG7 = "Dirty deeds? I get 'em done cheap.";
+EXITMSG8 = "I am a hard rocker, and even harder roller.";
+EXITMSG9 = "Impossible, you say?\n\nIs that a dare?";
+EXITMSG10 = "You hate evil wizard masterminds, I hate evil scientist masterminds.\nAnd you're like, a bigass, flying lighter on steroids.\nPerhaps we could find a common ground, whatdayathink?";
+EXITMSG11 = "That's how the story goes\nthis the the story that must be told\nfor what could be your destiny\nyou never know.";
+EXITMSG12 = "If you see a door saying ''Pull'' - push.\nThat's not an instruction.\n\nThat's a challenge.";
+EXITMSG13 = "KILL KILL MURDER KILL EVISCERATE SMOKE SMOKE EVERY DAY EVERY NIGHT POWER AND MIGHT~";
+EXITMSG14 = "Excessive force? That sounds like something some crazy-ass punk would come up with.\nLike seriously, the next day I wake up,\nI swear some whacko will be following me with a transparent\n''DEMONS HAVE RIGHTS TOO!''\n...I am not saving that guy's ass when shit hits the fan.";
+EXITMSG15 = "Devil may cry? Devil WILL cry.";
+EXITMSG16 = "I am not exactly fond of refridgerators these days, if you ask me.\nI only eat smoked meat, fridges are fucking dangerous.";
+EXITMSG17 = "O-ho, little Blazer's running outta gas!\nLemme chug another bottle.";
+EXITMSG18 = "Runnin' with the devil! *DLR gibberish*\nRunnin' with the devil! *rinse and repeat*";
+EXITMSG19 = "It's got what it takes,\nso tell me why can't this be love,\nstraight from my heart,\nOoh tell me why can't this be love.";
+EXITMSG20 = "It ain't me, it ain't me, I ain't no senator's son!\nIt ain't me, it ain't me, I ain't no fortunate one!";
+EXITMSG21 = "We're going down to the devil,\nwe are striking out for paradise,\nto bedlam below - down to the devil,\nThe mad parade is coming home!";
+EXITMSG22 = "We don't know what we'll find!\nwhy won't you come with me, little girl,\non a magic carpet ride!";
+EXITMSG23 = "Let bitter silence infect the wounds.\nI am assassin, your friend.\nI am assassing, my friend.";
+EXITMSG24 = "Nowhere to run, nowhere to hide!\nYou've got to kill to stay alive!";
+EXITMSG25 = "Get your motor runnin',\nHead out on the highway!\nLookin' for adventure,\nAnd whatever comes our way!";
+EXITMSG26 = "There is, a house, in New Orleans,\nThey call it a House of Rising Sun.";
+EXITMSG27 = "All along the watchtower!\nPrinces kept the view.\nWhile all the women came and went,\nbarefoot servants too.";
+EXITMSG28 = "It's more than a feeling!\nWhen I hear that old song they used to play,\nI begin dreaming,\ntill I see Marianne walking away.";
+EXITMSG29 = "No mercy for the damned, or else I'll be damned!";
+EXITMSG30 = "Might as well jump.\nGo ahead and jump!";
+EXITMSG31 = "After wrestling nutrients outta cigs and alcohol for over two decades,\nmy organism refuses to accept actual food supplies and water.";
+EXITMSG32 = "From all the things I've lost,\n\nI miss my mind the most.";
+EXITMSG33 = "How can I summon fire upon punching foes?... Well!...\nHuh. You know what, now you've got me wondering, too.";
+EXITMSG34 = "I've been hearing this voice in my head...\nmaybe I am going crazy, but... it demands more cigs...\nWell, I can't argue with that.";
+EXITMSG35 = "I can tell you only one thing:\nI'm grabbing death sticks!";
+EXITMSG36 = "You have the right to be permanently silent by being permanently dead.";
+EXITMSG37 = "I miss the days of being a regular cop at times.\nThose demons don't exactly wanna listen to blunt force,\nas much as they listen to lead. Cunts.";
+EXITMSG38 = "Get on the chopper! We're going for the nearest nightclub!";
+EXITMSG39 = "Being a merc also has it's pros.\nFlexible work time, payment equal to effort, trips around the world,\nmore whiskey than your body has room for, pulling lead outta your teeth...\nyou know, typical stuff.";
+EXITMSG40 = "On the second thought!... Hell ain't bad place to be.";
+EXITMSG41 = "Fucking with fire!\nI'm coming to rock\ngot my rocket on fire\nand I take what I want!";
+EXITMSG42 = "Y'see this silver six-shooter right here?\nIt sends a BBQ over ten miles!\nFuckin' future of technology, son-";
+EXITMSG43 = "And hereby I shall demonstrate how to turn a car battery\nand a set of pipes into one hell of an explosive!";
+EXITMSG44 = "All I ask for is one cigar.\n\nONE.\n\n\CIGAR.";
+EXITMSG45 = "Drinking game for hardcores!\nDrink a shot each time I spit a tab.\nHave fun with spheres.";
+EXITMSG46 = "Good? Vlad? I'm the guy with the cigs.";
+EXITMSG47 = "There are two kinds of folk in my world.\nThose who have a loaded gun, and those who die.\nWell guess what mister monster!...\n\n...You die.";
+EXITMSG48 = "I am not a herbalist, or some other vegan. But spiced whiskey sounds... kinda nice.";
+EXITMSG49 = "I tell ya what ye all dang monster hobos be leavin' mah world y'getit.";
+EXITMSG50 = "You know what's better than life insurance?\n\nA shotgun.\n\nThat's a life insurance you can count on.";
+EXITMSG51 = "As a token of gratitude, you have my disdain towards you lower slightly.";
+EXITMSG52 = "Boom boom boom let's go back to my room\nSo we can do it all night, and you can make me feel right, oooh!";
+EXITMSG53 = "Come ride with me\nThrough the veins of history\nI'll show you a god\nFalls asleep on the job.\n\nAnd how can we win\nWhen fools can be kings\nDon't waste your time\nOr time will waste you.";
+EXITMSG54 = "What the fuck did you just say about me you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. Your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. I can kill you in over seven hundred ways, and that's just with my bare hands. I also have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little clever comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you, and you will drown in it. You're fucking dead, kiddo.";
+
+// Doom 1
+E1TEXT =
+	"Guns and cigs and death, oh my! After\n"
+	"murdering two big dudes and clearing out\n"
+	"the smaller uglier pink things, you step\n"
+	"onto a platform and into some\n"
+	"interdimensional whosawhatsimathingy\n"
+	"where you are promptly shot and torn\n"
+	"multiple times in the darkness. Where the\n"
+	"hell is that bastard Vladimir Vladimir?\n"
+	"How would he be crafty enough to leave\n"
+	"such a trap for your dumb ass before the\n"
+	"next episode?\n"
+	"\n"
+	"It stinks like rotten meat, and definitely\n"
+	"doesn't seem to contain any babes. You\n"
+	"could really go for a cig rigt now, and\n"
+	"there's nothing but murder in theair.\n"
+	"The shores of undead will fall eventually.\n"
+	"The only way out of here... is through.";
+	
+E2TEXT =
+	"Was that all? Just some big ugly rocket-\n"
+	"spewing goat guarding a tall green marble\n"
+	"building? Vladdy's going to have to come\n"
+	"up with more exciting threats than that!\n"
+	"But where are you now, you wonder? What\n"
+	"sort of hellish abomination will be thrown\n"
+	"at you next? A quick look over the edge\n"
+	"provides the kind of cryptic answer our\n"
+	"hero needs!\n"
+	"\n"
+	"Of course, you don't know where the hell\n"
+	"you are anyway, but you shrug, say heck,\n"
+	"and drop carefully with carefully-\n"
+	"procured rope to the fleshy surface of a\n"
+	"strange new landscape. If there are more\n"
+	"of Vladimir's minions here, they'll be\n"
+	"sorry they ever met you. It's time to\n"
+	"take the fight to the fires of the devil\n"
+	"- Blazer style!";
+	
+E3TEXT =
+	"Really? A brain on legs, that's all the\n"
+	"real mastermind could come up with? A\n"
+	"strange feeling at the back of your mind,\n"
+	"one about seeming heroic for freeing an\n"
+	"entire moonbase of dead people from evil,\n"
+	"is quickly shunted by thoughts of kicking\n"
+	"back with a bottle of whiskey and fine\n"
+	"cubans.\n"
+	"No time for that! Vladimir Vladimir\n"
+	"awaits, and there's no telling what kind\n"
+	"of abominations your mortal enemy will\n"
+	"have contaminated new worlds with this\n"
+	"time! One step through a nearby entryway\n"
+	"reveals the great greens of Earth, and\n"
+	"a strange sense of peace you've never\n"
+	"felt since the refrigerator tragedy.\n"
+	"Perhaps it's a good idea you didn't\n"
+	"bring Hell with you...";
+
+E4TEXT =
+	"Vladimir Vladimir must have thought of\n"
+	"all this before you went on an epic\n"
+	"trek to kill his ass. How else would\n"
+	"Earth territories be so thoroughly\n"
+	"overrun? To sacrifice the women and\n"
+	"children like that to stop the\n"
+	"Trailblazer, what a horrendously\n"
+	"villainous thing to do! But you stepped\n"
+	"forth and destroyed them anyway, no\n"
+	"matter their affiliations or love of\n"
+	"fire - someone was going to pay for\n"
+	"that disturbing sight of rabbit head\n"
+	"on pike. Mind bleach will be required\n"
+	"for the next few weeks... Weeks you\n"
+	"don't have. Until next episode, then!\n"
+	"Hell on Earth awaits!";
+	
+// Doom 2
+C1TEXT =
+	"You have entered deeply into a bunch of\n"
+	"technical and mechanical military\n"
+	"hoohaha... Typical, Vlad. The monsters\n"
+	"you saw last season have subverted reality\n"
+	"with their existence, changing places that\n"
+	"looked vaguely familiar following old\n"
+	"professions of yours into something\n"
+	"decidedly new and unnatural, something\n"
+	"sinister. Ahead is the whatzit place with\n"
+	"the super switch that releases the Earth's\n"
+	"population, and you decide, what the heck,\n"
+	"maybe there's a fat pack of cigs in it for\n"
+	"you if you save the people. At the very\n"
+	"least, an upset in Vlad's carefully\n"
+	"organized plans are always appreciated, so\n"
+	"off you set, shotguns in hand and cigs in\n"
+	"your holster...";
+
+C2TEXT =
+	"Well, what do you know? That button wasn't\n"
+	"so hard to hit after all! Sometimes you\n"
+	"wonder if Vlad is even trying. Of course,\n"
+	"now that the Earth is devoid of humans,\n"
+	"raiding cigarette factories should now be\n"
+	"unbelievably easier. As you chart a course,\n"
+	"one of the monitors displays a message,\n"
+	"beamed directly from Earth Control:\n"
+	"\"Sensors have located the source of the\n"
+	"alien invasion. If you go there, you may\n"
+	"be able to block their entry. The alien\n"
+	"base is in a city, not far from the\n"
+	"starport.\" Well, how convenient! That's\n"
+	"another hop from the factories! Which you\n"
+	"may or may not be planning to take apart\n"
+	"to fuel your own heroic rampage. One thing\n"
+	"is for sure: Vladimir is paying the tab!";
+
+C3TEXT =
+	"After killing many things, dead and undead\n"
+	"(you're not actually sure which), you arrive\n"
+	"at the corrupt heart of the city, whereupon\n"
+	"a portal splays itself in the fabric of the\n"
+	"building existences. This side doesn't have\n"
+	"an off switch, so you're going to have to do\n"
+	"the fun thing and dive right in! If there is\n"
+	"any chance of Vladimir Vladimir on the other\n"
+	"side, there's no way you'd simply pass up\n"
+	"the opportunity to kill his evil butt. It's\n"
+	"time to turn up the fire and burn everything\n"
+	"in your path, baby! Light 'em on fire!";
+
+C4TEXT =
+	"For once, Vladimir shows some of his\n"
+	"creativity! A giant skull that turns into\n"
+	"exploding fireworks is a nice touch for a\n"
+	"final boss! Unfortunately, as the writhing,\n"
+	"flailing corpse of the ugliest thing you've\n"
+	"ever seen destroys the landscape and tears up\n"
+	"crap you don't even care about, your nemesis\n"
+	"is nowhere to be seen and your true mission\n"
+	"has yet to be completed. Maybe all of those\n"
+	"people on Earth can be happy that the demons\n"
+	"won't be ripping them to shreds anymore and\n"
+	"can rebuild all of the fine whiskey and\n"
+	"cigarette establishments you, ahem, traversed\n"
+	"in the name of justice, but your true quest\n"
+	"will never be complete until you've served\n"
+	"Vladimir Vladimir a bullet with his god damn\n"
+	"name on it. Quietly, painfully, you pack up\n"
+	"your guns and head off - you had a hell of\n"
+	"a time getting here... Time to give someone\n"
+	"else a taste of that.";
+
+C5TEXT =
+	"This strange interdimensional rift seems to\n"
+	"call to someone, but you're not sure who.\n"
+	"Still, the chance of fulfilling your vices,\n"
+	"finding cooler gear, or simply falling on\n"
+	"Vladimir's head for a quick and unsatisfying\n"
+	"kill are too good to pass up! Light 'em up!";
+
+C6TEXT =
+	"Well, that was a real nostalgic bummer. How\n"
+	"about this portal? Is a man's peace of mind\n"
+	"in nicotine too good to ask for?";
+
+// Plutonia
+P1TEXT =
+	"Some ugly beast that called itself a guardian\n"
+	"is now a steaming pile of guts at your feet,\n"
+	"supposedly having guarded a mechanical device\n"
+	"worth a lot of cigarettes to the UAC. That\n"
+	"device is now in your hands, and you wonder\n"
+	"idly if you can bargain. But what are you\n"
+	"thinking? There's no time for that now! If\n"
+	"Vladimir Vladimir has his hands on tech like\n"
+	"this, then there's no telling what evil plots\n"
+	"he can possibly muster if there's more than\n"
+	"just this one part! If you're going to stop\n"
+	"him, you're going to need to keep moving and\n"
+	"keep killing. Oh, and keep smoking, too.";
+
+P2TEXT =
+	"After a funny maze full of fiery bitches,\n"
+	"another, similar device that apparently\n"
+	"works (but was reported as a prototype)\n"
+	"is now efficiently and permanently disabled.\n"
+	"If the UAC is a little miffed that it's also\n"
+	"just a little broken, you couldn't care right\n"
+	"now. You're too good at this kind of thing.";
+
+P3TEXT =
+	"After murdering just about anything you've\n"
+	"come across, you find yourself in the heart\n"
+	"of trouble, the only barriers henceforth a\n"
+	"slaughter of demons coming your way. You grin\n"
+	"evilly insofar as your burning cigarette will\n"
+	"allow, for you know they're bad, but you're\n"
+	"worse.\n\n"
+	"Setting off toward the horde, your whiskey,\n"
+	"cigarettes, and murderous guns in tow, it's\n"
+	"time to show Vladimir's minions what Hell is\n"
+	"really all about.";
+
+P4TEXT =
+	"As the even uglier thing called the Gatekeeper\n"
+	"hits the ground, the machine that created his\n"
+	"gates of torment explodes, and the portals to\n"
+	"elsewhere violently consume every last one of\n"
+	"your troubles nearby. You're done here, but\n"
+	"heading home is the furthest thought from\n"
+	"your mind, for Vladimir Vladimir still has\n"
+	"yet to show his face in a satisfying victory\n"
+	"incandescence. As you turn away to continue\n"
+	"on your journeys, you think to yourself about\n"
+	"how you've made Hell your bitch, and that if\n"
+	"you ever die, the Bitchmaker in your\n"
+	"theoretical coffin will make the world below\n"
+	"think twice next time.";
+
+P5TEXT =
+	"So this is the second-hardest stronghold Hell\n"
+	"has got? What a joke you'll make of it if it\n"
+	"helps your deepest objective. For master\n"
+	"Trailblazers only? Maybe.";
+
+P6TEXT =
+	"The hardest stronghold in Hell's fleet? That\n"
+	"sounds like a challenge. No one's getting out\n"
+	"alive... Nobody on Vladimir's side, anyway.";
+
+// TNT
+T1TEXT =
+	"Once again, an infestation has broken out in\n"
+	"experimental UAC laboratories. Typical Vlad...\n"
+	"In any case, you can only imagine that a touch\n"
+	"more mercenary living would have done all of\n"
+	"the scientists a world more good, or at least\n"
+	"some training with a gun. Nobody's making\n"
+	"a profit over all of these dead employees.\n\n"
+	"Ahead lies the military complex, where said\n"
+	"scientists could possibly have spent time\n"
+	"developing guns that would save them in case\n"
+	"they expected an enemy of this caliber. With\n"
+	"any luck, you'll be putting them to good use.";
+
+T2TEXT =
+	"The sound of heavy machinery ahead almost\n"
+	"causes excitement, until you realize that\n"
+	"this facility can't possibly be stamping\n"
+	"tobacco into cigarettes. Oh well, you think\n"
+	"as you head onward ready to destroy any herds\n"
+	"of demons you come across - they might be\n"
+	"planning a massacre, but you're going to make\n"
+	"that come true in a way they wouldn't expect.\n\n"
+	"You don't plan to be slowed down easily.";
+
+T3TEXT =
+	"The panorama of blood, evil, and madness ahead\n"
+	"seems familiar. All too familiar, in fact...\n"
+	"The more you think about it, the more certain\n"
+	"you are that Vladimir is behind everything.\n"
+	"The longer you ponder this, the more your urge\n"
+	"for another cigarette grows (even before you\n"
+	"are done with the one you're already smoking!)\n"
+	"and you decide there's no better time to keep\n"
+	"moving. Maybe soon you'll be able to tick\n"
+	"Vladimir Vladimir off of the list.";
+
+T4TEXT =
+	"Suddenly, after one soul-shivering scream\n"
+	"echoes across the sky, everything is quiet.\n"
+	"Too quiet, in fact. The sky becomes a tranquil\n"
+	"blue, demon corpses all around you begin to\n"
+	"evaporate, and still you're left without a\n"
+	"clue or trail as to Vladimir's final resting\n"
+	"place... This can't be it, you think, as Hell's\n"
+	"influence recedes and leaves you to ponder\n"
+	"everything that's happened so far.\n\n"
+	"Then a blue glow catches your gaze, shining\n"
+	"from the depths of the ruined skull of the\n"
+	"nasty beast you just slew...";
+
+T5TEXT =
+	"What is this, Egypt? Almost reminds you of\n"
+	"that similar semi-serious guy you met in\n"
+	"Cairo once... Either way, what's here can\n"
+	"be worse than the usual faire. Or can it?\n"
+	"Maybe it's best to let sleeping time-locks\n"
+	"lie...?";
+
+T6TEXT =
+	"Another vacation spot, eh? It's too early for\n"
+	"Vladimir to be taking a break! Still, the\n"
+	"temptation to kick back with a bottle of\n"
+	"whiskey and a pack of cigs is great, and the\n"
+	"tranquility of this quaint town and the sound\n"
+	"of flowing water is too nice to ignore...\n\n"
+	"Then the sound of a heavy footfall sounds off\n"
+	"in the distance. Of course Hell would...";
+
+// NRFTL
+NERVETEXT =
+	"Once again, Hell thought it could stir up\n"
+	"an apocalypse and win. Some Cyberdemon beast\n"
+	"thought he could unleash the hordes and win\n"
+	"a tactical victory on Earth.\n\n"
+	"Well, that piece of crap is now a warm blob\n"
+	"of guts and metal parts, unable to fathom\n"
+	"whose attention he might be attracting with\n"
+	"his funny little stunt. You're almost sure\n"
+	"the one known as Vladimir Vladimir put him\n"
+	"up to it, another little distraction to keep\n"
+	"the Trailblazer occupied...\n\n"
+	"Now the main attraction has been shut down,\n"
+	"and all of the attendees are dead. Their ride\n"
+	"is over, but so long as your nemesis exists,\n"
+	"there's work to be done.";
+
+// Heretic
+HE1TEXT =
+	"After clearing out a bunch of ugly-\n"
+	"looking D&D rejects in a strange,\n"
+	"undead realm that looks like nothing\n"
+	"you've ever seen before fails to beckon\n"
+	"Vladimir Vladimir's sorry ass, you're\n"
+	"left to stare at one of the trippier\n"
+	"portals you've seen on the way here.\n"
+	"You have the sinking feeling you aren't\n"
+	"looking at a way to his evil lair, or\n"
+	"home, or even at a mystical slingshot\n"
+	"into the land of milk (babes) and honey\n"
+	"(whiskey).\n\n"
+	"One thing is for certain, and that's\n"
+	"that it looks like the only way ahead.\n"
+	"The heat is strong, but it's nothing\n"
+	"you can't handle. Plus, if this portal\n"
+	"is integral to Vladimir's designs, maybe\n"
+	"shutting it down will royally piss him\n"
+	"off and lure him out of hiding, and\n"
+	"the only way to do that is from the\n"
+	"other side. But hey, no one ever said\n"
+	"being the Trailblazer was easy!";
+
+HE2TEXT =
+	"Although a good burger is a completely\n"
+	"American pastime, you swear it's gonna\n"
+	"take a dose of the finer vices (that\n"
+	"is, cigs and whiskey) to make you want\n"
+	"one again after all this. Wherever\n"
+	"Vladimir finds these freaks is beyond\n"
+	"you but each one you kill makes you\n"
+	"want to kill him even harder.\n\n"
+	"Beyond the ugly mess of cow is another\n"
+	"portal, quite like the last, but...\n"
+	"somehow different. As if it leads to\n"
+	"somewhere purposeful. As you step\n"
+	"through, you hear laughter, and it's\n"
+	"a worse sound than a prerecorded track.\n"
+	"Vladimir is certainly mocking you, but\n"
+	"the strange dome above you isn't exactly\n"
+	"his style... Whatever it is, it's a sign\n"
+	"of more creatures that need killing.\n"
+	"Just like you, they won't be leaving\n"
+	"this place easily.";
+
+HE3TEXT =
+	"At the end of the road is some giant\n"
+	"ugly snake and a fast-talking kid in\n"
+	"robes, but they died like the little\n"
+	"bitches they were. Without a smile on\n"
+	"your face, you step over his corpse and\n"
+	"head towards the portal ahead, diving\n"
+	"through with all speed to the cacophony\n"
+	"of breaking glass as the dome fragments\n"
+	"and collapses under its own weight.\n\n"
+	"Vladimir Vladimir, as expected, is still\n"
+	"nowhere to be found. What's worse is\n"
+	"that a sensation in your bones (not to\n"
+	"be confused with the significant need\n"
+	"for nicotine) tells you you're not any\n"
+	"closer to putting a bullet in his head.\n"
+	"Maybe it was the last two portals.\n"
+	"Maybe it was that last thinly disguised\n"
+	"scream of magic the now-dead spell\n"
+	"kiddie sounded off in his final moments.\n"
+	"Or maybe it's your liver begging for\n"
+	"mercy. Either way, the fight's not over\n"
+	"yet.";
+
+HE4TEXT =
+	"As you might have come to expect, your\n"
+	"way back onto the trail of Vladimir\n"
+	"Vladimir's destruction has been\n"
+	"delayed by none other than that kooky-\n"
+	"looking wizard's final magic spell, a\n"
+	"final curse that seems to have lead to\n"
+	"the apparent decimation of just about\n"
+	"every single minion that might have\n"
+	"furthered any posthumous plans, and by\n"
+	"your hands, no less.\n\n"
+	"It's an odd move on his part, to be\n"
+	"sure, and the only assumption you can\n"
+	"form with a half-burnt cig between\n"
+	"your lips is that the wizard is in\n"
+	"cahoots with your long-time nemesis.\n"
+	"Vladimir must be buying time to cook\n"
+	"up the most evil plot the world might\n"
+	"ever see, and you still have to cross\n"
+	"the wizard's lands to find out what.\n"
+	"If anyone tries to stop you, you're\n"
+	"sure you'll be handing them a twelve-\n"
+	"gauge eviction notice from life...";
+
+HE5TEXT =
+	"As the final minotaur slides to the\n"
+	"ground a fine stew of blood, lead, and\n"
+	"meat, a terrible thought sweeps your\n"
+	"mind, and a hand against your breast\n"
+	"pocket confirms this.\n\n"
+	"'I kicked ass and smoked cigs, and I'm\n"
+	"all out of cigs', you groan in utter\n"
+	"frustration before the flare of a\n"
+	"portal catches your eye. Only it knows\n"
+	"where it leads, and you can only hope,\n"
+	"with a shadow of a doubt cast by all\n"
+	"previous portals, that it leads back to\n"
+	"the nearest supermarket and sweet, sweet\n"
+	"nicotine relief. Even if you're out,\n"
+	"however, there's one thought that fails\n"
+	"to be left behind: cigarettes or no,\n"
+	"which Vladimir has to know by now is\n"
+	"the worst kind of torture, you will not\n"
+	"be stopped before you can put a bullet\n"
+	"in his head. As you step through the\n"
+	"final portal, all your previous trials\n"
+	"confirm this with a heady, vengeful\n"
+	"decision... You're from Australia, and\n"
+	"there's nothing to do but kill 'em all.";

@@ -1,0 +1,215 @@
+Actor NicotineToken : Inventory { Inventory.MaxAmount 100 }
+
+ACTOR LuckyStrikeItem : CustomInventory
+{
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Pickup:
+	   TNT1 A 0 {
+			A_PlaySound("Lucky/Strike",2);
+			A_SpawnItemEx("LuckyStrikeEffect",0,0,0,0,0,0,0,SXF_SETMASTER|SXF_TRANSFERPOINTERS);
+			A_SetBlend("Blue",0.3,70);
+			A_Print("\c[LightBlue]Lucky Strike!",2);
+		}
+		Stop
+	}
+}
+
+Actor LuckyStrikeEffect : TBPowerupEffect
+{
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay
+		{
+			for (A_SetUserVar(User_Counter, 0); User_Counter < 6; A_SetUserVar(User_Counter, User_Counter + 1))
+			{
+				A_SetAngle(frandom(0.0,360.0));
+				A_SpawnItemEx("LuckyStrikePart",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS);
+			}
+		}
+		TNT1 A 0 A_SetUserVar("User_Counter", 40)
+		Goto Super::Loop2
+	}
+}
+
+Actor LuckyStrikePart : TBPowerupPart
+{
+	States
+	{
+	Spawn:
+		PSHK E 0
+		Goto Super::Setup
+	}
+}
+
+ACTOR NicotineRushItem : CustomInventory
+{
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Pickup:
+		TNT1 A 0 A_GiveInventory("JunkItem",25)
+		TNT1 A 0 A_Jump(256,"BlazingRush","AmmoRush","QuadRush")
+	BlazingRush:
+		TNT1 A 0 {
+			A_PlaySound("Blazingsphere/Pickup",2);
+			A_SetBlend("Purple",0.3,70);
+			A_GiveInventory("BlazingsphereItem",1);
+			A_Print("\c[Purple]Nicotine Rush!\n\c[White]Blazingsphere administered.",2);
+			Healthing(100, 0);
+			if(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("BlazingsphereBoost",1);
+			}
+		}
+		Stop
+	QuadRush:
+		TNT1 A 0 {
+			A_PlaySound("Soulsphere/Pickup",2);
+			A_GiveInventory("QuadDamageItem",1);
+			A_Print("\c[Blue]Nicotine Rush!\n\c[White]Quad Damage administered.",2);
+			Healthing(100, 0);
+			if(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("QuadDamageBoost",1);
+			}
+		}
+		Stop
+	AmmoRush:
+		TNT1 A 0 {
+			A_PlaySound("AmmoJunkie/Pickup",2);
+			A_SetBlend("Yellow",0.3,70);
+			A_GiveInventory("AmmoJunkieItem",1);
+			A_Print("\c[Yellow]Nicotine Rush!\n\c[White]Ammo Junkie administered.",2);
+			Healthing(100, 0);
+			if(CountInv("AlchemistsPotency")) {
+				A_GiveInventory("AmmoJunkieBoost",1);
+			}
+		}
+		Stop
+	}
+}
+
+Actor CigbuttSpawner : CustomInventory
+{
+	+INVENTORY.AUTOACTIVATE
+	States
+	{
+	Spawn:
+		TNT1 A 1
+		Stop
+	Pickup:
+		TNT1 A 0 A_FireCustomMissile("CigButt",random(-7,-15),0,0,-3)
+		//TNT1 A 0 A_SpawnItemEx("CigButt", 18, 2, 31, frandom(2.0,4.0), frandom(1.0,3.0), frandom(1.0,3.0), 0, SXF_NOCHECKPOSITION)
+		Stop
+	}
+}
+
+
+Actor Cigbutt
+{
+	Speed 4
+	Radius 4
+	Height 3
+	Projectile
+	+FORCEXYBILLBOARD
+	+BOUNCEONACTORS
+	+THRUACTORS
+	+NOTIMEFREEZE
+	-NOGRAVITY
+	+NOTRIGGER
+	Scale 0.7
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_ScaleVelocity(frandom(1.0,2.0))
+		TNT1 A 0 ThrustThingZ(0,20,0,1)
+		CBUT ABCDEFGH 2 A_SpawnItemEx("Cigsmoke",frandom(0.1,-0.1),frandom(0.1,-0.1),0,0,0,frandom(0.5,0.1),0,SXF_CLIENTSIDE,0)
+		Loop
+	Death:
+		TNT1 A 0 A_SpawnItemEx("CigbuttGrounded",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0)
+		Stop
+	}
+}
+
+actor CigbuttGrounded
+{
+	-NOGRAVITY
+	+NOTIMEFREEZE
+	Var Int User_Counter;
+	Scale 0.7
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay A_Jump(255,"Spawn1","Spawn2")
+		stop
+	Spawn1:
+		CBUT I 0
+		Goto SetTimer
+	Spawn2:
+		CBUT J 0
+		Goto SetTimer
+	SetTimer:
+		"####" "#" 0 A_SetUserVar("User_Counter",random(145,65))
+	Looplet:
+		"####" "#" 0 A_JumpIf(User_Counter <= 0,"CheckOne")
+		"####" "#" 0 A_SetUserVar("User_Counter", User_Counter - 1)
+		"####" "#" 2 A_SpawnItemEx("Cigsmoke",frandom(0.1,-0.1),frandom(0.1,-0.1),0,0,0,frandom(0.5,0.1),0,SXF_CLIENTSIDE,10)
+		Loop
+	CheckOne:
+		"####" "#" 0 A_SetUserVar("User_Counter",105)
+	Looplet2:
+		"####" "#" 0 A_JumpIf(User_Counter <= 0,"CheckTwo")
+		"####" "#" 0 A_SetUserVar("User_Counter", User_Counter - 1)
+		"####" "#" 2
+		Loop
+	CheckTwo:
+		"####" "#" 0 A_CheckSight("Fadying")
+		Goto CheckOne
+	Fadying:
+		"####" "#" 1 A_FadeOut(0.1)
+		Wait
+	}
+}
+
+Actor Cigsmoke
+{
+	+NoInteraction
+	+ForceXYBillboard
+	+NoTimeFreeze
+	Alpha 0.0
+	RenderStyle Translucent
+	States
+	{
+		Spawn:
+			TNT1 A 0 NoDelay A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD")
+		SpriteA:
+			DYMI E 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			DYMI F 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			DYMI G 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			DYMI H 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+		FadeIn:
+			"####" "#" 0 A_SetScale(FRandom(0.03, 0.015))
+			Goto RealFadeIn
+		RealFadeIn:
+			"####" "#" 1 A_FadeIn(FRandom(0.02, 0.03))
+			"####" "#" 0 A_JumpIf(Alpha >= 0.2, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 A_FadeOut(FRandom(0.004,0.003))
+			"####" "#" 0 A_SetScale(ScaleX - 0.0002, ScaleY - 0.00005)
+			"####" "#" 0 A_JumpIf(Alpha <= 0,"NULL")
+			Loop
+	}
+}

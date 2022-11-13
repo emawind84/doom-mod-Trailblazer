@@ -1,0 +1,120 @@
+/*	KeksDose / MemeDose (kd):
+	
+	Sometimes you read a cvar and it's not there, but you don't really wanna
+	worry about checking if it was there to begin with and you also don't wanna
+	make gzd look it up again and again if it's really REALLY not there. That's
+	what this does, it ensures there's always a sane value for what cvar you're
+	reading.
+	
+	
+	
+	*/
+
+struct tb_DefaultCvar {
+	private bool				is_valid;
+	private transient Cvar		c_var;
+	private PlayerInfo			player_info;
+	private String				cvar_name;
+	
+	void Find (String _name) {
+		c_var		= c_Var.FindCvar(_name);
+		cvar_name	= _name;
+		is_valid	= c_var != NULL;
+	}
+	
+	bool Get (String _name, PlayerInfo player) {
+		if(!player) {
+			is_valid	= false;
+			cvar_name	= "";
+			c_var		= NULL;
+			return false;
+		}
+		
+		c_var		= c_var.GetCvar(_name, player);
+		cvar_name	= _name;
+		player_info	= player;
+		is_valid	= c_var != NULL;
+		return true;
+	}
+	
+	// kd: This is stronger than whether cvar is null. If the first read was
+	// bad, that means the cvar doesn't exist at all, so it shouldn't be looked
+	// up again.
+	
+	bool Exists () const {
+		return is_valid;
+	}
+	
+	double GetDouble (double def_val = 0) {
+		if(WasValidated()) {
+			return c_var.GetFloat();
+		}
+		
+		return def_val;
+	}
+	
+	String GetString (String def_val = "") {
+		if(WasValidated()) {
+			return c_var.GetString();
+		}
+		
+		return def_val;
+	}
+	
+	// kd: NOTE HOW THIS SHIT ONLY WORKS PROPERLY TO SET USER CVARS IF YOU USE
+	// FIND, EVEN THOUGH FIND DOESN'T TAKE A PLAYER, WHILE A "GET"-CVAR WILL
+	// JUST GHOST WRITE RESULTS, BUT NOT REALLY UPDATE YOUR CVAR.
+	
+	// WHY?
+	
+	// BECAUSE ZS BASE CODE HAD TO BE DESIGNED BY A LUCID DREAMER DREAMING ABOUT
+	// SNORTING LIQUID CRACK THROUGH A STRAW STRAIGHT INTO HIS BRAIN.
+	
+	// THAT'S WHY.
+	
+	// http://i.imgur.com/R7AXaYB.png
+	
+	int GetInt (int def_val = 0) {
+		if(WasValidated()) {
+			return c_var.GetInt();
+		}
+		
+		return def_val;
+	}
+	
+	bool GetBool (bool def_val = false) {
+		if(WasValidated()) {
+			return c_var.GetBool();
+		}
+		
+		return def_val;
+	}
+	
+	/* bool GetColor (Color def_val = 0xffffffff) {
+		if(WasValidated()) {
+			return c_var.GetColor();
+		}
+		
+		return def_val;
+	} */
+	
+	void SetInt (int val) {
+		if(WasValidated()) {
+			c_var.SetInt(val);
+		}
+	}
+	
+	void SetBool (bool val) {
+		if(WasValidated()) {
+			c_var.SetBool(val);
+		}
+	}
+	
+	private bool WasValidated () {
+		if(is_valid && c_var == NULL) {
+			c_var = c_var.GetCvar(cvar_name, player_info);
+		}
+		
+		return c_var != NULL;
+	}
+}

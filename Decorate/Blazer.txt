@@ -1,0 +1,129 @@
+/* // moved to zscript.
+ACTOR Trailblazer : PlayerPawn
+{
+	Health 100
+   	Player.maxhealth 100
+	Radius 16
+	Height 56
+	Mass 100
+	PainChance 255
+    Player.SoundClass "Trailblazer"
+    Player.forwardmove 1//.25
+	Player.sidemove 1//.25
+	Player.JumpZ 9.0
+	Player.GruntSpeed 16.0
+	Player.DisplayName "Malcolm"
+	Player.Face "BAD"
+	Player.ColorRange 112, 127
+	
+	Player.ColorSet 0, "Classic", 240, 247, 207
+	Player.ColorSet 1, "Ash", 96, 111, 103
+	Player.ColorSet 2, "Redscale", 176, 191, 176
+	Player.ColorSet 3, "Manly-ass", 250, 254, 251
+
+	Player.StartItem Sidekick
+	Player.StartItem BulletAmmo 60
+	Player.StartItem Macheterang
+	Player.StartItem SpikebombWeapon
+	Player.StartItem SpikebombTossWeapon
+	Player.StartItem PipeQuickToss
+	Player.StartItem TinkerItem
+	Player.StartItem AmmoCrafterItem
+	Player.StartItem HammerSpaceCounter 10
+	
+	//Machete Quick-Toss stuff
+	Player.StartItem MacheteIn
+	Player.StartItem MacheteOut
+	
+	//Hexen stuff
+	Player.SpawnClass Any
+	Player.StartItem Sidekick2
+	Player.StartItem BlueMana 60
+	
+	//Gun clips
+	Player.StartItem MacheteAmmo 1
+	Player.StartItem CradleClip 6
+	Player.StartItem GraveClip 6
+	Player.StartItem UziClipLeft 30
+	Player.StartItem UziClipRight 30
+	Player.StartItem MagnumClip 6
+	Player.StartItem SidekickClip 16
+	Player.StartItem ChromeJusticeClip 8
+	Player.StartItem FMGClip 70
+	Player.StartItem PatriarchClip 12
+	
+	Player.WeaponSlot 1, "SpikebombWeapon", "Macheterang"
+	Player.WeaponSlot 2, "Sidekick", "Sidekick2", "Colts"
+	Player.WeaponSlot 3, "ChromeJustice", "Fleshrend", "ChromeJustice2", "Fleshrend2"
+	Player.WeaponSlot 4, "FMG", "Leadspitter", "FMG2", "Leadspitter2"
+	Player.WeaponSlot 5, "Patriarch", "Bitchmaker", "Patriarch2", "Bitchmaker2"
+	Player.WeaponSlot 6, "Skullthrottle", "Skullthrottle2"
+	Player.WeaponSlot 7, "Nutcracker", "Nutcracker2"
+	
+	+DONTBLAST //For future use, usually
+	+THRUSPECIES
+	
+	Species "Chainsmoker"
+	
+	DamageFactor "Normal", 0.8 //Manly jacket and manly resistance!
+	DamageFactor "Patriarch", 0.1 //He shouldn't get so damaged by his own gun, babe - too action hero'y for that!
+	DamageFactor "MasteringExplosions", 0.0 //EXPLOSIVO!
+	States
+	{
+	Spawn:
+		BLAZ A -1
+		Stop
+ 	 See:
+ 		BLAZ A 0 A_SpawnItemEx("TrailblazerStep", 0, 0, 0, 0, 0, -10, 0, SXF_SETMASTER, 0) 
+		BLAZ AB 5
+ 		BLAZ A 0 A_SpawnItemEx("TrailblazerStep", 0, 0, 0, 0, 0, -10, 0, SXF_SETMASTER, 0)
+		BLAZ CD 5
+		Goto Spawn
+	Melee:
+		BLAZ F 6 Bright
+		Goto Missile
+	Missile:
+		BLAZ E 12
+		Goto Spawn
+	Pain:
+		BLAZ G 3
+		BLAZ G 3 A_Pain
+		Goto Spawn
+	Death:
+	AltSkinDeath:
+		BLAZ H 5
+		BLAZ I 5 A_PlayerScream
+		BLAZ J 5 A_NoBlocking
+		BLAZ K 5
+		BLAZ L -1
+		Stop
+	XDeath:
+	AltSkinXDeath:
+		BLAZ O 5
+		BLAZ P 5 A_PlayerScream
+		BLAZ Q 5 A_NoBlocking
+		BLAZ RSTUV 5
+		BLAZ W -1
+		Stop
+	}
+}
+
+actor TrailblazerStep
+{
+	PROJECTILE
+	+NOBLOOD
+	+DONTBLAST
+	damage 0
+	radius 10
+	deathsound "Move/Step"
+	States
+	{
+	Spawn:
+		TNT1 A 1
+		Stop
+	Death:
+		TNT1 A 0
+		TNT1 A 1
+		Stop
+	}
+}*/

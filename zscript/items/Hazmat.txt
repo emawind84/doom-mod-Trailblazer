@@ -1,0 +1,25 @@
+class PowerSuitProtect : PowerProtection
+{
+	default
+	{
+		Powerup.Duration 0x7FFFFFFF;
+		Powerup.Color 'Green', 0.05;
+		Inventory.Icon "ENVMASK0";
+
+		DamageFactor "Normal", 0.85;
+		DamageFactor "Fire", 0.6;
+		DamageFactor "Ice", 0.6;
+		DamageFactor "Slime", 0.0;
+		DamageFactor "Poison", 0.1;
+		//DamageFactor "Drowning", 0.0; provided by the ironfeet side.
+		DamageFactor "PoisonCloud", 0.0;
+	}
+	
+	override void AbsorbDamage(int damage, name damageType, out int newdamage)
+	{
+		if(damageType == 'Fire' && (gameinfo.gametype == Game_HERETIC || gameinfo.gametype == Game_HEXEN))
+		{
+			newdamage = 0;
+		}
+	}
+}

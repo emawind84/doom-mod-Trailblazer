@@ -1,0 +1,2 @@
+	STARTUPTITLE = "Trailblazer: Turns up the Heat 1.5e"
+	STARTUPCOLORS = "FF5A00", "000000"

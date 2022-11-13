@@ -1,0 +1,496 @@
+//Special thingamajib for detachable fleshrend upgrade.
+ACTOR RendDetached : Inventory { Inventory.MaxAmount 1 }
+
+//Upgrade counters
+ACTOR PipeUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 80 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 80 }
+ACTOR MacheteUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 60 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 60 }
+ACTOR SideUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 20 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 20 }
+ACTOR ColtsUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 30 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 30 }
+ACTOR RendUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 60 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 60 }
+ACTOR ChromeUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 110 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 110 }
+ACTOR FMGUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 40 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 40 }
+ACTOR LeadUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 60 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 60 }
+ACTOR PattyUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 70 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 70 }
+ACTOR BitchUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 70 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 70 }
+ACTOR ThrottleUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 130 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 130 }
+ACTOR NutterUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 250 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 250 }
+ACTOR PaintrainUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 100 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 100 }
+ACTOR ConquerorUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 150 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 150 }
+ACTOR EliminatorUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 50 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 50 }
+ACTOR DeuceUpgradeCounter : Ammo { +INVENTORY.UNDROPPABLE +INVENTORY.IGNORESKILL Inventory.Amount 1 Inventory.MaxAmount 200 Ammo.BackpackAmount 0 Ammo.BackpackMaxAmount 200 }
+
+//Timer
+actor TinkerTimerGiver : PowerupGiver
+{
+  Inventory.Amount 0
+  powerup.type "TinkerTimer"
+  powerup.duration -3
+  +INVENTORY.AUTOACTIVATE
+  +INVENTORY.ALWAYSPICKUP
+  states
+  {
+  Spawn:
+		TNT1 A 1
+		stop
+  }
+}
+
+actor PowerTinkerTimer : PowerDamage
+{	
+	DamageFactor "Normal", 1.0
+}
+
+
+//PULL THE LEVER KRONK.
+ACTOR TinkerItem : CustomInventory
+{
+	Inventory.Amount 1
+	Inventory.MaxAmount 1
+	Inventory.InterHubAmount 1
+	Inventory.PickupSound "Backpack/Pickup"
+	Inventory.UseSound ""
+	Inventory.PickupMessage "Picked up the tinker's toolbelt."
+	Inventory.Icon "ARTITLBT"
+	Tag "The Tinker's Toolbelt"
+	+INVBAR
+	+INVENTORY.UNDROPPABLE
+	States
+	{
+	Spawn:
+		TLBT A -1
+		Stop
+	Use:
+		TNT1 A 0 A_JumpIf(GetCvar("TB_CrafterWarning"),"Main")
+		TNT1 A 0 A_JumpIfInventory("PowerTinkerTimer",1,"Main")
+		TNT1 A 0 A_GiveInventory("TinkerTimerGiver")
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_Print("$TINKERWARNING",5)
+		Fail
+	Main:
+		TNT1 A 0 A_JumpIfInventory("PipeSelected",1,"PipeSequence")
+		TNT1 A 0 A_JumpIfInventory("MacheteSelected",1,"MacheteSequence")
+		TNT1 A 0 A_JumpIfInventory("SideSelected",1,"SideSequence")
+		TNT1 A 0 A_JumpIfInventory("SideSelected",1,"SideSequence")
+		TNT1 A 0 A_JumpIfInventory("ColtsSelected",1,"ColtsSequence")
+		TNT1 A 0 A_JumpIfInventory("RendSelected",1,"RendSequence")
+		TNT1 A 0 A_JumpIfInventory("ChromeSelected",1,"ChromeSequence")
+		TNT1 A 0 A_JumpIfInventory("FMGSelected",1,"FMGSequence")
+		TNT1 A 0 A_JumpIfInventory("LeadSelected",1,"LeadSequence")
+		TNT1 A 0 A_JumpIfInventory("PattySelected",1,"PattySequence")
+		TNT1 A 0 A_JumpIfInventory("BitchSelected",1,"BitchSequence")
+		TNT1 A 0 A_JumpIfInventory("ThrottleSelected",1,"ThrottleSequence")
+		TNT1 A 0 A_JumpIfInventory("NutterSelected",1,"NutterSequence")
+		TNT1 A 0 A_JumpIfInventory("PaintrainSelected",1,"PaintrainSequence")
+		TNT1 A 0 A_JumpIfInventory("ConquerorSelected",1,"ConquerorSequence")
+		TNT1 A 0 A_JumpIfInventory("EliminatorSelected",1,"EliminatorSequence")
+		TNT1 A 0 A_JumpIfInventory("DeuceSelected",1,"DeuceSequence")
+		
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_Print("$TINKERWRONGWEAPON")
+		Fail
+	AlreadyUpgraded:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_Print("$TINKERALREADYUPG")
+		Fail
+	NoJunk:
+		TNT1 A 0 A_PlaySound("Tinker/Tink",2,0.7)
+		TNT1 A 0 A_Print("$TINKERNOJUNK")
+		Fail
+		
+	PipeSequence:
+		TNT1 A 0 A_JumpIfInventory("PipeUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	PipeLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("PipeUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("PipeUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"PipeLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("PipeMode",1)
+		TNT1 A 0 A_GiveInventory("PipeUpgrade",1)
+		TNT1 A 0 A_Print("$PIPEUPGRADE",5)
+		Fail
+		
+	MacheteSequence:
+		TNT1 A 0 A_JumpIfInventory("MacheteUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	MacheteLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("MacheteUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("MacheteUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"MacheteLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("MacheteUpgrade",1)
+		TNT1 A 0 A_Print("$MACHETEUPGRADE",5)
+		Fail
+		
+	SideSequence:
+		TNT1 A 0 A_JumpIfInventory("SideUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	SideLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("SideUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("SideUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"SideLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("SideUpgrade",1)
+		TNT1 A 0 A_Print("$SIDEUPGRADE",5)
+		Fail
+		
+	ColtsSequence:
+		TNT1 A 0 A_JumpIfInventory("ColtsUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	ColtsLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("ColtsUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("ColtsUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"ColtsLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("ColtsUpgrade",1)
+		TNT1 A 0 A_Print("$COLTSUPGRADE",5)
+		Fail
+		
+	RendSequence:
+		//TNT1 A 0 A_JumpIfInventory("RendDetached",1,"RendAttach")
+		//TNT1 A 0 A_JumpIfInventory("RendUpgrade",1,"RendDetach")
+		TNT1 A 0 A_JumpIfInventory("RendUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	RendLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("RendUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("RendUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"RendLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("RendUpgrade",1)
+		TNT1 A 0 A_Print("$RENDUPGRADE",5)
+		Fail
+	/*RendDetach:
+		TNT1 A 0 A_PlaySound("Fleshrend/Up",2)
+		//TNT1 A 0 A_SetBlend("Green",0.2,25)
+		TNT1 A 0 A_TakeInventory("RendUpgrade",1)
+		TNT1 A 0 A_GiveInventory("RendDetached",1)
+		TNT1 A 0 A_Print("$RENDDETACH",5)
+		Fail
+	RendAttach:
+		TNT1 A 0 A_PlaySound("Fleshrend/Up",2)
+		//TNT1 A 0 A_SetBlend("Green",0.2,25)
+		TNT1 A 0 A_GiveInventory("RendUpgrade",1)
+		TNT1 A 0 A_TakeInventory("RendDetached",1)
+		TNT1 A 0 A_Print("$RENDATTACH",5)
+		Fail*/
+
+	ChromeSequence:
+		TNT1 A 0 A_JumpIfInventory("ChromeUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	ChromeLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("ChromeUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("ChromeUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"ChromeLoop")
+		Fail
+		TNT1 A 0 ACS_NamedExecuteAlways("SetChromeUpgradeClip")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("ChromeUpgrade",1)
+		TNT1 A 0 A_Print("$CHROMEUPGRADE",5)
+		Fail
+		
+	FMGSequence:
+		TNT1 A 0 A_JumpIfInventory("FMGUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	FMGLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("FMGUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("FMGUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"FMGLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("FMGUpgrade",1)
+		TNT1 A 0 A_Print("$FMGUPGRADE",5)
+		Fail
+		
+	LeadSequence:
+		TNT1 A 0 A_JumpIfInventory("LeadUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	LeadLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("LeadUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("LeadUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"LeadLoop")
+		Fail
+		TNT1 A 0 ACS_NamedExecuteAlways("SetUziUpgradeClip")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("LeadUpgrade",1)
+		TNT1 A 0 A_Print("$LEADUPGRADE",5)
+		Fail
+		
+	PattySequence:
+		TNT1 A 0 A_JumpIfInventory("PattyUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	PattyLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("PattyUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("PattyUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"PattyLoop")
+		Fail
+		TNT1 A 0 ACS_NamedExecuteAlways("SetPadreUpgradeClip")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("PattyUpgrade",1)
+		TNT1 A 0 A_Print("$PATTYUPGRADE",5)
+		Fail
+		
+	BitchSequence:
+		TNT1 A 0 A_JumpIfInventory("BitchUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	BitchLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("BitchUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("BitchUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"BitchLoop")
+		Fail
+		TNT1 A 0 ACS_NamedExecuteAlways("SetMagnumUpgradeClip")
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("BitchUpgrade",1)
+		TNT1 A 0 A_Print("$BITCHUPGRADE",5)
+		Fail
+
+	ThrottleSequence:
+		TNT1 A 0 A_JumpIfInventory("ThrottleUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	ThrottleLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("ThrottleUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("ThrottleUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"ThrottleLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("ThrottleUpgrade",1)
+		TNT1 A 0 A_Print("$THROTTLEUPGRADE",5)
+		Fail
+		
+	NutterSequence:
+		TNT1 A 0 A_JumpIfInventory("NutterUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	NutterLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("NutterUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("NutterUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"NutterLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("NutterUpgrade",1)
+		TNT1 A 0 A_Print("$NUTTERUPGRADE",5)
+		Fail
+		
+	PaintrainSequence:
+		TNT1 A 0 A_JumpIfInventory("PaintrainUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	PaintrainLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("PaintrainUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("PaintrainUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"PaintrainLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("PaintrainUpgrade",1)
+		TNT1 A 0 A_Print("$PAINTRAINUPGRADE",5)
+		Fail
+		
+	ConquerorSequence:
+		TNT1 A 0 A_JumpIfInventory("ConquerorUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	ConquerorLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("ConquerorUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("ConquerorUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"ConquerorLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("ConquerorUpgrade",1)
+		TNT1 A 0 A_Print("$CONQUERORUPGRADE",5)
+		Fail
+		
+	EliminatorSequence:
+		TNT1 A 0 A_JumpIfInventory("EliminatorUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	EliminatorLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("EliminatorUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("EliminatorUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"EliminatorLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("EliminatorUpgrade",1)
+		TNT1 A 0 A_Print("$ELIMINATORUPGRADE",5)
+		Fail
+		
+	DeuceSequence:
+		TNT1 A 0 A_JumpIfInventory("DeuceUpgrade",1,"AlreadyUpgraded")
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,1)
+		Goto NoJunk
+		TNT1 A 0 A_PlaySound("Tinker/Upgrade",2)
+		TNT1 A 0 A_SetBlend("Green",0.1,15)
+	DeuceLoop:
+		TNT1 A 0 A_TakeInventory("JunkItem",1)
+		TNT1 A 0 A_GiveInventory("DeuceUpgradeCounter",1)
+		TNT1 A 0 A_JumpIfInventory("DeuceUpgradeCounter",0,2)
+		TNT1 A 0 A_JumpIfInventory("JunkItem",1,"DeuceLoop")
+		Fail
+		TNT1 A 0 A_PlaySound("Tinker/Upgraded",2)
+		TNT1 A 0 A_SetBlend("Green",0.3,70)
+		TNT1 A 0 A_GiveInventory("DeuceUpgrade",1)
+		TNT1 A 0 A_Print("$DEUCEUPGRADE",5)
+		Fail
+	} 
+}
+
+//WRONG OOOOOOOONE~
+ACTOR JunkItem : Ammo
+{
+	Inventory.Amount 2
+	Inventory.MaxAmount 999
+	Ammo.BackpackAmount 10
+	Ammo.BackpackMaxAmount 999
+	Inventory.PickupSound "Junk/Minor"
+	Inventory.PickupMessage "Picked up some spare parts."
+	-INVBAR
+	+INVENTORY.KEEPDEPLETED
+	States
+	{
+	Spawn:
+		PRTS A -1
+		Stop
+	} 
+}
+
+//Junk pickups
+ACTOR JunkItemA : JunkItem
+{
+	States
+	{
+	Spawn:
+		PRTS A -1
+		Stop
+	} 
+}
+
+ACTOR JunkItemB : JunkItem
+{
+	States
+	{
+	Spawn:
+		PRTS B -1
+		Stop
+	} 
+}
+
+ACTOR JunkItemC : JunkItem
+{
+	States
+	{
+	Spawn:
+		PRTS C -1
+		Stop
+	} 
+}
+
+ACTOR JunkItemMajor : JunkItem
+{
+	Inventory.Amount 10
+	Inventory.PickupSound "Junk/Major"
+	Inventory.PickupMessage "Picked up some bigger spare parts."
+}
+
+ACTOR JunkItemD : JunkItemMajor
+{
+	States
+	{
+	Spawn:
+		PRTS D -1
+		Stop
+	} 
+}
+
+ACTOR JunkItemE : JunkItemMajor
+{
+	States
+	{
+	Spawn:
+		PRTS E -1
+		Stop
+	} 
+}
+
+ACTOR JunkItemF : JunkItemMajor
+{
+	States
+	{
+	Spawn:
+		PRTS F -1
+		Stop
+	} 
+}

@@ -1,0 +1,813 @@
+Actor MacheteSelected : Inventory { Inventory.MaxAmount 1 }
+Actor MacheteUpgrade : Inventory { Inventory.MaxAmount 1 }
+Actor MacheteFirstSlash : Inventory { Inventory.MaxAmount 1 }
+Actor MacheteTossed : Inventory { Inventory.MaxAmount 4 }
+
+Actor Macheterang : Weapon
+{
+	Weapon.SlotNumber 1
+	Weapon.SelectionOrder 8
+	Weapon.UpSound "Machete/Up"
+	Weapon.Kickback 50
+	Weapon.AmmoType "MacheteAmmo"
+	Weapon.AmmoGive 0
+	Weapon.AmmoUse 1
+	Weapon.AmmoType2 "MacheteAmmo"
+	Weapon.AmmoUse2 1
+	Inventory.PickupSound "misc/w_pkup"
+	Inventory.PickupMessage "Got your hands at ''Macheterang''! Chop chop, motherfuckers. (1)"
+	Obituary "%o was sliced'n'diced by %k's ''Macheterang''."
+	Weapon.BobStyle InverseSmooth
+	Weapon.BobSpeed 2.2
+	Weapon.BobRangeY 0.5
+	Weapon.BobRangeX 0.8
+	+NOALERT
+	+NOAUTOFIRE
+	+INVENTORY.UNDROPPABLE
+	+AMMO_OPTIONAL
+	//+NOAUTOAIM
+	States
+	{
+	Ready:
+		MCHU A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1)
+		MCHU B 1
+		MCHU C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		MCHU D 1
+		MCHU E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		MCHU F 1
+	ReadyMain:
+		MCHG A 0 A_JumpIfInventory("MacheteGoesFast",1,"CaberToss")
+		MCHG A 1 A_WeaponReady(WRF_ALLOWZOOM)
+		Loop
+	Deselect:
+		TNT1 A 0 A_TakeInventory("MacheteSelected")
+		MCHU F 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1)
+		MCHU E 1
+		MCHU D 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		MCHU C 1
+		MCHU B 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		MCHU A 1
+		TNT1 A 0 SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH)
+		TNT1 AAAAAAAAAAAAAAA 0 A_Lower
+		TNT1 A 1 A_Lower
+		Wait
+	Select:
+		TNT1 A 0 A_GiveInventory("MacheteSelected")
+		TNT1 A 0 SetPlayerProperty(0, 1, PROP_INSTANTWEAPONSWITCH)
+	HonkaCzongka:
+		TNT1 A 0 A_Raise
+		TNT1 A 1 A_Raise
+		Loop
+	Fire:
+		TNT1 A 0 A_JumpIfInventory("MacheteFirstSlash",1,"HackitySlashSlash")
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MC1S F 1
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		MC5S AB 1
+		TNT1 A 0 { if(CountInv("MacheteUpgrade")) {
+				if(CountInv("PowerStrength2"))
+				{
+					A_FireCustomMissile("MacheteBerserkSlashProjectile",0,0,10);
+				}
+				else
+				{
+					A_FireCustomMissile("MacheteSlashProjectile",0,0,10);
+				}
+			}
+		}
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,4)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteInvisPuff", 100)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteImpactRight", 100)
+		TNT1 A 0 A_Jump(256,3)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteInvisPuff", 150, 0.045)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteBerserkImpactRight", 150)
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		MC5S CD 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MC5S EF 1
+		TNT1 A 0 A_GiveInventory("MacheteFirstSlash",1)
+		TNT1 A 9 A_WeaponReady
+		TNT1 A 0 A_ReFire("HackitySlashSlash")
+		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
+		Goto Ready
+	HackitySlashSlash:
+		TNT1 A 0 A_Jump(256,"Slash3","Slash4","Slash5","Slash6")
+		Loop
+	/*Slash1: //Right
+		TNT1 A 0 A_PlaySound("Machete1/Slash",1,0.9)
+		TNT1 A 0 A_PlaySound("Machete2/Slash",5,0.2)
+		MC1S ABCDE 1
+		MC1S H 0 A_CustomPunch(50, 1, CPF_PULLIN, "MacheteImpactRight", 100)
+		MC1S FGHIJ 1
+		TNT1 A 5 A_WeaponReady
+		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
+		Goto Ready
+	Slash2: //Left
+		TNT1 A 0 A_PlaySound("Machete1/Slash",1,0.9)
+		TNT1 A 0 A_PlaySound("Machete2/Slash",5,0.2)
+		MC2S ABCDE 1
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,4)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteInvisPuff", 100)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteImpactLeft", 100)
+		TNT1 A 0 A_Jump(256,3)
+		TNT1 A 0 A_CustomPunch(150, 1, CPF_PULLIN, "MacheteInvisPuff", 150)
+		TNT1 A 0 A_CustomPunch(150, 1, CPF_PULLIN, "MacheteBerserkImpactLeft", 150)
+		MC2S FGHIJ 1
+		TNT1 A 5 A_WeaponReady
+		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
+		Goto Ready*/
+	Slash3: //Left
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MC3S AB 1
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		MC3S CD 1
+		TNT1 A 0 { if(CountInv("MacheteUpgrade")) {
+				if(CountInv("PowerStrength2"))
+				{
+					A_FireCustomMissile("MacheteBerserkSlashProjectileMirror",0,0,-10);
+				}
+				else
+				{
+					A_FireCustomMissile("MacheteSlashProjectileMirror",0,0,-10);
+				}
+			}
+		}
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,4)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteInvisPuff", 100)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteImpactLeft", 100)
+		TNT1 A 0 A_Jump(256,3)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteInvisPuff", 150, 0.045)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteBerserkImpactLeft", 150)
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		MC3S EF 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MC3S GH 1
+		MC3S IJ 1 A_WeaponReady
+		TNT1 A 5 A_WeaponReady
+		TNT1 A 0 A_ReFire("HackitySlashSlash")
+		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
+		Goto Ready
+	Slash4: //Right
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MC4S AB 1
+		TNT1 A 0 { if(CountInv("MacheteUpgrade")) {
+				if(CountInv("PowerStrength2"))
+				{
+					A_FireCustomMissile("MacheteBerserkSlashProjectile",0,0,10);
+				}
+				else
+				{
+					A_FireCustomMissile("MacheteSlashProjectile",0,0,10);
+				}
+			}
+		}
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MC4S CD 1
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,4)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteInvisPuff", 100)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteImpactRight", 100)
+		TNT1 A 0 A_Jump(256,3)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteInvisPuff", 150, 0.045)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteBerserkImpactRight", 150)
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		MC4S EF 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MC4S GH 1
+		MC4S IJ 1 A_WeaponReady
+		TNT1 A 5 A_WeaponReady
+		TNT1 A 0 A_ReFire("HackitySlashSlash")
+		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
+		Goto Ready
+	Slash5: //Right
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MC4S ABCD 1
+		TNT1 A 0 { if(CountInv("MacheteUpgrade")) {
+				if(CountInv("PowerStrength2"))
+				{
+					A_FireCustomMissile("MacheteBerserkSlashProjectile",0,0,10);
+				}
+				else
+				{
+					A_FireCustomMissile("MacheteSlashProjectile",0,0,10);
+				}
+			}
+		}
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		MC5S AB 1
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,4)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteInvisPuff", 100)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteImpactRight", 100)
+		TNT1 A 0 A_Jump(256,3)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteInvisPuff", 150, 0.045)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteBerserkImpactRight", 150)
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		MC5S CD 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MC5S EF 1
+		TNT1 A 5 A_WeaponReady
+		TNT1 A 0 A_ReFire("HackitySlashSlash")
+		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
+		Goto Ready
+	Slash6: //Left
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MC3S ABCD 1
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		MC6S AB 1
+		TNT1 A 0 { if(CountInv("MacheteUpgrade")) {
+				if(CountInv("PowerStrength2"))
+				{
+					A_FireCustomMissile("MacheteBerserkSlashProjectileMirror",0,0,-10);
+				}
+				else
+				{
+					A_FireCustomMissile("MacheteSlashProjectileMirror",0,0,-10);
+				}
+			}
+		}
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,4)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteInvisPuff", 100)
+		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteImpactLeft", 100)
+		TNT1 A 0 A_Jump(256,3)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteInvisPuff", 150, 0.045)
+		TNT1 A 0 A_CustomPunch(120, 1, CPF_PULLIN, "MacheteBerserkImpactLeft", 150)
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		MC6S CD 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MC6S EF 1
+		TNT1 A 5 A_WeaponReady
+		TNT1 A 0 A_ReFire("HackitySlashSlash")
+		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
+		Goto Ready
+	AltFire:
+	CaberToss:
+		MCHB A 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1)
+		MCHB B 1
+		MCHB C 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		MCHB D 1
+		MCHB E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		MCHB F 1
+
+		TNT1 A 0 {
+				A_PlaySound("Machete1/Slash",1,0.9);
+				A_PlaySound("Machete2/Slash",5,0.2);
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		MCHT ABC 1
+		TNT1 A 0 A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE)
+		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,3)
+		MCHT A 0 {
+			if(A_JumpIf(CountInv("PowerAmmoJunkie") > 0, "Null")) {
+				A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			} Else {
+				A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			}
+		}
+		TNT1 A 0 A_Jump(256,2)
+		MCHT A 0 {
+			if(A_JumpIf(CountInv("PowerAmmoJunkie") > 0, "Null")) {
+				A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			} Else {
+				A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+			}
+		}
+		// This solution is ten times better. Just let it bouncecount out.
+		MCHT D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1)
+		MCHT E 1
+		MCHT F 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1)
+		MCHT G 1
+		MCHT H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1)
+		MCHT I 1
+		TNT1 A 3
+		TNT1 A 0 A_JumpIf(CountInv("MacheteGoesFast") > 0 && CountInv("MacheteAmmo") > 0, "CaberToss")
+		TNT1 A 0 A_JumpIfNoAmmo(2)
+		TNT1 A 0 A_ReFire
+		Goto Ready
+		TNT1 A 0 {
+			A_TakeInventory("MacheteSelected");
+			A_WeaponReady(WRF_NOFIRE);
+			A_TakeInventory("Macheterang");
+		}
+		Wait
+		//MCHG A 0 A_WeaponReady(WRF_NOFIRE|WRF_NOSWITCH)
+		//Goto Deselect+6
+	Zoom:
+		"####" A 0 {
+				If(CountInv("PowerQuadDamage")) {
+				A_PlaySound("QuadDamage/Fire", 4);
+			}
+		}
+		QML1 A 0 A_Overlay(2,"PunchFlash")
+		QML1 A 0 A_JumpIfInventory("PowerStrength2",1,2)
+		QML1 A 0 A_Jump(256,3)
+		FML1 A 0 A_SetBlend("Orange",0.05,10)
+		FML1 A 0 A_PlaySound("Melee/Firepunch",5)
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" B 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		"####" C 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" D 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIfInventory("KineticFist",1,"KineticPunch")
+		"####" A 0 A_JumpIfInventory("PowerStrength2",1,3)
+		"####" A 0 A_CustomPunch(30, 1, 0, "PunchCracker", 100)
+		"####" A 0 A_Jump(256,"PunchContinue")
+		"####" A 0 A_CustomPunch(90, 1, 0, "FlamePunchCracker", 150,0.06)
+		Goto PunchContinue
+	KineticPunch:
+		"####" A 0 A_JumpIfInventory("PowerStrength2",1,3)
+		"####" A 0 A_CustomPunch(30, 1, 0, "PunchCracker", 300)
+		"####" A 0 A_Jump(256,"PunchContinue")
+		"####" A 0 A_CustomPunch(90, 1, 0, "FlamePunchCracker2", 350,0.06)
+		Goto PunchContinue
+	PunchContinue:
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		"####" E 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" F 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		"####" G 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" H 1 A_SetPitch(pitch+0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE)
+		"####" A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		"####" I 1
+		"####" J 1
+		"####" A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		"####" K 1
+		TNT1 A 5
+		TNT1 A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "Zoom")
+		Goto ReadyMain
+	Flash:
+		TNT1 A 2 A_Light1
+		TNT1 A 3 A_Light2
+		TNT1 A 0 A_Light0
+		Stop
+	PunchFlash:
+		MCHG A 1 A_PlaySound("Punch/Swing",6,1.0)
+		MCHN ABC 1
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		MCHN DE 1
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		MCHN FE 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MCHN DC 1
+		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2)
+		MCHN BA 1
+		TNT1 A 0 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2)
+		MCHG AA 1
+		TNT1 A 0 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2)
+		MCHG AA 1
+		Stop
+	Spawn:
+		MCHG X -1
+		Stop
+	}
+}
+
+Actor MacheterangProjectile
+{
+	Speed 25
+	Height 16
+	Radius 12
+	Damage 0
+	DeathSound ""
+	//BounceSound "Machete/Solid"
+	Scale 0.35
+	ProjectileKickback 0
+	PROJECTILE
+	BounceFactor 1.0
+	WallBounceFactor 1.0
+	BounceCount 12
+	//-NOGRAVITY
+	+RIPPER +NOEXTREMEDEATH
+	+BLOODSPLATTER +SKYEXPLODE
+	+SEEKERMISSILE +FORCERADIUSDMG
+	+BOUNCEONWALLS +BOUNCEONFLOORS
+	+BOUNCEONCEILINGS +THRUACTORS
+	+CANBOUNCEWATER //+USEBOUNCESTATE
+	var int User_Counter;
+	states
+	{
+	Spawn:
+		MCHP A 0 NoDelay {
+			A_SetUserVar("User_Counter",4);
+			if(!CountInv("PowerAmmoJunkie",AAPTR_TARGET)) { A_GiveToTarget("MacheteTossed",1); }
+			A_PlaySound("Machete/Fly",5,1.0,1);
+		}
+	SpawnLoop:
+		MCHP HGFEDCBA 1 {
+			A_Explode(20,32,0);
+			if(CountInv("MacheteUpgrade",AAPTR_TARGET)) {
+				A_SpawnItemEx("MacheteSlashProjectileFlat",0,0,0,20.0,0,0,frandom(360.0,0.0),SXF_TRANSFERPOINTERS,128);
+			}
+			Return A_JumpIf(User_Counter <= 0, "Spawn2");
+		}
+		MCHP A 0 A_SetUserVar("User_Counter", User_Counter - 1)
+		Loop
+	Bounce:
+		"####" "#" 0 A_SpawnItemEx("MachetePuff_Flash", 0, 0, 0, 0, 0, 0, 0, SXF_CLIENTSIDE, 0)
+		"####" "#" 0 A_JumpIf(User_Counter <= 0, "SpawnLoop2")
+		Goto SpawnLoop
+	Spawn2:
+		MCHP A 0 { 
+			A_RearrangePointers(AAPTR_DEFAULT, AAPTR_DEFAULT, AAPTR_TARGET);
+			A_PlaySound("Machete/Fly",5,1.0,1);
+		}
+	SpawnLoop2:
+		MCHP HGFEDCBA 1 { 
+			A_SeekerMissile (6, 8, SMF_PRECISE|SMF_CURSPEED, 256, 15);
+			A_Explode(20,32,0);
+			if(CountInv("MacheteUpgrade",AAPTR_TARGET)) {
+				A_SpawnItemEx("MacheteSlashProjectileFlat",0,0,0,20.0,0,0,frandom(360.0,0.0),SXF_TRANSFERPOINTERS,128);
+			}
+			Return A_JumpIf(CallACS("MacheteMagic"), "Death");
+		}
+		Loop
+	Death:
+	Crush:
+		TNT1 A 0 { 
+			A_StopSound(5);
+			if(!CountInv("MacheteTossed",AAPTR_TARGET))
+			{
+				Return State("");
+			}
+			A_TakeFromTarget("MacheteTossed",1);
+			A_GiveToTarget("GotItBack",1);
+			A_GiveToTarget("Macheterang",1);
+			A_GiveToTarget("MacheteAmmo",1);
+			Return State("");
+		}
+		Stop
+	}
+}
+
+Actor MacheterangProjectileJunkie : MacheterangProjectile
+{
+	States
+	{
+	
+	Death:
+	Spawn:
+		MCHP A 0 NoDelay {
+			A_SetUserVar("User_Counter",4);
+			A_PlaySound("Machete/Fly",5,1.0,1);
+		}
+		Goto Super::SpawnLoop
+	Death:
+	Crush:
+		TNT1 A 0 { 
+			A_GiveToTarget("Macheterang",1);
+			A_StopSound(5);
+		}
+		Stop
+	}
+}
+
+Actor GotItBack : CustomInventory
+{
+	Inventory.MaxAmount 0
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.ALWAYSPICKUP
+	States
+	{
+	Spawn:
+		MCHG X -1
+		Stop
+	Use:
+		TNT1 A 0 A_SetBlend("Gray",0.05,10)
+		//TNT1 A 0 A_PlaySound("Machete/Up",4,0.5)
+		Stop
+	}
+}
+
+Actor MacheterangBerserkProjectile : MacheterangProjectile
+{
+	states
+	{
+	Spawn:
+		MCHP A 0 NoDelay {
+			A_SetUserVar("User_Counter", 4);
+			A_GiveToTarget("MacheteTossed",1);
+			A_PlaySound("Machete/Fly",5,1.0,1);
+		}
+	SpawnLoop:
+		MCHP HGFEDCBA 1 {
+			A_Explode(40,32,0);
+			if(CountInv("MacheteUpgrade",AAPTR_TARGET)) {
+					A_SpawnItemEx("MacheteBerserkSlashProjectileFlat",0,0,0,30.0,0,0,frandom(360.0,0.0),SXF_TRANSFERPOINTERS,128);
+			}
+			A_SpawnItemEx("MacheterangBerserkTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERSPRITEFRAME);
+			Return A_JumpIf(User_Counter <= 0, "Spawn2");
+		}
+		MCHP A 0 A_SetUserVar("User_Counter", User_Counter - 1)
+		Loop
+	/*Bounce:
+		MCHP A 0
+		Goto Spawn2*/
+	Spawn2:
+		MCHP A 0 {
+			A_RearrangePointers(AAPTR_DEFAULT, AAPTR_DEFAULT, AAPTR_TARGET);
+			A_PlaySound("Machete/Fly",5,1.0,1);
+		}
+	SpawnLoop2:
+		MCHP HGFEDCBA 1 {
+			A_Explode(40,32,0);
+			if(CountInv("MacheteUpgrade",AAPTR_TARGET)) {
+					A_SpawnItemEx("MacheteBerserkSlashProjectileFlat",0,0,0,30.0,0,0,frandom(360.0,0.0),SXF_TRANSFERPOINTERS,128);
+			}
+			A_SpawnItemEx("MacheterangBerserkTrail",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERSPRITEFRAME);
+			A_SeekerMissile (6, 8, SMF_PRECISE|SMF_CURSPEED, 256, 15) ;
+			Return A_JumpIf(CallACS("MacheteMagic"), "Death");
+		}
+		Loop
+	}
+}
+
+Actor MacheterangBerserkProjectileJunkie : MacheterangBerserkProjectile
+{
+	States
+	{
+	Death:
+	Crush:
+		TNT1 A 0 { 
+			A_GiveToTarget("Macheterang",1);
+			A_StopSound(5);
+		}
+		Stop
+	}
+}
+
+Actor MacheterangBerserkTrail
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Scale 0.35
+	Renderstyle Translucent
+	Alpha 0.5
+	States
+	{
+	Spawn:
+		MCBP "#" 0
+	Miensmen:
+		MCBP "#" 0 A_FadeOut(0.05)
+		MCBP "#" 1 A_SetScale(ScaleX-0.01)
+		MCBP "#" 0 A_JumpIf(ScaleX <= 0,"Null")
+		Loop
+	}
+}
+
+//HERE COMES UPGRADED NIGHT TRAIN~
+Actor MacheteSlashProjectile
+{
+	Radius 3
+	Height 3
+	Speed 20
+	Damage 0
+	Renderstyle Add
+	Alpha 0.99
+	Scale 0.75
+	var int User_Lifespan;
+	SeeSound "Machete/SlashFlight"
+	Projectile
+	+FLATSPRITE
+	+RIPPER
+	+MBFBOUNCER
+	+FORCERADIUSDMG
+	+FOILINVUL
+	+THRUACTORS //Prevents blood overdose.
+	-MISSILE
+	+MBFBOUNCER	//DEM NON-MISSILES GETTIN' BLOCKED BY IMPASSABLES GERDEMMIT.
+	States
+	{
+	Spawn:
+		WSHS A 0 NoDelay {
+			A_SetRoll(Roll - 90.0);
+			A_SetPitch(Pitch + 45);
+			A_SetAngle(Angle + 90);
+			User_Lifespan = random(10,12);
+		}
+	Looplet:
+		"####" "#" 1 Bright {
+			//A_SpawnItemEx("MacheteSlashTrail",0,0,0,0,0,0,0,SXF_TRANSFERSPRITEFRAME|SXF_TRANSFERROLL|SXF_TRANSFERSCALE|SXF_TRANSFERPITCH|SXF_TRANSFERALPHA|SXF_CLIENTSIDE);
+			A_Explode(9,32,0);
+			if(User_Lifespan)
+			{
+				A_SetUserVar("User_Lifespan", User_Lifespan - 1);
+				Return A_JumpIf(User_Lifespan <= 0, "Death");
+			}
+			Return State("");
+		}
+		Loop
+	Death:
+		"####" "#" 1 Bright {
+			//A_SpawnItemEx("MacheteSlashTrail",0,0,0,0,0,0,0,SXF_TRANSFERSPRITEFRAME|SXF_TRANSFERROLL|SXF_TRANSFERSCALE|SXF_TRANSFERPITCH|SXF_TRANSFERALPHA|SXF_CLIENTSIDE);
+			A_Explode(9,32 * ScaleX,0);
+			A_FadeOut(0.08);
+			A_SetScale(ScaleX - 0.1);
+			Return A_JumpIf(ScaleX <= 0, "Null");
+		}
+		Wait
+	}
+}
+
+Actor MacheteSlashTrail
+{
+	+FLATSPRITE
+	+NOINTERACTION
+	States
+	{
+	Spawn:
+		"####" "#" 1 NoDelay Bright A_FadeOut(0.2)
+		Loop
+	}
+}
+
+Actor MacheteSlashProjectileMirror : MacheteSlashProjectile
+{
+	States
+	{
+	Spawn:
+		WSHS A 0 NoDelay {
+			A_SetRoll(Roll + 90.0);
+			A_SetPitch(Pitch + 45);
+			A_SetAngle(Angle - 90);
+			User_Lifespan = random(10,12);
+		}
+		Goto Super::Looplet
+	}
+}
+
+Actor MacheteBerserkSlashProjectile : MacheteSlashProjectile
+{
+	Speed 30
+	States
+	{
+	Spawn:
+		WSHS B 0 NoDelay {
+			A_SetRoll(Roll - 90.0);
+			A_SetPitch(Pitch + 45);
+			A_SetAngle(Angle + 90);
+			User_Lifespan = random(10,12);
+		}
+	Looplet:
+		"####" "#" 1 {
+			//A_SpawnItemEx("MacheteSlashTrail",0,0,0,0,0,0,0,SXF_TRANSFERSPRITEFRAME|SXF_TRANSFERROLL|SXF_TRANSFERSCALE|SXF_TRANSFERPITCH|SXF_TRANSFERALPHA|SXF_CLIENTSIDE);
+			A_Explode(12,32,0);
+			if(User_Lifespan)
+			{
+				A_SetUserVar("User_Lifespan", User_Lifespan - 1);
+				Return A_JumpIf(User_Lifespan <= 0, "Death");
+			}
+			Return State("");
+		}
+		Loop
+	Death:
+		"####" "#" 1 Bright {
+			//A_SpawnItemEx("MacheteSlashTrail",0,0,0,0,0,0,0,SXF_TRANSFERSPRITEFRAME|SXF_TRANSFERROLL|SXF_TRANSFERSCALE|SXF_TRANSFERPITCH|SXF_TRANSFERALPHA|SXF_CLIENTSIDE);
+			A_Explode(12,32 * ScaleX,0);
+			A_FadeOut(0.08);
+			A_SetScale(ScaleX - 0.1);
+			Return A_JumpIf(ScaleX <= 0, "Null");
+		}
+		Wait
+	}
+}
+
+Actor MacheteBerserkSlashProjectileMirror : MacheteBerserkSlashProjectile
+{
+	Speed 40
+	States
+	{
+	Spawn:
+		WSHS B 0 NoDelay {
+			A_SetRoll(Roll + 90.0);
+			A_SetPitch(Pitch + 45);
+			A_SetAngle(Angle - 90);
+			User_Lifespan = random(10,12);
+		}
+		Goto Super::Looplet
+	}
+}
+
+Actor MacheteSlashProjectileFlat : MacheteSlashProjectile
+{
+	States
+	{
+	Spawn:
+		WSHS A 0 NoDelay {
+			User_Lifespan = random(2,6);
+		}
+		Goto Super::Looplet
+	}
+}
+
+Actor MacheteBerserkSlashProjectileFlat : MacheteBerserkSlashProjectile
+{
+	States
+	{
+	Spawn:
+		WSHS B 0 NoDelay {
+			User_Lifespan = random(2,6);
+		}
+		Goto Super::Looplet
+	}
+}
+/*
+Actor MacheterangBerserkB : MacheterangBerserkA
+{
+	States
+	{
+	Spawn:
+	MCBP B 0
+	Goto Miensmen
+	}
+}
+
+Actor MacheterangBerserkC : MacheterangBerserkA
+{
+	States
+	{
+	Spawn:
+	MCBP C 0
+	Goto Miensmen
+	}
+}
+
+Actor MacheterangBerserkD : MacheterangBerserkA
+{
+	States
+	{
+	Spawn:
+	MCBP D 0
+	Goto Miensmen
+	}
+}
+
+Actor MacheterangBerserkE : MacheterangBerserkA
+{
+	States
+	{
+	Spawn:
+	MCBP E 0
+	Goto Miensmen
+	}
+}
+
+Actor MacheterangBerserkF : MacheterangBerserkA
+{
+	States
+	{
+	Spawn:
+	MCBP F 0
+	Goto Miensmen
+	}
+}
+
+Actor MacheterangBerserkG : MacheterangBerserkA
+{
+	States
+	{
+	Spawn:
+	MCBP G 0
+	Goto Miensmen
+	}
+}
+
+Actor MacheterangBerserkH : MacheterangBerserkA
+{
+	States
+	{
+	Spawn:
+	MCBP H 0
+	Goto Miensmen
+	}
+}*/

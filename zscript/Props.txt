@@ -1,0 +1,27 @@
+class TB_SwitchingDecoration : SwitchingDecoration
+{
+	property ItemToDistribute: DatItemName;
+
+	name DatItemName;
+
+	action state TB_ItemDistributor() {
+		Actor DistItem = Spawn(invoker.DatItemName);
+		if(DistItem && Target) { DistItem.Touch(Target); }
+		Return ResolveState(Null);
+	}
+	
+	Default
+	{
+		Activation THINGSPEC_Activate|THINGSPEC_ThingTargets;
+		+USESPECIAL
+	}
+}
+
+class TB_PowerIronFeet : PowerIronFeet
+{
+	override void EndEffect()
+	{
+		super.EndEffect();
+		A_TakeInventory("RadioactiveCounter",0);
+	}
+}

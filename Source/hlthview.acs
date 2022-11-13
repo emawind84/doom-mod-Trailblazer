@@ -1,0 +1,167 @@
+#library "marker"
+#include "zspecial.acs"
+#include "zdefs.acs"
+
+// -----------------------------------------------------------------------------
+//
+// Health viewer script (for Guncaster... And now also ported into Traiblazer!)
+//
+// Written by KeksDose
+// 25 / February / 2017
+//
+// Functionality to point at a friendly player and know their current health.
+// The script is set up in such a way that you can add functionality for three
+// states:
+//	a) Starting to point at a player
+//	b) The player target just changed
+//	c) Your crosshair stopped pointing at something
+// So additional cool stuff can be added with relative ease.
+//
+// Update 28 / March / 2017
+// Now shows max health and stays for a little while when no longer hovering
+// over a player. Removed percentage signs (health is hardly a percentage in
+// GC and it looks kinda annoying).
+//
+// NOTICE:
+// You can reuse this file and edit the scripts as you like, but I want you to
+// ship the .acs source file with your mod if you use it (even if you edited it)
+// and give due credit somewhere. Tell all your friends about Guncaster and how
+// cool ACS is. And most importantly - remember to praise Mima!
+//
+// -----------------------------------------------------------------------------
+
+#define HUD_HEALTHID	32000
+#define HUD_YOFFSET		0.1
+#define HUD_FADERATE	0.08
+
+#define HEALTH_CRITICAL	30			// Lower than these values affects the
+#define HEALTH_OUCHIES	60			// colour of the health display
+
+#define COLOR_CRITICAL	CR_RED		// Really bad condition
+#define COLOR_OUCHIES	CR_YELLOW	// Okay-ish condition still
+#define COLOR_HEALTHY	CR_GREEN	// Good condition
+
+#define MARKER_STAY_TICS 50
+
+#define SCRIPT_HEALTHVIEW "Health View"
+
+#define PLAYER_NOTFOUND	0
+
+int marked_health = 0;
+int marked_maxhealth = 0;
+
+// The smaller of x and y.
+function int min(int x, int y)
+{
+	if(x < y)
+		return x;
+	return y;
+}
+
+// The bigger of x and y.
+function int max(int x, int y)
+{
+	if(x < y)
+		return y;
+	return x;
+}
+
+// This increments a towards b by step, no matter if b is smaller or larger
+// than a. Finally, it "snaps" to b, meaning you can make a smooth, linear
+// transition from a to b in a loop.
+function int lerpstep(int a, int b, int step)
+{
+	if(a < b)
+		return min(a + step, b);
+	return max(a - step, b);
+}
+
+script "Marker" enter
+{
+	bool marking = true;
+	bool hovering;
+	int health, maxhealth;
+	int color;
+	int alpha = 0;
+	int found, oldfound;
+	int waittics;
+	str message;
+	
+	// Note I have no idea how to detect a player's team in DM. Too lazy to look
+	// anything up that is not on the zdoom wiki. °^°
+	
+	// Also disable on the title map if somebody did something REALLY weird.
+	// You just never know sometimes. Don't ask, I've seen THINGS.
+	int gamemode = GameType();
+	
+	if(gamemode == GAME_NET_DEATHMATCH || gamemode == GAME_TITLE_MAP)
+		terminate;
+	
+	// Technically this never is interrupted. But if you want, do marking = 0.
+	while(marking)
+	{
+		oldfound = found;
+		found = ACS_NamedExecuteWithResult(SCRIPT_HEALTHVIEW);
+		
+		if(found != oldfound)		// Your view target changed
+		{
+			// Update health and colour.
+			health    = marked_health;
+			maxhealth = marked_maxhealth;
+			if(health < HEALTH_CRITICAL)
+				color = COLOR_CRITICAL;
+			else if(health < HEALTH_OUCHIES)
+				color = COLOR_OUCHIES;
+			else
+				color = COLOR_HEALTHY;
+			
+			// This circumvents leaving the crosshair off the target and picking
+			// up the wrong player, accidentally. More of a shortcoming of using
+			// 'found' as both the index of the found player AND an indicator of
+			// one being found to begin with. #JustACCThings
+			if(found != PLAYER_NOTFOUND)
+				message
+					= strParam(	n:found, s:": ", i:health, s:" / ",
+								i:maxhealth );
+		}
+		
+		if(found && !oldfound)		// The moment you hover over an actor.
+			hovering = true;
+		else if(!found && oldfound)	// The moment you stop hovering.
+			hovering = false;
+		
+		// This code could be shortened to just set waittics, but I think if we
+		// keep the "first find out hovering state" structure, we can do more
+		// with it later.
+		if(hovering)
+			waittics = MARKER_STAY_TICS;
+		else if(0 < waittics)
+			waittics--;
+		
+		// Convert indicator to either 0 or 1.0 (fixed!). Then the indicator
+		// will smoothly fade in and out thanks to the lerpstep function.
+		alpha = lerpstep(alpha, (0 < waittics) << 16, HUD_FADERATE);
+		HudMessage(s:message; HUDMSG_ALPHA, HUD_HEALTHID, color,
+					0.5, HUD_YOFFSET, 0, alpha);
+		Delay(const:1);
+	}
+}
+
+script SCRIPT_HEALTHVIEW (void)
+{
+	// The target has to be under the player's crosshair and it must be another
+	// player is what this is saying. At the point ClassifyActor is called,
+	// either there was nothing under your crosshair, or the activator already
+	// changed. Keep that in mind while reading that second line.
+	if(	!(	SetActivator(0, AAPTR_PLAYER_GETTARGET) &&
+			(ClassifyActor(0) & ACTOR_PLAYER)	) )
+	{
+		SetResultValue(0);
+		terminate;
+	}
+	
+	SetResultValue(PlayerNumber() + 1);	// PlayerNumber is 0-indexed.
+	// markedplayer = PlayerNumber();
+	marked_health    = GetActorProperty(0, APROP_HEALTH);
+	marked_maxhealth = GetActorProperty(0, APROP_SPAWNHEALTH);
+}

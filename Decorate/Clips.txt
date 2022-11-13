@@ -1,0 +1,379 @@
+ACTOR SidekickClipDrop
+{
+   Radius 3
+   Height 5
+   Speed 0
+   Scale 0.2
+   BounceSound "Clip/Sidekick"
+   PROJECTILE
+   -NOGRAVITY
+   +BOUNCEONACTORS
+   +BOUNCEONCEILINGS
+   Gravity 0.75
+   BounceType Doom
+   BounceCount 3
+   BounceFactor 0.6
+   States
+   {
+   Spawn:
+      CLP1 A 0
+      CLP1 ABCDEFGH 1
+      Loop
+   Death:
+      CLP1 A 0 A_SpawnItemEx("SidekickClipLiedown")
+      stop
+   }
+}
+
+actor SidekickClipLiedown
+{
+	-NOGRAVITY
+	+FLOORCLIP
+    Scale 0.2
+	States
+	{
+	Spawn:
+	  TNT1 A 0
+	  TNT1 A 0 A_Jump(255,"Spawn1","Spawn2")
+	  stop
+	Spawn1:
+	  CLP1 J 1
+	  Goto Ded
+	Spawn2:
+	  CLP1 K 1
+	  Goto Ded
+	Ded:
+	  "####" "#" 210 A_CheckSight("Fadying")
+	  Loop
+	Fadying:
+	  "####" "#" 1 A_FadeOut(0.1)
+	  Wait
+   }
+}
+
+ACTOR FMGClipDrop
+{
+   Radius 4
+   Height 6
+   Speed 0
+   Scale 0.2
+   BounceSound "Clip/FMG"
+   PROJECTILE
+   -NOGRAVITY
+   +BOUNCEONACTORS
+   +BOUNCEONCEILINGS
+   Gravity 0.75
+   BounceType Doom
+   BounceCount 3
+   BounceFactor 0.6
+   States
+   {
+   Spawn:
+      CLP2 A 0
+      CLP2 ABCDEFGH 1
+      Loop
+   Death:
+      CLP1 A 0 A_SpawnItemEx("FMGClipLiedown")
+      stop
+   }
+}
+
+actor FMGClipLiedown
+{
+	-NOGRAVITY
+	+FLOORCLIP
+    Scale 0.2
+	States
+	{
+	Spawn:
+	  TNT1 A 0
+	  TNT1 A 0 A_Jump(255,"Spawn1","Spawn2")
+	  stop
+	Spawn1:
+	  CLP2 J 1
+	  Goto Ded
+	Spawn2:
+	  CLP2 K 1
+	  Goto Ded
+	Ded:
+	  "####" "#" 210 A_CheckSight("Fadying")
+	  Loop
+	Fadying:
+	  "####" "#" 1 A_FadeOut(0.1)
+	  Wait
+   }
+}
+
+ACTOR SuperFMGClipDrop : FMGClipDrop
+{
+   Scale 0.25
+   States
+   {
+   Spawn:
+      CLP7 A 0
+      CLP7 HGFEDCBA 1
+      Loop
+   Death:
+      CLP1 A 0 A_SpawnItemEx("SuperFMGClipLiedown")
+      stop
+   }
+}
+
+actor SuperFMGClipLiedown : FMGClipLiedown
+{
+    Scale 0.25
+	States
+	{
+	Spawn:
+	  TNT1 A 0
+	  TNT1 A 0 A_Jump(255,"Spawn1","Spawn2")
+	  stop
+	Spawn1:
+	  CLP7 I 1
+	  Goto Ded
+	Spawn2:
+	  CLP7 J 1
+	  Goto Ded
+	Ded:
+	  "####" "#" 210 A_CheckSight("Fadying")
+	  Loop
+	Fadying:
+	  "####" "#" 1 A_FadeOut(0.1)
+	  Wait
+   }
+}
+
+ACTOR PatriarchClipDrop
+{
+   Radius 5
+   Height 7
+   Speed 0
+   Scale 0.25
+   BounceSound "Clip/FMG"
+   PROJECTILE
+   -NOGRAVITY
+   +BOUNCEONACTORS
+   +BOUNCEONCEILINGS
+   Gravity 0.75
+   BounceType Doom
+   BounceCount 3
+   BounceFactor 0.6
+   States
+   {
+   Spawn:
+      CLP3 A 0
+      CLP3 ABCDEFGH 1
+      Loop
+   Death:
+      CLP1 A 0 A_SpawnItemEx("PatriarchClipLiedown")
+      stop
+   }
+}
+
+actor PatriarchClipLiedown
+{
+	-NOGRAVITY
+	+FLOORCLIP
+    Scale 0.25
+	States
+	{
+	Spawn:
+	  TNT1 A 0
+	  TNT1 A 0 A_Jump(255,"Spawn1","Spawn2")
+	  stop
+	Spawn1:
+	  CLP3 J 1
+	  Goto Ded
+	Spawn2:
+	  CLP3 K 1
+	  Goto Ded
+	Ded:
+	  "####" "#" 210 A_CheckSight("Fadying")
+	  Loop
+	Fadying:
+	  "####" "#" 1 A_FadeOut(0.1)
+	  Wait
+   }
+}
+
+ACTOR PatriarchClipDrop2
+{
+   Radius 5
+   Height 7
+   Speed 0
+   Scale 0.25
+   BounceSound "Clip/FMG"
+   PROJECTILE
+   -NOGRAVITY
+   +BOUNCEONACTORS
+   +BOUNCEONCEILINGS
+   Gravity 0.75
+   BounceType Doom
+   BounceCount 3
+   BounceFactor 0.6
+   States
+   {
+   Spawn:
+      CLP6 A 0
+      CLP6 ABCDEFGH 1
+      Loop
+   Death:
+      CLP6 A 0 A_SpawnItemEx("PatriarchClipLiedown2")
+      stop
+   }
+}
+
+actor PatriarchClipLiedown2
+{
+	-NOGRAVITY
+	+FLOORCLIP
+    Scale 0.25
+	States
+	{
+	Spawn:
+	  TNT1 A 0
+	  TNT1 A 0 A_Jump(255,"Spawn1","Spawn2")
+	  stop
+	Spawn1:
+	  CLP6 I 1
+	  Goto Ded
+	Spawn2:
+	  CLP6 J 1
+	  Goto Ded
+	Ded:
+	  "####" "#" 210 A_CheckSight("Fadying")
+	  Loop
+	Fadying:
+	  "####" "#" 1 A_FadeOut(0.1)
+	  Wait
+   }
+}
+
+
+ACTOR UziClipDrop
+{
+   Radius 4
+   Height 6
+   Speed 0
+   Scale 0.17
+   BounceSound "Clip/Sidekick"
+   PROJECTILE
+   -NOGRAVITY
+   +BOUNCEONACTORS
+   +BOUNCEONCEILINGS
+   Gravity 0.75
+   BounceType Doom
+   BounceCount 2
+   BounceFactor 0.6
+   States
+   {
+   Spawn:
+      CLP4 A 0
+      CLP4 ABCDEFGH 2
+      Loop
+   Death:
+      CLP1 A 0 A_SpawnItemEx("UziClipLiedown")
+      stop
+   }
+}
+
+ACTOR UziClipDrop2 : UziClipDrop //Reversed animation
+{
+   States
+   {
+   Spawn:
+      CLP4 A 0
+      CLP4 HGFEDCBA 2
+      Loop
+   }
+}
+
+actor UziClipLiedown
+{
+	-NOGRAVITY
+	+FLOORCLIP
+    Scale 0.17
+	States
+	{
+	Spawn:
+	  TNT1 A 0
+	  TNT1 A 0 A_Jump(255,"Spawn1","Spawn2")
+	  stop
+	Spawn1:
+	  CLP4 I 1
+	  Goto Ded
+	Spawn2:
+	  CLP4 J 1
+	  Goto Ded
+	Ded:
+	  "####" "#" 210 A_CheckSight("Fadying")
+	  Loop
+	Fadying:
+	  "####" "#" 1 A_FadeOut(0.1)
+	  Wait
+   }
+}
+
+ACTOR SuperUziClipDrop
+{
+   Radius 4
+   Height 6
+   Speed 0
+   Scale 0.17
+   BounceSound "Clip/Sidekick"
+   PROJECTILE
+   -NOGRAVITY
+   +BOUNCEONACTORS
+   +BOUNCEONCEILINGS
+   Gravity 0.75
+   BounceType Doom
+   BounceCount 2
+   BounceFactor 0.6
+   States
+   {
+   Spawn:
+      CLP5 A 0
+      CLP5 ABCDEFGH 2
+      Loop
+   Death:
+      CLP1 A 0 A_SpawnItemEx("SuperUziClipLiedown")
+      stop
+   }
+}
+
+ACTOR SuperUziClipDrop2 : SuperUziClipDrop //Reversed animation
+{
+   States
+   {
+   Spawn:
+      CLP5 A 0
+      CLP5 HGFEDCBA 2
+      Loop
+   }
+}
+
+actor SuperUziClipLiedown
+{
+	-NOGRAVITY
+	+FLOORCLIP
+    Scale 0.17
+	States
+	{
+	Spawn:
+	  TNT1 A 0
+	  TNT1 A 0 A_Jump(255,"Spawn1","Spawn2")
+	  stop
+	Spawn1:
+	  CLP5 I 1
+	  Goto Ded
+	Spawn2:
+	  CLP5 J 1
+	  Goto Ded
+	Ded:
+	  "####" "#" 210 A_CheckSight("Fadying")
+	  Loop
+	Fadying:
+	  "####" "#" 1 A_FadeOut(0.1)
+	  Wait
+   }
+}

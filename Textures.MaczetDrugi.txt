@@ -1,0 +1,234 @@
+
+Sprite MTHGA0, 320, 200
+{
+	Patch MCHUA0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MTHGB0, 320, 200
+{
+	Patch MCHUB0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MTHGC0, 320, 200
+{
+	Patch MCHUC0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MTHGD0, 320, 200
+{
+	Patch MCHUD0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MTHGE0, 320, 200
+{
+	Patch MCHUE0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MTHGF0, 320, 200
+{
+	Patch MCHUF0, -116, -25
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT5SA0, 720, 200
+{
+	Offset 200, 0
+	Patch MC5SA0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MT5SB0, 720, 200
+{
+	Offset 200, 0
+	Patch MC5SB0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MT5SC0, 720, 200
+{
+	Offset 200, 0
+	Patch MC5SC0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MT5SD0, 720, 200
+{
+	Offset 200, 0
+	Patch MC5SD0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MT5SE0, 720, 200
+{
+	Offset 200, 0
+	Patch MC5SE0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MT5SF0, 720, 200
+{
+	Offset 200, 0
+	Patch MC5SF0, 0, 0
+	{
+		FlipX
+		UseOffsets
+		Style Overlay
+	}
+}
+
+Sprite MT3SA0, 356, 265
+{
+	Offset -165, 86
+	Patch MC3SA0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SB0, 356, 265
+{
+	Offset -151, 94
+	Patch MC3SB0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SC0, 356, 265
+{
+	Offset -139, 96
+	Patch MC3SC0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SD0, 356, 265
+{
+	Offset -111, 97
+	Patch MC3SD0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SE0, 356, 265
+{
+	Offset -74, 85
+	Patch MC3SD0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SF0, 356, 265
+{
+	Offset -24, 56
+	Patch MC3SD0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SG0, 356, 265
+{
+	Offset 8, 30
+	Patch MC3SD0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SH0, 356, 265
+{
+	Offset 38, 5
+	Patch MC3SD0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SI0, 356, 265
+{
+	Offset 78, -25
+	Patch MC3SD0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT3SJ0, 356, 265
+{
+	Offset 108, -50
+	Patch MC3SD0, 0, 0
+	{
+		FlipX
+		Style Overlay
+	}
+}
+
+Sprite MT1SF0, 320, 200
+{
+	Patch MC1SF0, -79, -29
+	{
+		FlipX
+		Style Overlay
+	}
+}

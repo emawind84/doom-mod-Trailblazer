@@ -1,0 +1,74 @@
+ACTOR RedCard2 : RedCard replaces RedCard
+{
+  Inventory.PickupSound "KeyCard/Pickup"
+  Scale 0.8
+  Species RedCard
+  States
+  {
+  Spawn:
+  RCRD AB 10
+  Loop
+  }
+}
+
+ACTOR YellowCard2 : YellowCard replaces YellowCard
+{
+  Inventory.PickupSound "KeyCard/Pickup"
+  Scale 0.8
+  Species YellowCard
+  States
+  {
+  Spawn:
+  YCRD AB 10
+  Loop
+  }
+}
+
+ACTOR BlueCard2 : BlueCard replaces BlueCard
+{
+  Inventory.PickupSound "KeyCard/Pickup"
+  Scale 0.8
+  Species BlueCard
+  States
+  {
+  Spawn:
+  BCRD AB 10
+  Loop
+  }
+}
+
+ACTOR RedSkull2 : RedSkull replaces RedSkull
+{
+  Inventory.PickupSound "SkullKey/Pickup"
+  Species RedSkull
+  States
+  {
+  Spawn:
+  RSKL AB 10
+  Loop
+  }
+}
+
+ACTOR YellowSkull2 : YellowSkull replaces YellowSkull
+{
+  Inventory.PickupSound "SkullKey/Pickup"
+  Species YellowSkull
+  States
+  {
+  Spawn:
+  YSKL AB 10
+  Loop
+  }
+}
+
+ACTOR BlueSkull2 : BlueSkull replaces BlueSkull
+{
+  Inventory.PickupSound "SkullKey/Pickup"
+  Species BlueSkull
+  States
+  {
+  Spawn:
+  BSKL AB 10
+  Loop
+  }
+}

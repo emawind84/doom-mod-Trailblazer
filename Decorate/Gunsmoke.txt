@@ -1,0 +1,336 @@
+//Spawners
+
+Actor GunsmokeSpawner_Small //Pistol
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 AA 0 A_SpawnItemEx("Gunsmoke_Small",random(1,-1),random(1,-1),random(1,-1),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 A 0 A_SpawnItemEx("Gunsmoke_Small",random(1,-1),random(1,-1),random(1,-1),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+Actor GunsmokeSpawner_Small_Dark //Colts
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 AA 0 A_SpawnItemEx("Gunsmoke_Small_Dark",random(1,-1),random(1,-1),random(1,-1),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 AA 0 A_SpawnItemEx("Gunsmoke_Small_Dark",random(1,-1),random(1,-1),random(1,-1),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+Actor GunsmokeSpawner_Small_MG //Uzis, FMG
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 A 0 A_SpawnItemEx("Gunsmoke_Small",random(1,-1),random(1,-1),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 A 0 A_SpawnItemEx("Gunsmoke_Small",random(1,-1),random(1,-1),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+Actor GunsmokeSpawner_Medium //Shotties
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 AAA 0 A_SpawnItemEx("Gunsmoke_Medium",random(2,-2),random(2,-2),random(2,-2),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 AAA 0 A_SpawnItemEx("Gunsmoke_Medium",random(2,-2),random(2,-2),random(2,-2),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+Actor GunsmokeSpawner_Medium2 //Grenade Launcher
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 AAAA 0 A_SpawnItemEx("Gunsmoke_Medium",random(2,-2),random(2,-2),random(2,-2),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 AAAA 0 A_SpawnItemEx("Gunsmoke_Medium",random(2,-2),random(2,-2),random(2,-2),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+Actor GunsmokeSpawner_Medium_Dark //Shotgun's alt-fire, Magnum
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 AAA 0 A_SpawnItemEx("Gunsmoke_Medium_Dark",random(2,-2),random(2,-2),random(2,-2),frandom(0.02,-0.02),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 AAA 0 A_SpawnItemEx("Gunsmoke_Medium_Dark",random(2,-2),random(2,-2),random(2,-2),frandom(0.02,-0.02),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+Actor GunsmokeSpawner_Large //Chaingun
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 A 0 A_SpawnItemEx("Gunsmoke_Large",random(2,-2),random(2,-2),random(2,-2),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 A 0 A_SpawnItemEx("Gunsmoke_Large",random(2,-2),random(2,-2),random(2,-2),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+Actor GunsmokeSpawner_Large_Dark //2Bore
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	Speed 30
+	States
+	{
+	Spawn:
+	TNT1 A 1
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==1, "SmokeReduced")
+	TNT1 A 0 A_JumpIf(GetCvar("TB_SmokeReduction")==2, "SmokeNone")
+	TNT1 AAAAAAAAA 0 A_SpawnItemEx("Gunsmoke_Large_Dark",random(4,-4),random(4,-4),random(4,-4),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeReduced:
+	TNT1 AAAAAAAAA 0 A_SpawnItemEx("Gunsmoke_Large_Dark",random(4,-4),random(4,-4),random(4,-4),0,0,0,0,SXF_CLIENTSIDE)
+	SmokeNone:
+	TNT1 A 0
+	Stop
+	}
+}
+
+//Smokes
+	
+Actor Gunsmoke_Small
+{
+	+NoInteraction
+	+ForceXYBillboard
+	Alpha 0.0
+	RenderStyle Translucent
+	States
+	{
+		Spawn:
+		    TNT1 A 0
+			TNT1 AA 0 A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD")
+		SpriteA:
+			DYMI E 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			DYMI F 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			DYMI G 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			DYMI H 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+		FadeIn:
+			"####" "#" 0 A_SetScale(FRandom(0.01, 0.015))
+			Goto RealFadeIn
+		RealFadeIn:
+			"####" "#" 1 A_FadeIn(FRandom(0.1, 0.06))
+			"####" "#" 0 A_JumpIf(Alpha >= 0.25, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 A_FadeOut(FRandom(0.012,0.015))
+			"####" "#" 0 A_SetScale(ScaleX + FRandom(0.0075, 0.005))
+			Loop
+	}
+}
+
+Actor Gunsmoke_Small_Dark : Gunsmoke_Small
+{
+	+NoInteraction
+	+ForceXYBillboard
+	Alpha 0.0
+	RenderStyle Translucent
+	States
+	{
+		Spawn:
+		    TNT1 A 0
+			TNT1 AA 0 A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD")
+		SpriteA:
+			DYMI A 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			DYMI B 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			DYMI C 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			DYMI D 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+	}
+}
+
+Actor Gunsmoke_Medium : Gunsmoke_Small
+{
+	States
+	{
+		FadeIn:
+			"####" "#" 0 A_SetScale(FRandom(0.02, 0.015))
+			Goto RealFadeIn
+		RealFadeIn:
+			"####" "#" 1 A_FadeIn(FRandom(0.1, 0.06))
+			"####" "#" 0 A_JumpIf(Alpha >= 0.35, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 A_FadeOut(FRandom(0.01,0.02))
+			"####" "#" 0 A_SetScale(ScaleX + FRandom(0.0075, 0.0085))
+			Loop
+	}
+}
+
+Actor Gunsmoke_Medium_Dark : Gunsmoke_Small
+{
+	States
+	{
+		Spawn:
+		    TNT1 A 0
+			TNT1 AA 0 A_Jump(255, "SpriteA", "SpriteB", "SpriteC", "SpriteD")
+		SpriteA:
+			DYMI A 0 A_Jump(255, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			DYMI B 0 A_Jump(255, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			DYMI C 0 A_Jump(255, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			DYMI D 0 A_Jump(255, "FadeIn")
+			Goto SpriteD
+		FadeIn:
+			"####" "#" 0 A_SetScale(FRandom(0.02, 0.015))
+			Goto RealFadeIn
+		RealFadeIn:
+			"####" "#" 1 A_FadeIn(FRandom(0.1, 0.06))
+			"####" "#" 0 A_JumpIf(Alpha >= 0.35, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 A_FadeOut(FRandom(0.01,0.02))
+			"####" "#" 0 A_SetScale(ScaleX + FRandom(0.0075, 0.0085))
+			Loop
+	}
+}
+
+Actor Gunsmoke_Large : Gunsmoke_Small
+{
+	States
+	{
+		FadeIn:
+			"####" "#" 0 A_SetScale(FRandom(0.05, 0.06))
+			Goto RealFadeIn
+		RealFadeIn:
+			"####" "#" 1 A_FadeIn(FRandom(0.1, 0.06))
+			"####" "#" 0 A_JumpIf(Alpha >= 0.25, "FadeOut")
+			Loop
+		FadeOut:
+			"####" "#" 1 A_FadeOut(FRandom(0.015,0.0225))
+			"####" "#" 0 A_SetScale(ScaleX + FRandom(0.01, 0.012))
+			Loop
+	}
+}
+
+Actor Gunsmoke_Large_Dark : Gunsmoke_Small
+{
+	Speed 3
+	States
+	{
+		SpriteA:
+			DYMI A 0 A_Jump(256, "FadeIn")
+			Goto SpriteA
+		SpriteB:
+			DYMI B 0 A_Jump(256, "FadeIn")
+			Goto SpriteB
+		SpriteC:
+			DYMI C 0 A_Jump(256, "FadeIn")
+			Goto SpriteC
+		SpriteD:
+			DYMI D 0 A_Jump(256, "FadeIn")
+			Goto SpriteD
+		FadeIn:
+			"####" "#" 0 {
+				A_SetScale(frandom(0.06, 0.08));
+				A_ScaleVelocity(frandom(0.1,1.0));
+			}
+			Goto RealFadeIn
+		RealFadeIn:
+			"####" "#" 1 {
+				A_FadeIn(frandom(0.03, 0.04));
+				A_SetScale(ScaleX + frandom(0.001,0.004));
+				A_ScaleVelocity(0.994);
+				Return A_JumpIf(Alpha >= 0.5, "FadeOut");
+			}
+			Loop
+		FadeOut:
+			"####" "#" 1 {
+				A_ScaleVelocity(0.994);
+				A_FadeOut(frandom(0.002,0.005));
+				A_SetScale(ScaleX + frandom(0.001,0.004));
+			}
+			Loop
+	}
+}

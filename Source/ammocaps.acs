@@ -1,0 +1,37 @@
+// A script for setting ammo caps. To be called when the weapons upgrade.
+// By Zhs2.
+
+#library "ammohere!"
+#include "zcommon.acs"
+
+script "SetChromeUpgradeClip" (void)
+{
+	SetAmmoCapacity("ChromeJusticeClip",10);
+	GiveInventory("ChromeJusticeClip",10);
+}
+
+script "SetUziUpgradeClip" (void)
+{
+	SetAmmoCapacity("UziClipLeft",50);
+	SetAmmoCapacity("UziClipRight",50);
+	GiveInventory("UziClipLeft",50);
+	GiveInventory("UziClipRight",50);
+}
+
+script "SetPadreUpgradeClip" (void)
+{
+	SetAmmoCapacity("PatriarchClip",20);
+	GiveInventory("PatriarchClip",20);
+}
+
+script "SetMagnumUpgradeClip" (void)
+{
+	SetAmmoCapacity("MagnumClip",8);
+	GiveInventory("MagnumClip",8);
+}
+
+script "SetFMGUpgradeClip" (void)
+{
+	SetAmmoCapacity("FMGClip",150);
+	GiveInventory("FMGClip",150);
+}

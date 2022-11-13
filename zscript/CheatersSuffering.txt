@@ -1,0 +1,60 @@
+// Stuff you wanna get via Give All.
+
+class SmokinSmokinEveryoneJustKeepOnTokin : CustomInventory {
+	Default {
+		Inventory.Icon "ARTISUIT";
+		Inventory.PickupMessage "GIB ALL";
+		Inventory.MaxAmount 2;
+		Inventory.Amount 1;
+		Inventory.PickupSound "";
+		Inventory.UseSound "";
+		+INVENTORY.UNDROPPABLE;
+		+INVENTORY.AUTOACTIVATE;
+		+INVENTORY.ALWAYSPICKUP;
+	}
+
+	States
+	{
+	Spawn:
+		SUIT A -1;
+		Stop;
+	
+	Use:
+	Pickup:
+		TNT1 A 0 {
+		//Items you should get.
+			if(multiplayer && TB_KeyShare) { 
+				Array < Class<Actor> > these_keys;
+				for ( int i = 0; i < AllActorClasses.Size(); ++i)
+				{
+					let this_actor_default = GetDefaultByType(AllActorClasses[i]);
+					if(AllActorClasses[i] && this_actor_default && this_actor_default.bDONTGIB && AllActorClasses[i] is "Key" && !(AllActorClasses[i] is "TB_UniversalKey") && (this_actor_default.Special1 > 0)) {
+						these_keys.Push(AllActorClasses[i]);
+					}
+				}
+				for(int i = 0; i < MAXPLAYERS; i++)
+				{
+					if(!playeringame[i]) { Continue; }
+					for(int turd = 0; turd < these_keys.Size(); turd++) { players[i].mo.A_GiveInventory(these_keys[turd].GetClassName()); }
+						
+					players[i].mo.A_GiveInventory("TB_RedCard");
+					players[i].mo.A_GiveInventory("TB_BlueCard");
+					players[i].mo.A_GiveInventory("TB_YellowCard");
+					players[i].mo.A_GiveInventory("TB_RedSkull");
+					players[i].mo.A_GiveInventory("TB_BlueSkull");
+					players[i].mo.A_GiveInventory("TB_YellowSkull");
+					//players[i].mo.A_Print("Cheated for all keys."); 
+				}
+			}
+			else {
+				A_GiveInventory("TB_RedCard");
+				A_GiveInventory("TB_BlueCard");
+				A_GiveInventory("TB_YellowCard");
+				A_GiveInventory("TB_RedSkull");
+				A_GiveInventory("TB_BlueSkull");
+				A_GiveInventory("TB_YellowSkull");
+			}
+		}
+		Stop;
+	}
+}

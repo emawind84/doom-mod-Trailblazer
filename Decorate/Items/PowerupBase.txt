@@ -1,0 +1,147 @@
+//Powerup main base
+Actor TBPowerupBase : CustomInventory
+{
+	Inventory.MaxAmount 0
+	Renderstyle Add
+	Inventory.UseSound ""
+	+FLOATBOB
+	+COUNTITEM
+	+INVENTORY.ALWAYSPICKUP
+	+INVENTORY.AUTOACTIVATE
+	+INVENTORY.FANCYPICKUPSOUND
+	Var Int User_Count;
+}
+
+//Powerup portable base
+ACTOR TBPowerupPortableBase : TBPowerupBase
+{
+	Inventory.Amount 1
+	Inventory.MaxAmount 3
+	Inventory.InterHubAmount 3
+	-INVENTORY.AUTOACTIVATE
+	+INVBAR
+}
+
+//Fade base
+Actor TBFadeBase
+{
+	+NOGRAVITY
+	+NOINTERACTION
+	+NOTONAUTOMAP
+	+NOTIMEFREEZE
+	Renderstyle Add
+	States
+	{
+	Spawn:
+		TNT1 A 0
+	Fade:
+		"####" "#" 1 {
+			A_FadeOut(0.12);
+			A_SetScale(ScaleX + 0.02);
+		}
+		Loop
+	}
+}
+
+//Particle base
+Actor TBItemParticle
+{
+	+NOINTERACTION
+	+NOGRAVITY
+	+FORCEXYBILLBOARD
+	+NOTONAUTOMAP
+	+NOTIMEFREEZE
+	Alpha 0.99
+	Renderstyle Add
+	States
+	{
+	Spawn:
+	TNT1 A 0
+	SetScale:
+	"####" "#" 0 A_SetScale(0.05)
+	Main:
+	"####" "#" 0 A_JumpIf(ScaleX <= 0,"NULL")
+	"####" "#" 0 A_FadeOut(frandom(0.02,0.04))
+	"####" "#" 0 A_ChangeVelocity(0,0,frandom(-0.1,0.15),CVF_RELATIVE)
+	"####" "#" 1 Bright A_SetScale(ScaleX-frandom(0.0025,0.005))
+	Loop
+	}
+}
+
+//Shock base
+Actor TBPowerupEffect
+{
+	var int User_Counter;
+	Projectile
+	+NOINTERACTION
+	//+NOTIMEFREEZE
+	States
+	{
+	Spawn:
+		TNT1 A 0 NoDelay
+		{
+			for (A_SetUserVar(User_Counter, 0); User_Counter < 6; A_SetUserVar(User_Counter, User_Counter + 1))
+			{
+				A_SetAngle(frandom(0.0,360.0));
+				A_SpawnItemEx("TBPowerupPart",0,0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS);
+			}
+		}
+		TNT1 A 0 A_SetUserVar("User_Counter", 40) //This extra length of existence is for GLDEF to work.
+	Loop2:
+		TNT1 A 1 {
+			A_Warp(AAPTR_TARGET,0,0,0,0,WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE,0,0,0);
+			A_SetUserVar("User_Counter", User_Counter - 1);
+		}
+		TNT1 A 0 A_JumpIf(User_Counter > 0, "Loop2")
+		Stop
+	}
+}
+		
+Actor TBPowerupPart
+{
+	Projectile
+	Renderstyle Add
+	Alpha 0
+	+FLATSPRITE
+	+ROLLSPRITE
+	+ROLLCENTER
+	+DONTFLIP
+	+SPRITEANGLE
+	+NOINTERACTION
+	+NOTIMEFREEZE
+	var float User_PosX;
+	var float User_PosY;
+	var float User_PosZ;
+	var float User_Angle;
+	var float User_Scale;
+	var float User_Fade;
+	States
+	{
+	Spawn:
+		TNT1 A 0 //TEH SPROITE.
+	Setup:
+		"####" "#" 0
+		{
+			A_SetSpriteAngle(frandom(0.0,360.0));
+			A_SetScale(frandom(0.2,0.5));
+			A_FadeIn(frandom(0.6,0.99));
+			A_SetPitch(frandom(-90.0,90.0));
+			A_SetUserVarFloat("User_PosX", frandom(15.0,-15.0));
+			A_SetUserVarFloat("User_PosY", frandom(15.0,-15.0));
+			A_SetUserVarFloat("User_PosZ", frandom(15.0,-15.0));
+			A_SetUserVarFloat("User_Angle",frandom(0.0,360.0));
+			A_SetUserVarFloat("User_Scale",frandom(0.05,0.2));
+			A_SetUserVarFloat("User_Fade", frandom(0.02,0.05));
+		}
+	Main:
+		"####" "#" 1 Bright {
+			A_SetScale(ScaleX + User_Scale);
+			A_FadeOut(User_Fade);
+			A_Warp(AAPTR_TARGET, User_PosX, User_PosY, 35.0 + User_PosZ, User_Angle,
+			WARPF_NOCHECKPOSITION|WARPF_INTERPOLATE|WARPF_WARPINTERPOLATION|
+			WARPF_ABSOLUTEANGLE|WARPF_ABSOLUTEOFFSET, 0, 0, 0);
+			A_SetSpriteRotation(Angle + frandom(20.0,15.0));
+		}
+		Loop
+	}
+}

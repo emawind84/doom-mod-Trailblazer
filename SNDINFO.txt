@@ -1,0 +1,685 @@
+misc/secret			SHIIING //Spongebob Squarepants - Plankton, heh.
+
+$ifheretic
+misc/secret			WARCRY //Worms, Team17
+$endif
+
+//Menu - Raven (Wolfenstein 3)
+menu/activate		MENUOPEN
+menu/backup			MENUCLOS
+menu/prompt			MENUCLOS
+$random menu/choose	{ Colt/Menu1 Colt/Menu2 } //MENUOPEN
+menu/cursor			MENUMOVE
+menu/change			MENUMOVE
+menu/invalid		MENUPUSH
+menu/dismiss		MENUCLOS
+menu/clear			MENUOPEN
+menu/quit			MENUPUSH
+
+$volume menu/choose 0.4
+Colt/Menu1	COLTFIR1
+Colt/Menu2	COLTFIR2
+
+//Malcolm Striker (Courtesy of Marty Kirra)
+$playeralias	Trailblazer	male	*death		Trailblazer/Death
+$playeralias	Trailblazer	male	*xdeath		Trailblazer/XDeath
+$playersounddup	Trailblazer	male	*gibbed		*death
+$playersounddup	Trailblazer	male	*wimpydeath	*death
+$playersounddup	Trailblazer	male	*crazydeath	*death
+$playersounddup	Trailblazer	male	*burndeath	*death
+$playeralias	Trailblazer	male	*pain100	Trailblazer/Pain/100
+$playeralias	Trailblazer	male	*pain75 	Trailblazer/Pain/75
+$playeralias	Trailblazer	male	*pain50 	Trailblazer/Pain/50
+$playeralias	Trailblazer	male	*pain25 	Trailblazer/Pain/25
+$playeralias	Trailblazer	male	*grunt		Trailblazer/Oof
+$playeralias	Trailblazer	male	*land		Trailblazer/Land
+$playeralias	Trailblazer	male	*jump		Trailblazer/Jump
+$playersound	Trailblazer	male	*fist		dsnone
+$playeralias	Trailblazer	male	*usefail	Trailblazer/Nope
+$playeralias	Trailblazer	male	*weaponlaugh	Trailblazer/Laugh
+$playersounddup	Trailblazer	male	*evillaugh	*weaponlaugh
+
+Trailblazer/Jump	MSJUMP1
+
+ //RTCW/ID Software
+Trailblazer/Land	BLZELAND
+$volume	Trailblazer/Land	0.8
+
+$random Trailblazer/Jump	{ Trailblazer/Jump1 Trailblazer/Jump2 }
+Trailblazer/Jump1	MSJUMP1
+Trailblazer/Jump2	MSJUMP2
+
+$random Trailblazer/Oof	{ Trailblazer/Oof1 Trailblazer/Oof2 }
+Trailblazer/Oof1	MSOOF1
+Trailblazer/Oof2	MSOOF2
+
+$random Trailblazer/Nope	{ Trailblazer/Nope1 Trailblazer/Nope2 Trailblazer/Nope3 }
+Trailblazer/Nope1	MSNOPE1
+Trailblazer/Nope2	MSNOPE2
+Trailblazer/Nope3	MSNOPE3
+
+$random Trailblazer/Aah { Trailblazer/Aah1 Trailblazer/Aah2 Trailblazer/Aah3 }
+Trailblazer/Aah1 	MSAAH1
+Trailblazer/Aah2 	MSAAH2
+Trailblazer/Aah3 	MSAAH3
+
+$random Trailblazer/Pain/100	{ Trailblazer/Pain/100/1 Trailblazer/Pain/100/2 Trailblazer/Pain/100/3 Trailblazer/Pain/100/4 }
+Trailblazer/Pain/100/1 MSPN101
+Trailblazer/Pain/100/2 MSPN102
+Trailblazer/Pain/100/3 MSPN103
+Trailblazer/Pain/100/4 MSPN104
+
+$random Trailblazer/Pain/75	{ Trailblazer/Pain/75/1 Trailblazer/Pain/75/2 Trailblazer/Pain/75/3 Trailblazer/Pain/75/4 }
+Trailblazer/Pain/75/1 MSPN751
+Trailblazer/Pain/75/2 MSPN752
+Trailblazer/Pain/75/3 MSPN753
+Trailblazer/Pain/75/4 MSPN754
+
+$random Trailblazer/Pain/50	{ Trailblazer/Pain/50/1 Trailblazer/Pain/50/2 Trailblazer/Pain/50/3 Trailblazer/Pain/50/4 }
+Trailblazer/Pain/50/1 MSPN501
+Trailblazer/Pain/50/2 MSPN502
+Trailblazer/Pain/50/3 MSPN503
+Trailblazer/Pain/50/4 MSPN504
+
+$random Trailblazer/Pain/25	{ Trailblazer/Pain/25/1 Trailblazer/Pain/25/2 Trailblazer/Pain/25/3 Trailblazer/Pain/25/4 }
+Trailblazer/Pain/25/1 MSPN251
+Trailblazer/Pain/25/2 MSPN252
+Trailblazer/Pain/25/3 MSPN253
+Trailblazer/Pain/25/4 MSPN254
+
+$random Trailblazer/Death { Trailblazer/Death1 Trailblazer/Death2 Trailblazer/Death3 }
+Trailblazer/Death1 MSDEAD1
+Trailblazer/Death2 MSDEAD2
+Trailblazer/Death3 MSDEAD3
+
+$random Trailblazer/XDeath { Trailblazer/XDeath1 Trailblazer/XDeath2 Trailblazer/XDeath3 Trailblazer/XDeath4 }
+Trailblazer/XDeath1 MSDEADX1
+Trailblazer/XDeath2 MSDEADX2
+Trailblazer/XDeath3 MSDEADX3
+Trailblazer/XDeath4 MSDEADX4
+
+Trailblazer/Laugh	MSLAUGH
+
+Trailblazer/Yell1	MSHA1
+Trailblazer/Yell2	MSHA2
+Trailblazer/Yell3	MSHA3
+Trailblazer/Yell4	MSHA4
+Trailblazer/Yell5	MSHA5
+Trailblazer/Yell6	MSHA6
+Trailblazer/Yell7	MSHA7
+
+//Dashing, smashing, lezing, plazing
+$random Trailblazer/Dash { Trailblazer/Yell1 Trailblazer/Yell6 }
+
+//Booty Time! (Black Legion Development\Tremulous)
+$random Move/Step { Move/Step1 Move/Step2 Move/Step3 Move/Step4 }
+Move/Step1	MOVESTP1
+Move/Step2	MOVESTP2
+Move/Step3	MOVESTP3
+Move/Step4	MOVESTP4
+
+$volume Move/Step 0.8
+
+General/Toss	TOSSSWNG
+
+//Macheterang
+Machete/Up		MACHUP
+Machete1/Slash	MACHSWNG //L4D2\Valve, High Five Games\Broforce
+
+ //L4D2\Valve
+$random Machete2/Slash { Machete2/Slash1 Machete2/Slash2 }
+Machete2/Slash1	MCH2SWN1
+Machete2/Slash2 MCH2SWN2
+
+//Mortal Kombat X\NetherRealm Studios
+$random Machete/SlashFlight { Machete/SlashFlight1 Machete/SlashFlight2 }
+Machete/SlashFlight1 MACHSLF1
+Machete/SlashFlight2 MACHSLF2
+
+$rolloff Machete/SlashFlight 600 1800
+$volume Machete/SlashFlight 0.5
+
+ //Blizzard\Warcraft 3, High Five Games\Broforce
+$random Machete/Solid { Machete/Solid1 Machete/Solid2 Machete/Solid3 }
+Machete/Solid1 MACHHIT1
+Machete/Solid2 MACHHIT2
+Machete/Solid3 MACHHIT3
+
+//Croteam\Serious Sam: 2nd Encounter
+$random Machete/Yum { Machete/Yum1 Machete/Yum2 Machete/Yum3 Machete/Yum4 Machete/Yum5 Machete/Yum6 }
+Machete/Yum1	MCHYUM1
+Machete/Yum2	MCHYUM2
+Machete/Yum3	MCHYUM3
+Machete/Yum4	MCHYUM4
+Machete/Yum5	MCHYUM5
+Machete/Yum6	MCHYUM6
+
+//Will Rock\Saber Ent.
+Machete/Fly		MACHFLY
+
+ //REEEED ROOOBIN! YUM!
+$volume Machete/Up 0.6
+$volume Machete/Yum 0.85
+
+//Sidekick
+Sidekick/Up		SIDEUP //L4D2\Valve
+Sidekick/Fire	SIDEFIRE //Epic Games\UT2004
+$random Sidekick/Add { Sidekick/Add1 Sidekick/Add2 } //EA\C&C3
+Sidekick/CommandoFire	RAMGUN2 //Cough~
+Sidekick/Add1	SIDEADD1
+Sidekick/Add2	SIDEADD2
+Sidekick/Out	SIDEOUT //Croteam\Serious Sam
+Sidekick/In		SIDEIN //Croteam\Serious Sam
+Sidekick/Cock	SIDECOCK //Uh-oh. It's from... Demon Eclipse. :D
+Sidekick/Dry	SIDEDRY
+
+$random Sidekick/CommandoLoad { Sidekick/CommandoLoad1Sidekick/CommandoLoad2
+								Sidekick/CommandoLoad3 Sidekick/CommandoLoad4
+								Sidekick/CommandoLoad5 Sidekick/CommandoLoad6
+								Sidekick/CommandoLoad7 Sidekick/CommandoLoad8 }
+Sidekick/CommandoLoad1	COMMTNT1
+Sidekick/CommandoLoad2	COMMTNT2
+Sidekick/CommandoLoad3	COMMTNT3
+Sidekick/CommandoLoad4	COMMTNT4
+Sidekick/CommandoLoad5	COMMTNT5
+Sidekick/CommandoLoad6	COMMTNT6
+Sidekick/CommandoLoad7	COMMTNT7
+Sidekick/CommandoLoad8	COMMTNT8
+
+$volume Sidekick/Up 0.7
+
+Sidekick/SilencedFire	SIDESILF //Wolfenstein:ET\Splash Damage, ID Soft.
+
+$random Uranium/Hit { Uranium/Hit1 Uranium/Hit2 Uranium/Hit3 Uranium/Hit4 Uranium/Hit5 }
+Uranium/Hit1	URANHIT1
+Uranium/Hit2	URANHIT2
+Uranium/Hit3	URANHIT3
+Uranium/Hit4	URANHIT4
+Uranium/Hit5	URANHIT5
+
+//Chrome Justice
+ChromeJustice/Up	PCFGUP //L4D2\Valve
+ChromeJustice/Fire	PCFGFIRE //Stalker:Shadow of Chernobyl\GSC Games
+AutoJustice/Fire	AUTOJUST //L4D2\Valve
+ChromeJustice/Alt	PCFGALT //People Can Fly\BulletStorm
+ChromeJustice/Fly1	PCFGFLY1
+ChromeJustice/Fly2	PCFGFLY2 //Half Life 2\Valve
+ChromeJustice/Pump	PCFGPUMP //L4D2\Valve
+ChromeJustice/Dry	PCFGDRY
+$random ChromeJustice/Load { ChromeJustice/Load1 ChromeJustice/Load2 ChromeJustice/Load3 ChromeJustice/Load4 } //ID Software/Doom 3
+ChromeJustice/Load1	PCFLOAD1
+ChromeJustice/Load2	PCFLOAD2
+ChromeJustice/Load3	PCFLOAD3
+ChromeJustice/Load4	PCFLOAD4
+
+$limit ChromeJustice/Fire 8
+
+$volume ChromeJustice/Up 0.7
+
+//FMG
+//That feel when you use so much sounds... and don't know their origins. Yeah, I'm terrible.
+FMG/Up		FMGGUP
+$random FMG/Fire { FMG/Fire1 FMG/Fire2 FMG/Fire3 FMG/Fire4 }
+FMG/Fire1	FMGGFIR1
+FMG/Fire2	FMGGFIR2
+FMG/Fire3	FMGGFIR3
+FMG/Fire4	FMGGFIR4
+FMG/SniperFire	FMGSFIRE
+FMG/Out		FMGGOUT
+FMG/In		FMGGIN
+FMG/Cock	FMGGCOCK
+FMG/Dry		FMGGDRY
+
+$volume FMG/Up 0.7
+
+//Fleshrend
+Fleshrend/Up	RENDIN
+$random Fleshrend/Fire { Fleshrend/Fire1 Fleshrend/Fire2 Fleshrend/Fire3 } //Tripwire\Killing Floor, //Doom, Quake \ID Software
+Fleshrend/Fire1	RENDFIR1
+Fleshrend/Fire2	RENDFIR2
+Fleshrend/Fire3	RENDFIR3
+Fleshrend/Out	RENDOUT
+Fleshrend/In	RENDIN
+Fleshrend/Dry	RENDDRY
+
+$limit Fleshrend/Fire 8
+
+$volume Fleshrend/Up 0.6
+
+//Patriarch
+Patriarch/Up	PTRGUP //L4D2\Valve
+Patriarch/Fire	PTRGFIRE //L4D2\Valve
+Patriarch/Add	PTRGADD
+$random Patriarch/Roll { Patriarch/Roll1 Patriarch/Roll2 Patriarch/Roll3 }
+Patriarch/Roll1	PTRGROL1
+Patriarch/Roll2	PTRGROL2
+Patriarch/Roll3	PTRGROL3 //C&C\Westwood
+$random Patriarch/Cannon { Patriarch/Cannon1 Patriarch/Cannon2 Patriarch/Cannon3 }
+Patriarch/Cannon1	PTRGCAN1
+Patriarch/Cannon2	PTRGCAN2
+Patriarch/Cannon3	PTRGCAN3
+Patriarch/Out	PTRGOUT //L4D2\Valve
+Patriarch/In	PTRGIN //L4D2\Valve
+Patriarch/In2	PTRGIN2 //L4D2\Valve
+Patriarch/Dry	PTRGDRY
+Patriarch/Pull1	PTRGPUL1
+Patriarch/Pull2	PTRGPUL2
+Patriarch/Bounce PTRGBNC //ID Soft.\RTCW, Wolf:ET
+
+$limit Patriarch/Cannon 6
+$limit Patriarch/Add 6
+$limit Patriarch/Fire 6
+
+$volume Patriarch/Up 0.6
+
+//Spikebomb
+Spikebomb/Up 		PIPEUP //Jedi Knight III\Raven
+Spikebomb/Detonate 	PIPEDET //Jedi Knight III\Raven
+
+Spikebomb/Pick		PIPEPICK //Wolf:ET\ID Sofware, Splash Damage
+Spikebomb/Explosion	PIPEEXP //Wolf:ET\ID Sofware, Splash Damage, Killing Floor\Tripwire
+Spikebomb/Add		PIPEADD //Wolf:ET\ID Sofware, Splash Damage
+Spikebomb/Far		PIPEFAR //Wolf:ET\ID Sofware, Splash Damage
+Spikebomb/Implosion PIPEIMPL	//Wolf 3\Raven Software, C&C3\EA
+
+$random Spikebomb/Bounce { Spikebomb/Bounce1 Spikebomb/Bounce2 } //Wolf 3\Raven Software
+Spikebomb/Bounce1	PIPEBNC1
+Spikebomb/Bounce2	PIPEBNC2
+
+$volume Spikebomb/Bounce 0.7
+
+$rolloff Spikebomb/Explosion 400 1600
+$rolloff Spikebomb/Add 500 1800
+$rolloff Spikebomb/Far 1900 7000
+
+//Entirety of explosion part comes from Wolfenstein 3\Raven Software... when I still had those around, heh.
+
+$random Explosion/Init { Explosion/Init1 Explosion/Init2 Explosion/Init3 Explosion/Init4 }
+Explosion/Init1	EXPINIT1
+Explosion/Init2	EXPINIT2
+Explosion/Init3	EXPINIT3
+Explosion/Init4	EXPINIT4
+
+$random Explosion/Main { Explosion/Main1 Explosion/Main2 Explosion/Main3 Explosion/Main4 }
+Explosion/Main1	EXPMAIN1
+Explosion/Main2	EXPMAIN2
+Explosion/Main3	EXPMAIN3
+Explosion/Main4	EXPMAIN4
+
+$random Explosion/Layer { Explosion/Layer1 Explosion/Layer2 Explosion/Layer3 Explosion/Layer4 Explosion/Layer5 Explosion/Layer6 Explosion/Layer7 Explosion/Layer8 }
+Explosion/Layer1	EXPLAYR1
+Explosion/Layer2	EXPLAYR2
+Explosion/Layer3	EXPLAYR3
+Explosion/Layer4	EXPLAYR4
+Explosion/Layer5	EXPLAYR5
+Explosion/Layer6	EXPLAYR6
+Explosion/Layer7	EXPLAYR7
+Explosion/Layer8	EXPLAYR8
+
+Explosion/Flavor	EXPFLAVR
+
+$rolloff Explosion/Init 400 2000
+$rolloff Explosion/Main 400 2000
+$rolloff Explosion/Layer 400 2000
+$rolloff Explosion/Flavor 400 2000
+
+//Colts
+$random Colt/Fire { Colt/Fire1 Colt/Fire2 } //People can Fly\Bulletstorm
+Colt/Fire1	COLTFIR1
+Colt/Fire2	COLTFIR2
+
+//Croteam\Serious Sam
+Colt/Add	COLTADD
+Colt/Open	COLTOPEN
+Colt/Close	COLTCLOS
+
+$limit Colt/Fire 0
+
+//Skullthrottle
+//Mostly courtesy of Strelok from FPSBanana (Screw Gamebanana! >:( )
+Throttle/Up			CHNGUP
+Throttle/WindUp		CHNGWUP
+Throttle/Loop		CHNGLOOP
+Throttle/WindDown	CHNGWDWN
+Throttle/Fire		CHNGFIRE
+Throttle/Add		CHNGADD //Croteam/Serious Sam 2
+Throttle/Dry		CHNGDRY
+
+//Airborne - It ain't over till it's over
+$random Throttle/RocknRoll { Throttle/RocknRoll1 Throttle/RocknRoll2 }
+Throttle/RocknRoll1	AIRBRNE
+Throttle/RocknRoll2	AIRBRNE2
+
+$volume Throttle/RocknRoll3 2.0
+
+//ID Soft., Splash Damage, Raven - Wolfenstein: Enemy Territory, Wolfenstein 2009, Tripwire - Killing Floor
+Browning/Fire	BRWGFIRE
+$limit Browning/Fire 8
+
+//Samurai Jack, if you can believe it - the part with the scotsman, to be exact.
+$random Redneck/Gibberish { Redneck/1 Redneck/2 Redneck/3 Redneck/4 Redneck/5 Redneck/6
+Redneck/7 Redneck/8 Redneck/9 Redneck/10 Redneck/11 Redneck/12 Redneck/13
+Redneck/14 Redneck/15 Redneck/16 Redneck/17 Redneck/18 Redneck/19 Redneck/20
+Redneck/21 Redneck/22 Redneck/23 Redneck/24 Redneck/25 Redneck/26 Redneck/27
+Redneck/28 Redneck/29 Redneck/30 Redneck/31 Redneck/32 } //phewt.
+
+Redneck/1		RDNKFR01
+Redneck/2		RDNKFR02
+Redneck/3		RDNKFR03
+Redneck/4		RDNKFR04
+Redneck/5		RDNKFR05
+Redneck/6		RDNKFR06
+Redneck/7		RDNKFR07
+Redneck/8		RDNKFR08
+Redneck/9		RDNKFR09
+Redneck/10		RDNKFR10
+Redneck/11		RDNKFR11
+Redneck/12		RDNKFR12
+Redneck/13		RDNKFR13
+Redneck/14		RDNKFR14
+Redneck/15		RDNKFR15
+Redneck/16		RDNKFR16
+Redneck/17		RDNKFR17
+Redneck/18		RDNKFR18
+Redneck/19		RDNKFR19
+Redneck/20		RDNKFR20
+Redneck/21		RDNKFR21
+Redneck/22		RDNKFR22
+Redneck/23		RDNKFR23
+Redneck/24		RDNKFR24
+Redneck/25		RDNKFR25
+Redneck/26		RDNKFR26
+Redneck/27		RDNKFR27
+Redneck/28		RDNKFR28
+Redneck/29		RDNKFR29
+Redneck/30		RDNKFR30
+Redneck/31		RDNKFR31
+Redneck/32		RDNKFR32 //phewt times two.
+
+//Nutcracker
+Nutcracker/Up	NTCGUP
+Nutcracker/Fire	NTCGFIRE
+Nutcracker/Load	NTCGLOAD
+Nutcracker/Pull	NTCGPULL
+Nutcracker/Fly	NTCGFLY
+Nutcracker/Hit	NTCGHIT
+Nutcracker/Alt	NTCGALTF		//People can Fly\Bulletstorm
+Nutcracker/Chariots	CHARIOTS	//Vangelis - Chariots of Fire
+Nutcracker/Airforce	NTCGAIRF	//Hexum\Shambler's Castle (Doom 3 Mod.)
+Nutcracker/Eagle	NTCGEAGL	//Devolver, High Five games\Broforce. Of course.
+
+//Leadspitter
+Uzi/Up		UZIUP
+$random Uzi/Fire { Uzi/Fire1 Uzi/Fire2 } //Relic\Goldeneye
+Uzi/Fire1	UZIFIRE1
+Uzi/Fire2	UZIFIRE2
+Uzi/Dry		UZIDRY
+Uzi/Out		UZIOUT
+Uzi/In		UZIIN
+
+Tickler/Fire	TCKLFIRE	//Raven Soft.\Wolfenstein 3
+
+Uzi/Firework	UZIFWRK	//Valve\Team Fortress 2
+
+$volume Uzi/Firework 0.9
+
+//Bitchmaker
+Magnum/Up		MAGNUP
+Magnum/Fire		MAGNFIRE
+Magnum/Hammer1	MAGNHMR1	// Tripwire\Killing Floor
+Magnum/Hammer2	MAGNHMR2	// Tripwire\Killing Floor
+Magnum/Open		MAGNOPEN
+Magnum/Load		MAGNLOAD
+Magnum/Close	MAGNCLOS
+Magnum/Fly		MAGNFLY
+Magnum/Explode	MAGNEXP
+$random Magnum/Hit	{ Magnum/Hit1 Magnum/Hit2 }
+Magnum/Hit1		MAGNHIT1
+Magnum/Hit2		MAGNHIT2
+Magnum/Chant	MAGNCHNT
+Magnum/Channel	MAGNCHNL
+
+$limit Magnum/Fire 8
+
+$volume Magnum/Up 0.7
+
+//Paintrain
+Paintrain/Up		PAINUP
+Paintrain/Idle		PAINIDLE
+Paintrain/Charge	PAINCHRG
+Paintrain/Add		PAINADD // TerminusEst13
+$random Paintrain/Fire { Paintrain/Fire1 Paintrain/Fire2 Paintrain/Fire3 }
+Paintrain/Fire1		PAINFIR1
+Paintrain/Fire2		PAINFIR2
+Paintrain/Fire3		PAINFIR3
+Paintrain/Hit		PAINHIT
+
+$volume Paintrain/Up 0.7
+
+//Conqueror
+Conqueror/Up	CONQUP	// EA\C&C 3
+Conqueror/Mode	CONQMODE // Monolith Productions\Fear
+
+// EA\C&C: Generals
+$random Conqueror/MachinegunFire { Conqueror/MGF1 Conqueror/MGF2 Conqueror/MGF3 Conqueror/MGF4 Conqueror/MGF5 Conqueror/MGF6 }
+Conqueror/MGF1	CONQMGF1
+Conqueror/MGF2	CONQMGF2
+Conqueror/MGF3	CONQMGF3
+Conqueror/MGF4	CONQMGF4
+Conqueror/MGF5	CONQMGF5
+Conqueror/MGF6	CONQMGF6
+
+$limit Conqueror/MachinegunFire 6
+
+// Splash Damage\Wolfenstein: Enemy Territory
+Conqueror/MortarFire	CONQMORT
+
+$limit Conqueror/MortarFire	6
+
+$random Conqueror/MortarIncoming { Conqueror/MortarFly1 Conqueror/MortarFly2 Conqueror/MortarFly3 }
+Conqueror/MortarFly1	CONQFLY1
+Conqueror/MortarFly2	CONQFLY2
+Conqueror/MortarFly3	CONQFLY3
+
+$random Conqueror/MortarExplosion { Conqueror/MortarExp1 Conqueror/MortarExp2 Conqueror/MortarExp3 }
+Conqueror/MortarExp1	CONQEXP1
+Conqueror/MortarExp2	CONQEXP2
+Conqueror/MortarExp3	CONQEXP3
+
+$rolloff Conqueror/MortarIncoming 500 1700
+$rolloff Conqueror/MortarExplosion 400 1600
+
+//Eliminator
+Eliminator/Up		LEVGUP
+Eliminator/DryFire	LEVGDRY
+Eliminator/AddFire	LEVGAFIR
+
+$volume Eliminator/Up 0.6
+
+$random Eliminator/Fire { Eliminator/Fire1 Eliminator/Fire2 Eliminator/Fire3 Eliminator/Fire4 }
+Eliminator/Fire1	LEVGFIR1
+Eliminator/Fire2	LEVGFIR2
+Eliminator/Fire3	LEVGFIR3
+Eliminator/Fire4	LEVGFIR4
+
+$random Eliminator/Open { Eliminator/Open1 Eliminator/Open2 Eliminator/Open3 }
+Eliminator/Open1	LEVGCLS1
+Eliminator/Open2	LEVGCLS2
+Eliminator/Open3	LEVGCLS3
+
+$random Eliminator/Close { Eliminator/Close1 Eliminator/Close2 Eliminator/Close3 Eliminator/Close4 Eliminator/Close5 }
+Eliminator/Close1	LEVGCLS1
+Eliminator/Close2	LEVGCLS2
+Eliminator/Close3	LEVGCLS3
+Eliminator/Close4	LEVGCLS4
+Eliminator/Close5	LEVGCLS5
+
+//Double Deuce
+DoubleDeuce/Up		 DEUCUP	  //Bulletstorm/People Can Fly
+DoubleDeuce/Fire 	 DEUCFIRE //Bulletstorm/People Can Fly, Postal 2/Running with Scissors
+DoubleDeuce/FireTwo	 DEUCFIR2 //Bulletstorm/People Can Fly, Postal 2/Running with Scissors
+DoubleDeuce/Open	 DEUCOPEN //Bulletstorm/People Can Fly, Wolfenstein 2k9/Raven Software
+DoubleDeuce/Load	 DEUCLOAD //Bulletstorm/People Can Fly, Wolfenstein 2k9/Raven Software
+DoubleDeuce/Close	 DEUCLOSE //Bulletstorm/People Can Fly, Wolfenstein 2k9/Raven Software
+
+//Misc
+$random Pickup/Weapon { Pickup/Weapon1 Pickup/Weapon2 }
+Pickup/Weapon1 GUNPICK1
+Pickup/Weapon2 GUNPICK2
+
+Sights/Weapon GUNSIGHT
+
+//Bullet casings
+$random Casing/Bullet { Casing/Bullet0 Casing/Bullet1 Casing/Bullet2 Casing/Bullet3 Casing/Bullet4 Casing/Bullet5 Casing/Bullet6 Casing/Bullet7 Casing/Bullet8 Casing/Bullet9 }
+Casing/Bullet0 CASING0
+Casing/Bullet1 CASING1
+Casing/Bullet2 CASING2
+Casing/Bullet3 CASING3
+Casing/Bullet4 CASING4
+Casing/Bullet5 CASING5
+Casing/Bullet6 CASING6
+Casing/Bullet7 CASING7
+Casing/Bullet8 CASING8
+Casing/Bullet9 CASING9
+
+$volume Casing/Bullet 0.075
+
+//Shotgun casings
+$random Casing/Shotgun { Casing/Shotgun1 Casing/Shotgun2 Casing/Shotgun3 }
+Casing/Shotgun1	SHTGCAS1
+Casing/Shotgun2	SHTGCAS2
+Casing/Shotgun3	SHTGCAS3
+
+$volume Casing/Shotgun 0.3
+
+//Grenade launcher casings
+$random Casing/Grenade { Casing/Grenade1 Casing/Grenade2 Casing/Grenade3 }
+Casing/Grenade1 GRENCAS1
+Casing/Grenade2 GRENCAS2
+Casing/Grenade3 GRENCAS3
+
+$volume Casing/Grenade 0.4
+
+//Clips
+$random Clip/Sidekick { Clip/Sidekick1 Clip/Sidekick2 Clip/Sidekick3 Clip/Sidekick4 Clip/Sidekick5 Clip/Sidekick6 }
+Clip/Sidekick1	SDKCLIP1
+Clip/Sidekick2	SDKCLIP2
+Clip/Sidekick3	SDKCLIP3
+Clip/Sidekick4	SDKCLIP4
+Clip/Sidekick5	SDKCLIP5
+Clip/Sidekick6	SDKCLIP6
+
+$volume Clip/Sidekick 0.5
+
+$random Clip/FMG { Clip/FMG1 Clip/FMG2 Clip/FMG3 Clip/FMG4 Clip/FMG5 Clip/FMG6 }
+Clip/FMG1	FMGCLIP1
+Clip/FMG2	FMGCLIP2
+Clip/FMG3	FMGCLIP3
+Clip/FMG4	FMGCLIP4
+Clip/FMG5	FMGCLIP5
+Clip/FMG6	FMGCLIP6
+
+$volume Clip/FMG 0.5
+
+//Melee
+Punch/Swing		PNCHSWNG //Raven Soft.\Wolfenstein 3
+$random Punch/Solid { Punch/Solid1 Punch/Solid2 Punch/Solid3 Punch/Solid4 }
+Punch/Solid1	PNCHWAL1
+Punch/Solid2	PNCHWAL2
+Punch/Solid3	PNCHWAL3
+Punch/Solid4	PNCHWAL4
+
+Punch/Meatbag	PNCHYEES
+Melee/Firepunch	FIREPNCH
+Punch/Fireblast	PNCHBLST
+
+$limit Melee/Firepunch 0
+
+//Ammo
+Bullet/Ammo		BULLAMMO
+Shells/Ammo		SHELAMMO
+Grenade/Ammo	GRENAMMO
+Hellraiser/Ammo	HELLAMMO
+Throttle/Ammo	TRTLAMMO
+2Bore/Ammo		2BREAMMO
+Paintrain/Ammo	PAINAMMO
+
+$volume Bullet/Ammo 0.5
+$volume Shells/Ammo 0.6
+$volume 2Bore/Ammo 0.6
+
+//Items
+KeyCard/Pickup			CRDPICK	//EA\C&C3
+SkullKey/Pickup			SKLPICK //EA\C&C3, Irrational Games\BS:Infinite
+Misc/W_Pkup				WEAPPICK //ID Soft.\Quake 4
+Blueprint/Pickup		BLPCPICK //EA Games\C&C3
+Cigs/Pickup				CIGSPICK //ID Soft.\RTCW
+Cigs/Jackpot			CIGSJACK //Haha... Wish I knew.
+Stimpack/Pickup			STIMPICK //ID Soft.\RTCW
+Medikit/Pickup			MEDIPICK //ID Soft.\RTCW
+Suit/Pickup				SUITPICK //Tripwire\ Killing Floor
+Suit/In					SUITIN //Dunno
+Suit/Out				SUITOUT //Same here
+Armor/Pickup			ARMRPICK //ID Soft.\Quake 4
+Backpack/Pickup			BPAKPICK //ID Soft.\Quake 4
+Berserk/Pickup			BRSKPICK //Raven Soft.\Wolf 2k9
+Infrared/Pickup			INFRPICK
+Infrared/On				INFRON //Westwood\C&C Renegade
+Fullmap/Pickup			MAPPICK //Westwood\C&C Renegade, ID Soft.\Doom 3
+Infrared/Off			INFROFF //Westwood\C&C Renegade
+Soulsphere/Pickup		SOULPICK //Blizzard\Diablo 2
+Megasphere/Pickup		MEGAPICK //Blizzard\Diablo 2
+Invulnerability/Pickup	INVLPICK //Blizzard\Diablo 2
+Blazingsphere/Pickup	BLAZPICK //Blizzard\Diablo 2
+Whiskey/Pickup			WHSKPICK //Irrational Games\BS:Infinity
+$random Whiskey/Use { Whiskey/Use1 Whiskey/Use2 Whiskey/Use3 } //Irrational Games\BS:Infinity
+Whiskey/Use1			WHSKUSE1
+Whiskey/Use2			WHSKUSE2
+Whiskey/Use3			WHSKUSE3
+Jetpack/Pickup			JETPPICK //Raven Soft.\Wolf 3
+Jetpack/Active			JETBUTTS //Raven Soft.\Wolf 3
+$random Jetpack/Thrust { Jetpack/Thrust1 Jetpack/Thrust2 } //EA Games\C&C3
+Jetpack/Thrust1			JETTRST1
+Jetpack/Thrust2			JETTRST2
+Flechette/Throw			PBAGTHRW //Quake2\ID Soft.
+Lucky/Strike			LCKYSTRK //10tonsd\Crimsonland
+Cigbox/Pickup			CBOXPICK //Raven Soft.\Wolf 3
+Cigbox/Use				CBOXUSE	//Raven Soft.\Wolf 3
+Syringe/Boost			DRUGSHOT //Black Legion Dev.\Tremulous
+AmmoJunkie/Pickup		AMJKPICK //Blizzard\Diablo 2, EA\C&C3
+QuadDamage/Pickup		QUADPICK //ID Soft.\Quake 4/1, Doom 4
+QuadDamage/Announcer	QUADANON
+QuadDamage/Fade			QUADFADE
+QuadDamage/Fire			QUADFIRE
+Flare/Use				FLARUSE //Epic Games\Unreal
+Flare/Loop				FLARLOOP //Valve\Half Life 2
+HeavyMachinegun/Pickup	HMGPICK //Metal Slug, fellas~
+HeavyMachinegun/Okay	HMGOKAY
+
+$volume Misc/W_Pkup 0.9
+$volume QuadDamage/Fire 0.8
+
+Tinker/Upgraded	TINKUPGD //EA\C&C3
+Tinker/Tink		TINKTINK //EA\C&C3
+$random Tinker/Upgrade	{ Tinker/Upgrade1 Tinker/Upgrade2 Tinker/Upgrade3 } //EA\C&C3
+Tinker/Upgrade1	TINKUPG1
+Tinker/Upgrade2	TINKUPG2
+Tinker/Upgrade3	TINKUPG3
+
+Junk/Minor		JUNKMINR //EA\C&C3
+Junk/Major 		JUNKMAJR //EA\C&C3
+
+$volume Backpack/Pickup 0.9
+$volume Infrared/On 0.7
+$volume Infrared/Off 0.7
+$volume Suit/Pickup 0.8
+$volume Whiskey/Pickup 0.7
+$volume Whiskey/Use 0.7
+
+Barrel/Break	BARRDEAD //ID Soft.\RTCW
+Barrel/Rad		BARRRAD
+Barrel/Slurp	BARRSLOP //Dparke\Freesound
+
+Dismantle/Firebarrel	DISMFIRB //sgak, trygven
+Dismantle/Tech			DISMTECH //nettimato, luannwepener, 13fpanska
+Dismantle/Torch			DISMTRCH //nettimato, wesselorg

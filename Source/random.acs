@@ -1,0 +1,258 @@
+//Pillow: A collection of scripts that don't fit any particular category, and are generally short.
+
+#library "RANDOM"
+#include "zcommon.acs"
+
+#define MAX_PLAYERS 8
+#define TB_ARMORTYPES 6
+
+//Clean-up script when you are leaving the level.
+script "EnterTheBlazer" Unloading
+{
+	for (int i = 0; i<MAX_PLAYERS; i++)
+	{
+		if(SetActivator(0, AAPTR_PLAYER1<<i))
+		{
+			TakeInventory("GloryShotTimer",99); //Reset glory shot reload.
+			TakeInventory("PipeTossTimer",999); //Reset quick-pipe delay.
+			
+			GiveInventory("Macheterang", 1); //[2016-03-05] Pillow: Because your machete is also being taken when tossed as a melee weapon. Don't wanna lose that.
+			while(CheckInventory("MacheteTossed")) //[2016-03-12] Trade in any thrown machetes for ones that were out while entering next map.
+			{
+				GiveInventory("MacheteAmmo", 1);
+				TakeInventory("MacheteTossed", 1);
+			}
+		}
+	}
+}
+
+//A script to handle laser sight in the upgraded pistol.
+//Also salvaged for armor checks so I don't have multiple looping scripts running.
+
+str tb_armortype[TB_ARMORTYPES] =
+{
+	"SecurityVest",		//0
+	"BodyArmor",		//1
+	"TacticalSet",		//2
+	"Luckie",			//3
+	"ArmorBonus2",		//4
+	"MegasphereArmor2"	//5
+};
+
+script "Vain Glory Be My Guide" Enter
+{
+	int Angler = 0;
+	int Pitcher = 0;
+	
+	int gotAny = false;						//Do we have any armor?
+	str SomeArmorToken = "WearsSomeArmor";	//It's some armor. I dunno what kind of, ask your retailer.
+	str NoArmorToken = "WearsNoArmor";		//What says on the tin. Not exactly needed, but just in case it will be.
+
+	if(CheckInventory("LazerActive")) //while
+	{
+		Angler = GetActorAngle(0);
+		Pitcher = GetActorPitch(0);
+		
+		LineAttack(0, Angler, Pitcher, 0, "LasersightPuff", "None",
+					0x7FFFFFFF, FHF_NORANDOMPUFFZ);
+	}
+
+	//Retrieve armor type and check if you have at least one point of an actual armor.
+	for (int Armor = 0; Armor < TB_ARMORTYPES; Armor++)
+    {
+		str WearString = StrParam(s:"Wears", s:tb_armortype[Armor]);	//Simplification for Wears(this armor) token check.
+		if (GetArmorType(tb_armortype[Armor], playernumber()) && CheckInventory("Armor"))
+		{
+			gotAny = true;
+			GiveInventory(WearString,1);
+		}
+		else
+		{
+			TakeInventory(WearString,1);
+		}
+	}
+	if(gotAny)
+	{
+		TakeInventory(NoArmorToken, 1);
+		TakeInventory(SomeArmorToken, 1);
+	}
+	else if (CheckInventory("Armor"))
+	{
+		TakeInventory(NoArmorToken, 1);
+		GiveInventory(SomeArmorToken, 1);
+	}
+	else
+	{
+		GiveInventory(NoArmorToken, 1);
+		TakeInventory(SomeArmorToken, 1);
+	}
+	
+	delay(1);
+	Restart;
+}
+
+//Whiskey healing script.
+script "WhiskeyHealing" (void)
+{
+	if(GetActorProperty(0,APROP_Health) < GetActorProperty(0,APROP_SpawnHealth))
+	{
+		until(GetActorProperty(0,APROP_Health) >= GetActorProperty(0,APROP_SpawnHealth))
+		{
+			if(!CheckInventory("Whiskey")) { break; }
+			GiveInventory("WhiskeyHealth", 1);
+			TakeInventory("Whiskey", 1);
+		}
+		GiveInventory("WhiskeyEffect", 1);
+	}
+}
+
+//Pillow: Health expansion scripts! If you can call those scripts.
+script "Marichuanen z Tuczonym Szkuem" (void)
+{
+	SetActorProperty(0, APROP_SpawnHealth, 100 + CheckInventory("HealthExpander"));
+}
+
+script "Marichuanen Recalibration" respawn
+{
+	SetActorProperty(0, APROP_SpawnHealth, 100 + CheckInventory("HealthExpander"));
+	/*delay(const:1); //Pillow: decided to handle it differently so I can save some cycles. PRAISE KEK(S).
+	restart;*/
+}
+
+//Radsuit script.
+#libdefine RADSUIT_UNIT 100
+
+script "ARadsuitThing" (void)
+{
+	int radtimer;
+	TakeInventory("Hazmatsuit", 1); // To discourage repeatedly removing the suit.
+	while (CheckInventory("PowerSuitProtect"))
+	{
+		radtimer++;
+		if(!(radtimer % RADSUIT_UNIT)) { TakeInventory("Hazmatsuit", 1); }
+		if(!CheckInventory("Hazmatsuit")) { break; } // Whoops, we ran out of suit.
+		delay(1);
+	}
+	TakeInventory("PowerSuitProtect", 1); // In case we ran out of suit.
+	TakeInventory("PowerSuitIronFeet", 1);
+}
+
+//Infrared script.
+#libdefine INFRARED_UNIT 100
+
+script "AnInfraredThing" (void)
+{
+	int vistimer;
+	TakeInventory("FisherPrice", 1);
+	while (CheckInventory("PowerFisherVision"))
+	{
+		vistimer++;
+		if(!(vistimer % INFRARED_UNIT)) { TakeInventory("FisherPrice", 1); }
+		if(!CheckInventory("FisherPrice")) { break; }
+		delay(1);
+	}
+	TakeInventory("PowerFisherVision", 1);
+}
+
+//Quad damage message and sound when it burns out.
+script "Quad Decay" (void) {
+	while (1) {
+	delay(1);
+	if (GetActorPowerUpTics(0, "PowerQuadDamage") != 105) continue;
+	PlaySound(0, "QuadDamage/Fade", CHAN_AUTO, 1.0, 0, ATTN_NORM);
+	//Log(s:"Quad damage is fading away.");
+	terminate;
+	}
+}
+
+//Master exploder's blastsphere stuff and niced rewards for dealing with bosses.
+script "KillDropsEffect" Kill
+{
+	if(CheckFlag(0, "ISMONSTER")) // Don't even run if not a monster.
+	{
+		int MonsterKilledTID = UniqueTID();
+		Thing_ChangeTID(0, MonsterKilledTID); // We need to return to the actor we're dropping from.
+		bool WasABoss = false; // Also set up a check if it was a boss.
+		if(CheckFlag(0, "BOSS")) { WasABoss = True; }
+		SetActivatorToTarget(0); //B-Butt check for player's inventory and then drop it from monster you twit.
+		if(!CheckInventory("MasterExploder")) // Failure condition.
+		{
+			SetActivator(MonsterKilledTID); // Change back,
+			if(WasABoss && GetCvar("TB_NoCrafting") == 0) { DropItem(0,"BlueprintSpawner",1,256); } // drop a blueprint if the monster was a bossu,
+			Thing_ChangeTID(0,0); // wipe the TID,
+			Terminate; // and die.
+		}
+		// Success.
+		SetActivator(MonsterKilledTID); // Return to the monster,
+		if(WasABoss && GetCvar("TB_NoCrafting") == 0) { DropItem(0,"BlueprintSpawner",1,256); } // drop a blueprint if the monster was a bossu,
+		DropItem(0,"Blastsphere",1,4); // drop Blastsphere if condition was met,
+		Thing_ChangeTID(0,0); // wipe the TID when done.
+	}
+}
+
+//Glory shot recharge and music lock.
+script "Glory Blockade" (void)
+{
+	while(CheckInventory("GloryShotTimer"))
+	{
+		delay(const:35);
+		TakeInventory("GloryShotTimer",1);
+	}
+	HUDMessage(s:"\c[red]Glory \c[blue]Shot \c[white]has recharged."; HUDMSG_FADEINOUT, 0, CR_WHITE, 0.5, 0.8, 1.5, 0.5, 0.5);
+	GiveInventory("NutterReturn",1);
+	PlaySound(0, "Nutcracker/Eagle", 0, 0.7);
+}
+
+script "GloryStart" (void)
+{
+	SetActivatorToTarget(0);
+	SetMusic("");
+}
+
+script "GloryEnd" (void)
+{
+	SetActivatorToTarget(0);
+	SetMusic("*");
+}
+
+//Paintrain ammo regen on upgrade.
+script "Paintrain has no brakes" Enter
+{
+	delay(const:350);
+	if(CheckInventory("PaintrainUpgrade") && CheckInventory("Paintrain")) {
+		if(!CheckInventory("HexenCounter")) {
+			GiveInventory("RailgunAmmo",1);
+		} else {
+			GiveInventory("GreenMana",15);
+		}
+	}
+	restart;
+}
+
+
+//Bitchmaker ammo saved notification.
+int currentbitchmessageid = 1; // Map variable. Shared.
+
+script "Bitching Shot" (void)
+{
+	int thisbitchmessageid = currentbitchmessageid; // Get the current global ID so we can slide another one on top.
+	currentbitchmessageid++; // Increment the global ID for the next instance.
+	int thismessagealpha = 1.0; // Start fully opaque, I guess.
+	SetFont("bitchbns");
+	for ( int ycoord = 0.94; ycoord > 0.92; ycoord -= 0.001 )
+	{ //(    starting point;   destination;      increment )
+		HUDMessage(s:"A"; HUDMSG_PLAIN|HUDMSG_ALPHA, thisbitchmessageid, CR_WHITE, 0.69, ycoord, 1.0, thismessagealpha);
+		thismessagealpha -= 0.05;
+		delay(const:1); // le keks
+	}
+}
+// This has no function at all. I'm having fun.
+
+// By Zhs2.
+// Pillow: BEST FUNCTION EVER.
+
+script "RidingAgain" Respawn
+{
+	str playername = GetUserCVarString(PlayerNumber(), "name"); // This guy is cool.
+	PrintBold(s:"Trailblazer ", s:playername, s:"\c- is riding again!"); // :)
+}
