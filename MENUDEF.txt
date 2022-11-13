@@ -1,12 +1,4 @@
-DEFAULTLISTMENU
-{
-	Font "BigFont", "Untranslated"
-	
-	Selector "ZIPPO1", -18, -6
-	Linespacing 18
-}
-
-LISTMENU "MainMenu"
+/* LISTMENU "MainMenu"
 {
 	Size "Clean"
 	StaticPatch 50, -75, "TBLOGO"
@@ -19,6 +11,13 @@ LISTMENU "MainMenu"
 	TextItem "Load",         "l",	"LoadGameMenu"
 	TextItem "Save",         "s",	"SaveGameMenu"
 	TextItem "Piss Off.",	 "q",	"QuitMenu"
+} */
+
+AddOptionMenu "OptionsMenu"
+{
+    StaticText ""
+	Submenu "Trailblazer Options", "BlazerMenu"
+	Submenu "Trailblazer Contorls", "CustomControls"
 }
 
 ListMenu "PlayerclassMenu"
