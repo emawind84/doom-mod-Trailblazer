@@ -453,7 +453,7 @@ ACTOR Fleshrend_Dual : TBMPWeaponGiver
 // Super Shotgun
 ACTOR ChromeJustice_Spawner : RandomSpawner
 {
-	DropItem "ChromeJustice"
+	DropItem "ChromeJusticePickup"
 }
 
 ACTOR Eliminator_Spawner : RandomSpawner
@@ -463,7 +463,7 @@ ACTOR Eliminator_Spawner : RandomSpawner
 
 ACTOR SSG_Spawner : RandomSpawner
 {
-	DropItem "ChromeJustice"
+	DropItem "ChromeJusticePickup"
 	DropItem "EliminatorPickup"
 }
 

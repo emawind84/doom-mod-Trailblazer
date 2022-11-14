@@ -15,6 +15,30 @@ class ChromeJusticeClip : Ammo
 	}
 }
 
+class ChromeJusticePickup : CustomInventory
+{
+	Default
+	{
+		Inventory.PickupSound "misc/w_pkup";
+		//Inventory.PickupMessage "Obtained a really damn stylish ''Fleshrend'' sawed-off! Peeling off the skins - multiple enemies at a time! (3)";
+	}
+	
+	States
+	{
+	Spawn:
+		PCFG X -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 {
+			if (FindInventory("ChromeJustice") == NULL) A_GiveInventory("ChromeJustice");
+			else A_GiveInventory("ChromeJustice2");
+		}
+		Stop;
+	}
+}
+
+class ChromeJustice2 : ChromeJustice {}
+
 class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 {
 	Default

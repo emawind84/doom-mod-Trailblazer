@@ -9,7 +9,7 @@ Actor CrossbowSpawner : RandomSpawner replaces Crossbow
 {
 	DropItem "Shotgun_Spawner" 255 3
 	DropItem "EliminatorPickup" 255 1
-	DropItem "ChromeJustice" 255 1
+	DropItem "ChromeJusticePickup" 255 1
 }
 
 Actor BlasterSpawner : RandomSpawner replaces Blaster
