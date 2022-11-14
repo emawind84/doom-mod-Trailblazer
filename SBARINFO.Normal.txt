@@ -224,7 +224,7 @@ statusbar normal, fullscreenoffsets
 		}
 		
 		//Fleshrend
-		IsSelected Fleshrend
+		IsSelected Fleshrend, Fleshrend2
 		{
 			InInventory TricorneShot
 			{
@@ -329,7 +329,7 @@ statusbar normal, fullscreenoffsets
 		}
 		
 		//Leadspitter
-		IsSelected Leadspitter
+		IsSelected Leadspitter, Leadspitter2
 		{
 			InInventory SpontaneousFreedom
 			{
@@ -511,7 +511,7 @@ statusbar normal, fullscreenoffsets
 		}
 		
 		//Eliminator
-		IsSelected Eliminator
+		IsSelected Eliminator, Eliminator2
 		{
 			drawimage "LEVGX0", -93, -34, center;
 			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;

@@ -23,7 +23,8 @@ class LeadspitterPickup : CustomInventory
 	GiveItNevertheless:
 		TNT1 A 0 {
 			if(CountInv("LeadspitPickupCounter") == 2) { A_SetMugshotState("Grin"); }
-			A_GiveInventory("Leadspitter");
+			if (FindInventory("Leadspitter") == NULL) A_GiveInventory("Leadspitter");
+			else A_GiveInventory("Leadspitter2");
 			A_GiveInventory("LeadspitPickupCounter");
 			A_GiveInventory("BulletAmmo",15);
 		}
@@ -40,7 +41,7 @@ class LeadspitPickupCounter : Inventory
 	{
 		Inventory.Icon "TNT1A0";;
 		Inventory.PickupMessage "DOUBLE YOUR FUN, DOUBLE YOUR GUN!";
-		Inventory.MaxAmount 3;
+		Inventory.MaxAmount 1;
 		Inventory.Amount 1;
 		-INVENTORY.INVBAR
 	}
@@ -65,6 +66,8 @@ class UziClipLeft : Ammo
 		+INVENTORY.IGNORESKILL
 	}
 }
+
+class Leadspitter2 : Leadspitter {}
 
 class Leadspitter : Weapon
 {
