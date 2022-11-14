@@ -531,7 +531,7 @@ statusbar normal, fullscreenoffsets
 		}
 		
 		//Double Deuce
-		IsSelected DoubleDeuce
+		IsSelected DoubleDeuce, DoubleDeuce2
 		{
 			drawimage "DEUGX0", -94, -31, center;
 			
