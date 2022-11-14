@@ -23,7 +23,8 @@ class LeadspitterPickup : CustomInventory
 	GiveItNevertheless:
 		TNT1 A 0 {
 			if(CountInv("LeadspitPickupCounter") == 2) { A_SetMugshotState("Grin"); }
-			A_GiveInventory("Leadspitter");
+			if (FindInventory("Leadspitter") == NULL) A_GiveInventory("Leadspitter");
+			else A_GiveInventory("Leadspitter2");
 			A_GiveInventory("LeadspitPickupCounter");
 			A_GiveInventory("BulletAmmo",15);
 		}
@@ -40,7 +41,7 @@ class LeadspitPickupCounter : Inventory
 	{
 		Inventory.Icon "TNT1A0";;
 		Inventory.PickupMessage "DOUBLE YOUR FUN, DOUBLE YOUR GUN!";
-		Inventory.MaxAmount 3;
+		Inventory.MaxAmount 1;
 		Inventory.Amount 1;
 		-INVENTORY.INVBAR
 	}
@@ -66,7 +67,9 @@ class UziClipLeft : Ammo
 	}
 }
 
-class Leadspitter : Weapon
+class Leadspitter2 : Leadspitter {}
+
+class Leadspitter : TrailblazerWeapon
 {
 	Default
 	{
@@ -160,7 +163,7 @@ class Leadspitter : Weapon
 		TIKG A 0 A_JumpIfInventory("LeadUpgrade",1,2);
 		UZIG A 0;
 		"####" A 1;
-		"####" A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "SingleFire");
+		"####" A 0 A_JumpIfAttack("SingleFire");
 		"####" A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_RELOAD), "SingleReload");
 		"####" A 0 A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"), "SingleCaberToss");
 		Loop;
@@ -254,7 +257,7 @@ class Leadspitter : Weapon
 		"####" A 0 A_Jump(256,"SingleMain2");
 		"####" A 0 A_FireProjectile("BuellerCasingSpawner2",0,0,5,0,FPF_NOAUTOAIM);
 	SingleMain2:
-		"####" A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "SingleFire");
+		"####" A 0 A_JumpIfAttack("SingleFire");
 		"####" C 1;
 		"####" DE 1;
 		TIKG A 0 A_JumpIfInventory("LeadUpgrade",1,2);

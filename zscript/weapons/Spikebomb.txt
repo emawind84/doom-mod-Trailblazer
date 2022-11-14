@@ -232,6 +232,7 @@ class SpikebombTossWeapon : Weapon
 	{
 			Weapon.SelectionOrder 9;
 	+WEAPON.CHEATNOTWEAPON
+	+WEAPON.TWOHANDED
 	}
 	
 	States
@@ -656,8 +657,8 @@ class SpikebombWeapon : Weapon
 		DETS H 1;
 	DetonatorIdle:
 		DETG A 1;
-		DETG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "Detonate");
-		DETG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "Punch");
+		DETG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (bOFFHANDWEAPON ? BT_ATTACK : BT_OFFHANDATTACK), "Detonate");
+		DETG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (bOFFHANDWEAPON ? BT_OFFHANDATTACK : BT_ATTACK), "Punch");
 		Loop;
 	DetonatorDown:
 		DETS H 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),1);

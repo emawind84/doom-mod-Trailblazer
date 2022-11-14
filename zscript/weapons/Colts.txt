@@ -24,7 +24,7 @@ class GraveClip : Ammo
 class CradleBurst : Inventory { Default { Inventory.MaxAmount 3; } }
 class GraveBurst : CradleBurst {}
 
-class Colts : Weapon
+class Colts : TrailblazerWeapon
 {
 	Default
 	{
@@ -47,6 +47,7 @@ class Colts : Weapon
 		Weapon.BobRangeX 0.8;
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_CHECKBOTH
+		+WEAPON.TWOHANDED
 		//+WEAPON.NOAUTOAIM
 	}
 	
@@ -66,7 +67,7 @@ class Colts : Weapon
 		Goto ReadyMain;
 	LIdle:
 		LCLG A 1;
-		LCLG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "LFire");
+		LCLG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (bOFFHANDWEAPON ? BT_ATTACK : BT_OFFHANDATTACK), "LFire");
 		LCLG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_RELOAD), "LReload");
 		LCLG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ZOOM), "Punch");
 		Loop;
@@ -142,7 +143,7 @@ class Colts : Weapon
 		}
 		LCLF GH 1;
 		LCLG A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
-		LCLG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "LFire");
+		LCLG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (bOFFHANDWEAPON ? BT_ATTACK : BT_OFFHANDATTACK), "LFire");
 		LCLG A 0 A_TakeInventory("ShotsWereFired",1);
 		Goto LIdle;
 	LGunflash:
@@ -238,8 +239,9 @@ class Colts : Weapon
 	RIdle:
 		RCLG A 1;
 		RCLG A 0 {
-			If(CountInv("ShotsWereFired") && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK)) { Return ResolveState("RFire"); }
-			Else If(GetPlayerInput(INPUT_BUTTONS) & (BT_ALTATTACK)) { Return ResolveState("RFire"); }
+			int btn = bOFFHANDWEAPON ? BT_OFFHANDATTACK : BT_ATTACK;
+			If(CountInv("ShotsWereFired") && GetPlayerInput(INPUT_BUTTONS) & (btn)) { Return ResolveState("RFire"); }
+			Else If(GetPlayerInput(INPUT_BUTTONS) & (btn)) { Return ResolveState("RFire"); }
 			Return ResolveState(Null);
 		}
 		RCLG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_RELOAD), "RReload");
@@ -291,8 +293,9 @@ class Colts : Weapon
 		RCLF GH 1;
 		RCLG A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		RCLG A 0 {
-			If(CountInv("ShotsWereFired") && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK)) { Return ResolveState("RFire"); }
-			Else If(GetPlayerInput(INPUT_BUTTONS) & (BT_ALTATTACK)) { Return ResolveState("RFire"); }
+			int btn = bOFFHANDWEAPON ? BT_OFFHANDATTACK : BT_ATTACK;
+			If(CountInv("ShotsWereFired") && GetPlayerInput(INPUT_BUTTONS) & (btn)) { Return ResolveState("RFire"); }
+			Else If(GetPlayerInput(INPUT_BUTTONS) & (btn)) { Return ResolveState("RFire"); }
 			Return ResolveState(Null);
 		}
 		Goto RIdle;

@@ -499,7 +499,7 @@ ACTOR Leadspitter_Dual : TBMPWeaponGiver
 
 ACTOR FMG_Spawner : RandomSpawner
 {
-	DropItem "FMG"
+	DropItem "FMGPickup"
 }
 
 ACTOR Chaingun_SpawnerDummy : RandomSpawner
@@ -510,18 +510,18 @@ ACTOR Chaingun_SpawnerDummy : RandomSpawner
 //Rocket launcher
 ACTOR RocketLauncher_Spawner : RandomSpawner
 {
-	Dropitem "Patriarch"
+	Dropitem "PatriarchPickup"
 	DropItem "Bitchmaker"
 }
 
 ACTOR Bitchmaker_Spawner : RandomSpawner
 {
-	Dropitem "Bitchmaker"
+	Dropitem "BitchmakerPickup"
 }
 
 ACTOR Patriarch_Spawner : RandomSpawner
 {
-	Dropitem "Patriarch"
+	Dropitem "PatriarchPickup"
 }
 
 ACTOR RocketLauncher_SpawnerDummy : RandomSpawner replaces RocketLauncher
@@ -532,19 +532,19 @@ ACTOR RocketLauncher_SpawnerDummy : RandomSpawner replaces RocketLauncher
 //BFG 9000
 ACTOR BFG_Spawner : RandomSpawner
 {
-	DropItem "Nutcracker"
-	DropItem "DoubleDeuce"
+	DropItem "NutcrackerPickup"
+	DropItem "DoubleDeucePickup"
 	DropItem "Conqueror"
 }
 
 ACTOR Nutcracker_Spawner : RandomSpawner
 {
-	DropItem "Nutcracker"
+	DropItem "NutcrackerPickup"
 }
 
 ACTOR DoubleDeuce_Spawner : RandomSpawner
 {
-	DropItem "DoubleDeuce"
+	DropItem "DoubleDeucePickup"
 }
 
 ACTOR Conqueror_Spawner : RandomSpawner

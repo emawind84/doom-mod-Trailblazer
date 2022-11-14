@@ -11,6 +11,30 @@ class MagnumClip : Ammo
 	}
 }
 
+class BitchmakerPickup : CustomInventory
+{
+	Default
+	{
+		Inventory.PickupSound "misc/w_pkup";
+		//Inventory.PickupMessage "Obtained a really damn stylish ''Fleshrend'' sawed-off! Peeling off the skins - multiple enemies at a time! (3)";
+	}
+	
+	States
+	{
+	Spawn:
+		BITG X -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 {
+			if (FindInventory("Bitchmaker") == NULL) A_GiveInventory("Bitchmaker");
+			else A_GiveInventory("Bitchmaker2");
+		}
+		Stop;
+	}
+}
+
+class Bitchmaker2 : Bitchmaker {}
+
 class Bitchmaker : Weapon
 {
 	Default

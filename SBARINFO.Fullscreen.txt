@@ -170,7 +170,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//Fleshrend
-		IsSelected Fleshrend
+		IsSelected Fleshrend, Fleshrend2
 		{
 			InInventory TricorneShot
 			{
@@ -234,7 +234,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//FMG
-		IsSelected FMG
+		IsSelected FMG, FMG2
 		{
 			Alpha 0.2
 			{
@@ -275,7 +275,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//Leadspitter
-		IsSelected Leadspitter
+		IsSelected Leadspitter, Leadspitter2
 		{
 			InInventory SpontaneousFreedom
 			{
@@ -315,7 +315,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//Patriarch
-		IsSelected Patriarch
+		IsSelected Patriarch, Patriarch2
 		{
 			Alpha 0.2
 			{
@@ -351,7 +351,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//Bitchmaker
-		IsSelected Bitchmaker//, Bitchmaker2
+		IsSelected Bitchmaker, Bitchmaker2
 		{
 			InInventory KeepShooting
 			{
@@ -420,7 +420,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//Nutcracker
-		IsSelected Nutcracker
+		IsSelected Nutcracker, Nutcracker2
 		{
 			InInventory NutForceOne
 			{
@@ -452,7 +452,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//Eliminator
-		IsSelected Eliminator
+		IsSelected Eliminator, Eliminator2
 		{
 			drawimage "LEVGX0", -93, -34, center;
 			drawnumber 6, BIGFONT, Untranslated, ammo1, -126, -21;
@@ -472,7 +472,7 @@ statusbar fullscreen, fullscreenoffsets
 		}
 		
 		//Double Deuce
-		IsSelected DoubleDeuce
+		IsSelected DoubleDeuce, DoubleDeuce2
 		{
 			drawimage "DEUGX0", -94, -31, center;
 			

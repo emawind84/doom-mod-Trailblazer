@@ -13,6 +13,7 @@ version "3.7"
 #include "zscript/events/keyhandler.txt"
 
 //weapons
+#include "zscript/weapons/Trailblazer.txt"
 #include "zscript/weapons/Macheterang.txt"
 #include "zscript/weapons/Colts.txt"
 #include "zscript/weapons/Sidekick.txt"

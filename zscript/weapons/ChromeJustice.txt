@@ -359,7 +359,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		}
 		"####" N 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		"####" OP 1;
-		"####" III 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK || GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "ReloadFinish");
+		//"####" III 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ATTACK || GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "ReloadFinish");
 		"####" A 0 A_JumpIfInventory("ChromeJusticeClip",0,"ReloadFinish");
 		"####" A 0 A_JumpIfInventory("DemShellsAmmo",1,"ReloadWorking");
 		Goto ReloadFinish;
