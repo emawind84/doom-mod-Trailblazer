@@ -22,7 +22,11 @@ class FleshrendPickup : CustomInventory
 	GiveItNevertheless:
 		TNT1 A 0 {
 			if(CountInv("FleshrendPickupCounter") == 2) { A_SetMugshotState("Grin"); }
-			A_GiveInventory("Fleshrend");
+			if (invoker.FindInventory("Fleshrend") == NULL)
+			{
+				A_GiveInventory("Fleshrend");
+			}
+			else A_GiveInventory("Fleshrend2");
 			A_GiveInventory("FleshrendPickupCounter");
 		}
 		Stop;
@@ -50,7 +54,11 @@ class FleshrendPickup2 : FleshrendPickup
 	GiveItNevertheless:
 		TNT1 A 0 {
 			if(CountInv("FleshrendPickupCounter") == 2) { A_SetMugshotState("Grin"); }
-			A_GiveInventory("Fleshrend");
+			if (invoker.FindInventory("Fleshrend") == NULL)
+			{
+				A_GiveInventory("Fleshrend");
+			}
+			else A_GiveInventory("Fleshrend2");
 			A_GiveInventory("FleshrendPickupCounter");
 			A_GiveInventory("DemShellsAmmo",1);
 		}
@@ -67,7 +75,7 @@ class FleshrendPickupCounter : Inventory
 	Default
 	{
 		Inventory.Icon "TNT1A0";
-		Inventory.MaxAmount 3;
+		Inventory.MaxAmount 1;
 		Inventory.Amount 1;
 		-INVENTORY.INVBAR;
 	}
@@ -79,6 +87,8 @@ class FleshrendPickupCounter : Inventory
 		Stop;
 	}
 }
+
+class Fleshrend2 : Fleshrend {}
 
 class Fleshrend : Weapon
 {
