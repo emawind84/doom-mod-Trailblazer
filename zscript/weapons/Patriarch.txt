@@ -45,6 +45,30 @@ class PatriarchToggler : CustomInventory
 	}
 }
 
+class PatriarchPickup : CustomInventory
+{
+	Default
+	{
+		Inventory.PickupSound "misc/w_pkup";
+		//Inventory.PickupMessage "Obtained a really damn stylish ''Fleshrend'' sawed-off! Peeling off the skins - multiple enemies at a time! (3)";
+	}
+	
+	States
+	{
+	Spawn:
+		PTRG X -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 {
+			if (FindInventory("Patriarch") == NULL) A_GiveInventory("Patriarch");
+			else A_GiveInventory("Patriarch2");
+		}
+		Stop;
+	}
+}
+
+class Patriarch2 : Patriarch {}
+
 class Patriarch : Weapon
 {
 	Default

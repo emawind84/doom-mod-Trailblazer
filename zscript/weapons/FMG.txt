@@ -23,6 +23,30 @@ class FMGClip : Ammo
 
 //Maybe will rewrite it from scratch. Maybe. Someday.
 
+class FMGPickup : CustomInventory
+{
+	Default
+	{
+		Inventory.PickupSound "misc/w_pkup";
+		//Inventory.PickupMessage "Obtained a really damn stylish ''Fleshrend'' sawed-off! Peeling off the skins - multiple enemies at a time! (3)";
+	}
+	
+	States
+	{
+	Spawn:
+		FMGG X -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 {
+			if (FindInventory("FMG") == NULL) A_GiveInventory("FMG");
+			else A_GiveInventory("FMG2");
+		}
+		Stop;
+	}
+}
+
+class FMG2 : FMG {}
+
 class FMG : Weapon
 {
 	Default

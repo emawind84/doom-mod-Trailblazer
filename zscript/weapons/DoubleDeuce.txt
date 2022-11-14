@@ -22,6 +22,30 @@ class DoubleDeuceClip : Ammo
 	}
 }
 
+class DoubleDeucePickup : CustomInventory
+{
+	Default
+	{
+		Inventory.PickupSound "misc/w_pkup";
+		//Inventory.PickupMessage "Obtained a really damn stylish ''Fleshrend'' sawed-off! Peeling off the skins - multiple enemies at a time! (3)";
+	}
+	
+	States
+	{
+	Spawn:
+		DEUG X -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 {
+			if (FindInventory("DoubleDeuce") == NULL) A_GiveInventory("DoubleDeuce");
+			else A_GiveInventory("DoubleDeuce2");
+		}
+		Stop;
+	}
+}
+
+class DoubleDeuce2 : DoubleDeuce {}
+
 class DoubleDeuce : Weapon
 {
 	Default

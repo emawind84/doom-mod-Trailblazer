@@ -12,7 +12,7 @@ ACTOR ShellBox_Spawner_Doom1 : RandomSpawner replaces ShellBox
 
 ACTOR Chaingun_Spawner_Doom1 : RandomSpawner replaces Chaingun
 {
-	Dropitem "FMG_Spawner"
+	Dropitem "FMGPickup"
 	Dropitem "LeadspitterPickup"
 }
 

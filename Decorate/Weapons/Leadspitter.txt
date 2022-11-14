@@ -18,7 +18,8 @@ Actor LeadspitterPickup : CustomInventory
 		TNT1 A 0 A_JumpIfInventory("BulletAmmo",0,"Bailure")
 	GiveItNevertheless:
 		TNT1 A 0 { if(CountInv("LeadspitPickupCounter") == 2) { A_SetMugshotState("Grin"); } }
-		TNT1 A 0 A_GiveInventory("Leadspitter")
+		if (FindInventory("Leadspitter") == NULL) A_GiveInventory("Leadspitter");
+		else A_GiveInventory("Leadspitter2");
 		TNT1 A 0 A_GiveInventory("LeadspitPickupCounter")
 		TNT1 A 0 A_GiveInventory("BulletAmmo",15)
 		Stop
@@ -32,7 +33,7 @@ Actor LeadspitPickupCounter : Inventory
 {
 	Inventory.Icon "TNT1A0"
 	Inventory.PickupMessage "DOUBLE YOUR FUN, DOUBLE YOUR GUN!"
-	Inventory.MaxAmount 3
+	Inventory.MaxAmount 1
 	Inventory.Amount 1
 	-INVBAR
 	States
@@ -56,6 +57,8 @@ Actor UziClipLeft : Ammo
 	Inventory.Icon UZIGX0
 	+IGNORESKILL
 }
+
+Actor Leadspitter2 : Leadspitter {}
 
 Actor Leadspitter : Weapon
 {

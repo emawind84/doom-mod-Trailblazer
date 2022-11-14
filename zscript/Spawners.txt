@@ -94,13 +94,13 @@ class Chaingun_SpawnerMain : actor replaces Chaingun
 		TNT1 A 0 A_JumpIf(GetCvar("TB_ChainSpawner") == 3, "LeadspitOnly");
 		TNT1 A 0 A_JumpIf(bDROPPED == true, "LeadspitOnly");
 	FMGOnly:
-		TNT1 A 0 A_SpawnItemEx("FMG_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
+		TNT1 A 0 A_SpawnItemEx("FMGPickup",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
 		Stop;
 	LeadspitOnly:
 		TNT1 A 0 A_SpawnItemEx("LeadspitterPickup",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL,0);
 		Stop;
 	Both:
-		TNT1 A 0 A_SpawnItemEx("FMG_Spawner");
+		TNT1 A 0 A_SpawnItemEx("FMGPickup");
 		TNT1 A 0 A_SpawnItemEx("LeadspitterPickup");
 		TNT1 A 0 A_SpawnItemEx("Chaingun_SpecialToken",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
 		Stop;
@@ -126,11 +126,11 @@ class RocketLauncher_SpawnerMain : actor
 		Stop;
 	Both:
 		TNT1 A 0 A_SpawnItemEx("Patriarch_Spawner");
-		TNT1 A 0 A_SpawnItemEx("Bitchmaker_Spawner");
+		TNT1 A 0 A_SpawnItemEx("BitchmakerPickup");
 		TNT1 A 0 A_SpawnItemEx("RocketLauncher_SpecialToken",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
 		Stop;
 	BitchOnly:
-		TNT1 A 0 A_SpawnItemEx("Bitchmaker_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
+		TNT1 A 0 A_SpawnItemEx("BitchmakerPickup",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);
 		Stop;
 	PadreOnly:
 		TNT1 A 0 A_SpawnItemEx("Patriarch_Spawner",0,0,0,0,0,0,0,SXF_TRANSFERSPECIAL);

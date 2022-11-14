@@ -14,7 +14,7 @@ Actor CrossbowSpawner : RandomSpawner replaces Crossbow
 
 Actor BlasterSpawner : RandomSpawner replaces Blaster
 {
-	Dropitem "FMG_Spawner"
+	Dropitem "FMGPickup"
 	Dropitem "LeadspitterPickup"
 }
 

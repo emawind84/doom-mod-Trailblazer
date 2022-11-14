@@ -2,6 +2,30 @@ class NutterSelected : Inventory { Default { Inventory.MaxAmount 1; } }
 class NutterUpgrade : Inventory  { Default { Inventory.MaxAmount 1; } }
 class GloryShotTimer : Inventory { Default { Inventory.MaxAmount 30; } }
 
+class NutcrackerPickup : CustomInventory
+{
+	Default
+	{
+		Inventory.PickupSound "misc/w_pkup";
+		//Inventory.PickupMessage "Obtained a really damn stylish ''Fleshrend'' sawed-off! Peeling off the skins - multiple enemies at a time! (3)";
+	}
+	
+	States
+	{
+	Spawn:
+		NTCG X -1;
+		Stop;
+	Pickup:
+		TNT1 A 0 {
+			if (FindInventory("Nutcracker") == NULL) A_GiveInventory("Nutcracker");
+			else A_GiveInventory("Nutcracker2");
+		}
+		Stop;
+	}
+}
+
+class Nutcracker2 : Nutcracker {}
+
 class Nutcracker : Weapon //replaces BFG9000
 {
 	Default
