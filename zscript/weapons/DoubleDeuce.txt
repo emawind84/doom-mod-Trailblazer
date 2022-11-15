@@ -38,13 +38,13 @@ class DoubleDeucePickup : CustomInventory
 	Pickup:
 		TNT1 A 0 {
 			if (FindInventory("DoubleDeuce") == NULL) A_GiveInventory("DoubleDeuce");
-			else A_GiveInventory("DoubleDeuce2");
+			//else A_GiveInventory("DoubleDeuce2");
 		}
 		Stop;
 	}
 }
 
-class DoubleDeuce2 : DoubleDeuce {}
+//class DoubleDeuce2 : DoubleDeuce {}
 
 class DoubleDeuce : Weapon
 {

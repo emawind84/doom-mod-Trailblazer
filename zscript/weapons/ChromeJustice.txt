@@ -31,13 +31,13 @@ class ChromeJusticePickup : CustomInventory
 	Pickup:
 		TNT1 A 0 {
 			if (FindInventory("ChromeJustice") == NULL) A_GiveInventory("ChromeJustice");
-			else A_GiveInventory("ChromeJustice2");
+			//else A_GiveInventory("ChromeJustice2");
 		}
 		Stop;
 	}
 }
 
-class ChromeJustice2 : ChromeJustice {}
+//class ChromeJustice2 : ChromeJustice {}
 
 class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 {

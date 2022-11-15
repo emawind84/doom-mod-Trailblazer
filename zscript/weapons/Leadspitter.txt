@@ -24,7 +24,7 @@ class LeadspitterPickup : CustomInventory
 		TNT1 A 0 {
 			if(CountInv("LeadspitPickupCounter") == 2) { A_SetMugshotState("Grin"); }
 			if (FindInventory("Leadspitter") == NULL) A_GiveInventory("Leadspitter");
-			else A_GiveInventory("Leadspitter2");
+			//else A_GiveInventory("Leadspitter2");
 			A_GiveInventory("LeadspitPickupCounter");
 			A_GiveInventory("BulletAmmo",15);
 		}
@@ -67,7 +67,7 @@ class UziClipLeft : Ammo
 	}
 }
 
-class Leadspitter2 : Leadspitter {}
+//class Leadspitter2 : Leadspitter {}
 
 class Leadspitter : TrailblazerWeapon
 {

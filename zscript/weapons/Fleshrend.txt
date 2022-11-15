@@ -23,7 +23,7 @@ class FleshrendPickup : CustomInventory
 		TNT1 A 0 {
 			if(CountInv("FleshrendPickupCounter") == 2) { A_SetMugshotState("Grin"); }
 			if (FindInventory("Fleshrend") == NULL) A_GiveInventory("Fleshrend");
-			else A_GiveInventory("Fleshrend2");
+			//else A_GiveInventory("Fleshrend2");
 			A_GiveInventory("FleshrendPickupCounter");
 		}
 		Stop;
@@ -52,7 +52,7 @@ class FleshrendPickup2 : FleshrendPickup
 		TNT1 A 0 {
 			if(CountInv("FleshrendPickupCounter") == 2) { A_SetMugshotState("Grin"); }
 			if (FindInventory("Fleshrend") == NULL) A_GiveInventory("Fleshrend");
-			else A_GiveInventory("Fleshrend2");
+			//else A_GiveInventory("Fleshrend2");
 			A_GiveInventory("FleshrendPickupCounter");
 			A_GiveInventory("DemShellsAmmo",1);
 		}
@@ -82,9 +82,9 @@ class FleshrendPickupCounter : Inventory
 	}
 }
 
-class Fleshrend2 : Fleshrend {}
+//class Fleshrend2 : Fleshrend {}
 
-class Fleshrend : Weapon
+class Fleshrend : TrailblazerWeapon
 {
 	Default
 	{

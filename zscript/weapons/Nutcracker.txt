@@ -18,13 +18,13 @@ class NutcrackerPickup : CustomInventory
 	Pickup:
 		TNT1 A 0 {
 			if (FindInventory("Nutcracker") == NULL) A_GiveInventory("Nutcracker");
-			else A_GiveInventory("Nutcracker2");
+			//else A_GiveInventory("Nutcracker2");
 		}
 		Stop;
 	}
 }
 
-class Nutcracker2 : Nutcracker {}
+//class Nutcracker2 : Nutcracker {}
 
 class Nutcracker : Weapon //replaces BFG9000
 {

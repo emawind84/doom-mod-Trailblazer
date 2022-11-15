@@ -30,7 +30,7 @@ class EliminatorPickup : CustomInventory
 		TNT1 A 0 {
 			if(CountInv("EliminatorPickupCounter") == 2) { A_SetMugshotState("Grin"); }
 			if (FindInventory("Eliminator") == NULL) A_GiveInventory("Eliminator");
-			else A_GiveInventory("Eliminator2");
+			//else A_GiveInventory("Eliminator2");
 			A_GiveInventory("DemShellsAmmo",8);
 			A_GiveInventory("EliminatorPickupCounter",1);
 		}
@@ -59,7 +59,7 @@ class EliminatorPickupCounter : Inventory
 	}
 }
 
-class Eliminator2 : Eliminator {}
+//class Eliminator2 : Eliminator {}
 
 class Eliminator : TrailblazerWeapon
 {

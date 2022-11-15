@@ -27,13 +27,13 @@ class BitchmakerPickup : CustomInventory
 	Pickup:
 		TNT1 A 0 {
 			if (FindInventory("Bitchmaker") == NULL) A_GiveInventory("Bitchmaker");
-			else A_GiveInventory("Bitchmaker2");
+			//else A_GiveInventory("Bitchmaker2");
 		}
 		Stop;
 	}
 }
 
-class Bitchmaker2 : Bitchmaker {}
+//class Bitchmaker2 : Bitchmaker {}
 
 class Bitchmaker : Weapon
 {

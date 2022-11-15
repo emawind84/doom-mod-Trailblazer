@@ -39,13 +39,13 @@ class FMGPickup : CustomInventory
 	Pickup:
 		TNT1 A 0 {
 			if (FindInventory("FMG") == NULL) A_GiveInventory("FMG");
-			else A_GiveInventory("FMG2");
+			//else A_GiveInventory("FMG2");
 		}
 		Stop;
 	}
 }
 
-class FMG2 : FMG {}
+//class FMG2 : FMG {}
 
 class FMG : Weapon
 {

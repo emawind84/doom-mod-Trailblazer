@@ -62,7 +62,7 @@ class Conqueror : Weapon
 		Scale 0.7;
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_OPTIONAL
-		+WEAPON.TWOHANDED
+		//+WEAPON.TWOHANDED
 		//+NOAUTOAIM
 	}
 	

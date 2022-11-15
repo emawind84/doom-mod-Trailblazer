@@ -6,9 +6,8 @@ class TrailblazerWeapon : Weapon
         // let weap = invoker == player.OffhandWeapon ? player.OffhandWeapon : player.ReadyWeapon;
         // if (!weap) return null;
 
-        // int button = weap.bOffhandWeapon ? BT_OFFHANDATTACK : BT_ATTACK;
-        // return GetPlayerInput(INPUT_BUTTONS) & button? ResolveState(state) : null;
-        return null;
+        int button = invoker.bOffhandWeapon ? BT_OFFHANDATTACK : BT_ATTACK;
+        return GetPlayerInput(INPUT_BUTTONS) & button? ResolveState(state) : null;
     }
 
     action state A_JumpIfAltAttack(statelabel state)
@@ -17,8 +16,7 @@ class TrailblazerWeapon : Weapon
         // let weap = invoker == player.OffhandWeapon ? player.OffhandWeapon : player.ReadyWeapon;
         // if (!weap) return null;
 
-        // int button = weap.bOffhandWeapon ? BT_OFFHANDALTATTACK : BT_ALTATTACK;
-        // return GetPlayerInput(INPUT_BUTTONS) & button? ResolveState(state) : null;
-        return null;
+        int button = invoker.bOffhandWeapon ? BT_OFFHANDALTATTACK : BT_ALTATTACK;
+        return GetPlayerInput(INPUT_BUTTONS) & button? ResolveState(state) : null;
     }
 }

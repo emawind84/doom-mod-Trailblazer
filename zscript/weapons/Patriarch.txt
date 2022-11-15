@@ -61,13 +61,13 @@ class PatriarchPickup : CustomInventory
 	Pickup:
 		TNT1 A 0 {
 			if (FindInventory("Patriarch") == NULL) A_GiveInventory("Patriarch");
-			else A_GiveInventory("Patriarch2");
+			//else A_GiveInventory("Patriarch2");
 		}
 		Stop;
 	}
 }
 
-class Patriarch2 : Patriarch {}
+//class Patriarch2 : Patriarch {}
 
 class Patriarch : Weapon
 {
