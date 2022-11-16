@@ -491,7 +491,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		"####" GHI 1;
 	PunchCriminalScums:
 		QML1 A 0 {
-			A_Overlay(2,"PunchFlash");
+			A_Overlay(60,"PunchFlash");
 			If(CountInv("PowerQuadDamage")) {
 				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}

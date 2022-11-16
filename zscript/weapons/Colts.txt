@@ -55,8 +55,8 @@ class Colts : Weapon
 	Ready:
 		CLTU ABC 1;
 		TNT1 A 0 {
-			A_Overlay(2,"RIdle");
-			A_Overlay(-3,"LIdle");
+			A_Overlay(52,"RIdle");
+			A_Overlay(50,"LIdle");
 		}
 	ReadyMain:
 		TNT1 A 1 A_WeaponReady();
@@ -76,8 +76,8 @@ class Colts : Weapon
 			A_TakeInventory("ColtsSelected");
 			A_TakeInventory("PowerCrafterTimer");
 			SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
-			A_Overlay(2,"none");
-			A_Overlay(-3,"none");
+			A_Overlay(52,"none");
+			A_Overlay(50,"none");
 		}
 		CLTU CBA 1;
 	DeselectMain:
@@ -99,7 +99,7 @@ class Colts : Weapon
 			A_PlaySound("Colt/Fire",CHAN_AUTO,0.5);
 			A_PlaySound("Colt/Add",CHAN_AUTO,0.8);
 			A_AlertMonsters();
-			A_Overlay(-2,"LGunflash");
+			A_Overlay(51,"LGunflash");
 			A_FireProjectile("GunsmokeSpawner_Small_Dark",0,0,-12,-3,FPF_NOAUTOAIM);
 			If(CountInv("PowerQuadDamage")) {
 				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
@@ -254,7 +254,7 @@ class Colts : Weapon
 			A_TakeInventory("CradleBurst",1);
 			A_PlaySound("Colt/Fire",CHAN_WEAPON,0.5);
 			A_PlaySound("Colt/Add",CHAN_AUTO,0.8);
-			A_Overlay(3,"RGunflash");
+			A_Overlay(53,"RGunflash");
 			A_FireProjectile("GunsmokeSpawner_Small_Dark",0,0,12,-3,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			If(CountInv("PowerQuadDamage")) {

@@ -433,7 +433,7 @@ class Sidekick : Weapon replaces Pistol
 		Goto AltFire;
 	Zoom:
 		QML1 A 0 {
-			A_Overlay(2,"PunchFlash");
+			A_Overlay(3,"PunchFlash");
 			If(CountInv("PowerQuadDamage")) {
 				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}

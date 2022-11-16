@@ -350,7 +350,7 @@ class Nutcracker : Weapon //replaces BFG9000
 		"####" FDBA 1;
 	PunchHoes:
 		QML1 A 0 {
-			A_Overlay(2,"PunchFlash");
+			A_Overlay(5,"PunchFlash");
 			If(CountInv("PowerQuadDamage")) {
 				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}

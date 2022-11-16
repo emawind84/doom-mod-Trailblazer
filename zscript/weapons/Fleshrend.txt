@@ -133,8 +133,8 @@ class Fleshrend : Weapon
 		"####" EF 1;
 		"####" G 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		"####" H 1;
-		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(-3,"LIdle"); } Else { A_Overlay(-3,"SingleLIdle"); } }
-		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(2,"RIdle"); } Else { A_Overlay(2,"SingleRIdle"); } }
+		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(12,"LIdle"); } Else { A_Overlay(12,"SingleLIdle"); } }
+		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(14,"RIdle"); } Else { A_Overlay(14,"SingleRIdle"); } }
 	ReadyMain:
 		TNT1 A 1 A_WeaponReady();
 		Loop;
@@ -153,8 +153,8 @@ class Fleshrend : Weapon
 			A_TakeInventory("RendSelected");
 			A_TakeInventory("PowerCrafterTimer");
 			SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
-			A_Overlay(2,"none");
-			A_Overlay(-3,"none");
+			A_Overlay(14,"none");
+			A_Overlay(12,"none");
 		}
 		TNT1 A 0 A_JumpIfInventory("FleshrendPickupCounter",2,"TwinDeselect");
 		3NDN A 0 A_JumpIfInventory("RendUpgrade",1,"DeselectMain");
@@ -291,7 +291,7 @@ class Fleshrend : Weapon
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,12,-5,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			A_Recoil(2.0);
-			A_Overlay(3,"RGunflash");
+			A_Overlay(15,"RGunflash");
 			A_FireBullets(8.0, 2.0, 16 + (CountInv("RendUpgrade") ? 8 : 0) + (CountInv("TricorneShot") ? 8 : 0), 5, "ChainsmokerPuff");
 			If(CountInv("PowerQuadDamage")) {
 				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
@@ -443,7 +443,7 @@ class Fleshrend : Weapon
 		"####" A 0 {
 			A_PlaySound("Fleshrend/Fire",CHAN_WEAPON);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,-14,-5,FPF_NOAUTOAIM);
-			A_Overlay(-2,"LGunflash");
+			A_Overlay(13,"LGunflash");
 			A_AlertMonsters();
 			A_Recoil(2.0);
 			A_FireBullets(8.0, 2.0, 16 + (CountInv("RendUpgrade") ? 8 : 0) + (CountInv("TricorneShot") ? 8 : 0), 5, "ChainsmokerPuff");
@@ -521,7 +521,7 @@ class Fleshrend : Weapon
 		"####" A 0 {
 			A_PlaySound("Fleshrend/Fire",CHAN_WEAPON);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,14,-5,FPF_NOAUTOAIM);
-			A_Overlay(3,"RGunflash");
+			A_Overlay(15,"RGunflash");
 			A_AlertMonsters();
 			A_Recoil(2.0);
 			A_FireBullets(8.0, 2.0, 16 + (CountInv("RendUpgrade") ? 8 : 0) + (CountInv("TricorneShot") ? 8 : 0), 5, "ChainsmokerPuff");

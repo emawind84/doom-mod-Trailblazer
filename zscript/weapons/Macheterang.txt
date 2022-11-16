@@ -338,7 +338,7 @@ class Macheterang : Weapon
 				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
-		QML1 A 0 A_Overlay(2,"PunchFlash");
+		QML1 A 0 A_Overlay(6,"PunchFlash");
 		QML1 A 0 A_JumpIfInventory("PowerStrength2",1,2);
 		QML1 A 0 A_Jump(256,3);
 		FML1 A 0 A_SetBlend("Orange",0.05,10);
