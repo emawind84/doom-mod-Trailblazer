@@ -172,7 +172,7 @@ class BlazingspherePortable : TBPowerupPortableBase
 			//Stuff.
 			A_SetMugshotState("Grin");
 			A_SetBlend("Purple",0.3,70);
-			A_PlaySound("Blazingsphere/Pickup",0);
+			A_PlaySound("Blazingsphere/Pickup",CHAN_AUTO);
 			A_GiveInventory("Blazingsphere");
 			A_GiveInventory("NicotineToken",15);
 			A_SpawnItemEx("BlazingsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);

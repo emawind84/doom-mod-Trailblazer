@@ -81,7 +81,7 @@ class FMG : Weapon
 		FHIU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
 		2MIU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
 		FMIU A 0;
-		"####" A 0 A_PlaySound("Sights/Weapon",0,0.8);
+		"####" A 0 A_PlaySound("Sights/Weapon",CHAN_AUTO,0.8);
 		"####" A 0 A_JumpIfInventory("FMGZoomed",1,"UnZoom");
 		"####" A 0 A_ZoomFactor(2.5);
 		"####" A 0 A_SetCrosshair(77);
@@ -121,7 +121,7 @@ class FMG : Weapon
 	SniperMode:
 		"####" A 0 A_JumpIfInventory("FMGUpgrade",1,1);
 		Goto ReadyMain;
-		"####" A 0 A_PlaySound("Tinker/Tink",0,0.7);
+		"####" A 0 A_PlaySound("Tinker/Tink",CHAN_AUTO,0.7);
 		"####" A 0 A_JumpIfInventory("FMGSniperMode",1,4);
 		"####" A 0 A_Print("\c[white]FMG Sniper Mode\n\c[green]Engaged.",1);
 		"####" A 0 A_GiveInventory("FMGSniperMode",1);
@@ -135,7 +135,7 @@ class FMG : Weapon
 	DryFire:
 		"####" A 0 A_JumpIf(GetCvar("TB_ReloadMode"),"AutoReload");
 		"####" A 0 A_JumpIfInventory("FMGFireToken",1,"Gundown");
-		"####" A 0 A_PlaySound("FMG/Dry",0,0.7);
+		"####" A 0 A_PlaySound("FMG/Dry",CHAN_AUTO,0.7);
 		2HGD A 0 A_JumpIf(CountInv("FMGUpgrade") && CountInv("HeavyMachinegun"),4);
 		FHGD A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
 		2MGD A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
@@ -148,7 +148,7 @@ class FMG : Weapon
 	ZoomedDryFire:
 		"####" A 0 A_JumpIf(GetCvar("TB_ReloadMode"),"ZoomedAutoReload");
 		"####" A 0 A_JumpIfInventory("FMGFireToken",1,"GundownZoom");
-		"####" A 0 A_PlaySound("FMG/Dry",0,0.9); //Louder in ironsights. DETAILS!
+		"####" A 0 A_PlaySound("FMG/Dry",CHAN_AUTO,0.9); //Louder in ironsights. DETAILS!
 		
 		2MID A 0 A_JumpIfInventory("FMGUpgrade",1,2);
 		FMID A 0;
@@ -216,12 +216,12 @@ class FMG : Weapon
 		*/
 		"####" A 0 A_GiveInventory("FMGFireToken",1);
 		"####" A 0 {
-			A_PlaySound("FMG/Fire",1,0.8);
+			A_PlaySound("FMG/Fire",CHAN_WEAPON,0.8);
 			A_FireProjectile("GunsmokeSpawner_Small_MG",0,0,7,-5,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			A_GunFlash();
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.05,5);
 			}
 		}
@@ -304,12 +304,12 @@ class FMG : Weapon
 		
 		"####" A 0 {
 			A_GiveInventory("FMGFireToken",1);
-			A_PlaySound("FMG/Fire",1,0.9);
+			A_PlaySound("FMG/Fire",CHAN_WEAPON,0.9);
 			A_AlertMonsters();
 			A_GunFlash();
 			A_FireProjectile("GunsmokeSpawner_Small_MG",0,0,0,-2,FPF_NOAUTOAIM);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.05,5);
 			}
 		}
@@ -394,11 +394,11 @@ class FMG : Weapon
 		2MIF A 0 A_JumpIfInventory("FMGClip",10,1);
 		Goto ZoomedDryFire;
 		2MIF A 0 A_GiveInventory("FMGFireToken",1);
-		2MIF A 0 A_PlaySound("FMG/SniperFire",1,0.9);
+		2MIF A 0 A_PlaySound("FMG/SniperFire",CHAN_WEAPON,0.9);
 		2MIF A 0 A_TakeInventory("FMGClip",10,TIF_NOTAKEINFINITE);
 		2MIF A 0 {
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.15,20);
 			}
 		}
@@ -496,7 +496,7 @@ class FMG : Weapon
 		FHIU A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
 		2MIU A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
 		FMIU A 0;
-		"####" A 0 A_PlaySound("Sights/Weapon",0,0.8);
+		"####" A 0 A_PlaySound("Sights/Weapon",CHAN_AUTO,0.8);
 		"####" A 0 A_ZoomFactor(1.0);
 		"####" F 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
 		"####" ED 1;
@@ -580,7 +580,7 @@ class FMG : Weapon
 		"####" CDE 1;
 		"####" F 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
 		"####" H 1;
-		"####" H 0 A_PlaySound("FMG/Out",0);
+		"####" H 0 A_PlaySound("FMG/Out",CHAN_AUTO);
 
 		"####" IJ 1;
 		"####" K 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
@@ -675,7 +675,7 @@ class FMG : Weapon
 		2MGI A 0 A_Jump(256,2);
 		FMGI A 0;
 		
-		"####" A 0 A_PlaySound("FMG/In",0,0.7);
+		"####" A 0 A_PlaySound("FMG/In",CHAN_AUTO,0.7);
 		"####" A 0 A_SetAngle(angle - 1.0, SPF_INTERPOLATE);
 		"####" J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
 		"####" KL 1;
@@ -770,7 +770,7 @@ class FMG : Weapon
 		"####" FG 1;
 		"####" I 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
 		"####" KL 1;
-		"####" A 0 A_PlaySound("FMG/Cock",0,0.7);
+		"####" A 0 A_PlaySound("FMG/Cock",CHAN_AUTO,0.7);
 		"####" M 1;
 		"####" N 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		"####" OPQ 1;
@@ -826,14 +826,14 @@ class FMG : Weapon
 	PunchFuck:
 		"####" A 0 {
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		QML1 A 0 A_Overlay(2,"PunchFlash");
 		QML1 A 0 A_JumpIfInventory("PowerStrength2",1,2);
 		QML1 A 0 A_Jump(256,3);
 		FML1 A 0 A_SetBlend("Orange",0.05,10);
-		FML1 A 0 A_PlaySound("Melee/Firepunch",0);
+		FML1 A 0 A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" B 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -872,7 +872,7 @@ class FMG : Weapon
 		FHGM A 0 A_JumpIf(CountInv("HeavyMachinegun") && !CountInv("FMGUpgrade"),3);
 		2MGM A 0 A_JumpIf(!CountInv("HeavyMachinegun") && CountInv("FMGUpgrade"),2);
 		FMGM A 0;
-		"####" A 1 A_PlaySound("Punch/Swing",0,1.0);
+		"####" A 1 A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 		"####" B 1;
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" CD 1;
@@ -903,10 +903,10 @@ class FMG : Weapon
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-			A_PlaySound("Machete1/Slash",1,0.9);
-			A_PlaySound("Machete2/Slash",0,0.2);
+			A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+			A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;

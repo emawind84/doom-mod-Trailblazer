@@ -219,7 +219,7 @@ class Conqueror : Weapon
 					}
 				}
 			}
-			if(GetCvar("TB_MinigunMode") == 2) { A_StopSound(0); }
+			if(GetCvar("TB_MinigunMode") == 2) { A_StopSound(CHAN_AUTO); }
 			Return ResolveState(Null);
 		}
 		Loop;
@@ -232,7 +232,7 @@ class Conqueror : Weapon
 		CNQG A 0 A_JumpIf(CountInv("ConquerorUpgrade"),1);
 		Goto Ready;
 		CNQG A 0 {
-			A_PlaySound("Conqueror/Mode",1,CHANF_OVERLAP);
+			A_PlaySound("Conqueror/Mode",CHAN_WEAPON,CHANF_OVERLAP);
 			if(CountInv("ConquerorMode")) {
 				A_TakeInventory("ConquerorMode",1);
 				A_Print("\c[white]Grenades + Classic shells loaded.",2);
@@ -307,7 +307,7 @@ class Conqueror : Weapon
 	QuadLol:
 		TNT1 A 1 {
 			if(CountInv("PowerQuadDamage") && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK|BT_ALTATTACK)) {
-				A_PlaySound("QuadDamage/Fire",0);
+				A_PlaySound("QuadDamage/Fire",CHAN_AUTO);
 				A_SetBlend("Blue",0.075,25);
 				Return ResolveState("QuadBanana");
 			}
@@ -334,8 +334,8 @@ class Conqueror : Weapon
 			A_QuakeEx(2,2,2,7,0,256,"none",QF_SCALEDOWN);
 			A_QuakeEx(2,2,2,7,0,256,"none",QF_SCALEDOWN|QF_WAVE,1.0,1.0,1.5);
 			A_TakeInventory("ConquerorAmmo",1,TIF_NOTAKEINFINITE);
-			A_StartSound("Patriarch/Cannon",1,CHANF_OVERLAP); //A_PlaySound("Patriarch/Cannon",0);
-			A_StartSound("Patriarch/Add",1,CHANF_OVERLAP,0.7); //A_PlaySound("Patriarch/Add",1,0.7);
+			A_StartSound("Patriarch/Cannon",1,CHANF_OVERLAP); //A_PlaySound("Patriarch/Cannon",CHAN_AUTO);
+			A_StartSound("Patriarch/Add",1,CHANF_OVERLAP,0.7); //A_PlaySound("Patriarch/Add",CHAN_WEAPON,0.7);
 			A_FireProjectile("Conqueror90mmProjectile",0,0,0,-5);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,0,-7,FPF_NOAUTOAIM);
 			A_SetPitch(pitch-2.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -678,7 +678,7 @@ class Conqueror : Weapon
 			A_OverlayRenderstyle(12,STYLE_Add);
 			if(CountInv("HexenCounter")) { A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE); A_TakeInventory("GreenMana",1,TIF_NOTAKEINFINITE); }
 			else 						 { A_TakeInventory("ThrottleAmmo",1,TIF_NOTAKEINFINITE); }
-			A_PlaySound("Browning/Fire",0,0.7); //A_SpawnItemEx("ConqBrowningSounder",0,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
+			A_PlaySound("Browning/Fire",0,0.7); //A_SpawnItemEx("ConqBrowningSounder",CHAN_AUTO,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
 			A_FireProjectile("BrowningBullet",0,0,-14,0,FPF_NOAUTOAIM);
 			A_FireProjectile("GunsmokeSpawner_Small",0,0,-26,-1,FPF_NOAUTOAIM);
 			A_FireProjectile("BuellerCasingSpawnerMirror",0,0,-15,-3,FPF_NOAUTOAIM);
@@ -699,7 +699,7 @@ class Conqueror : Weapon
 			A_OverlayRenderstyle(13,STYLE_Add);
 			if(CountInv("HexenCounter")) { A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE); A_TakeInventory("GreenMana",1,TIF_NOTAKEINFINITE); }
 			else 						 { A_TakeInventory("ThrottleAmmo",1,TIF_NOTAKEINFINITE); }
-			A_PlaySound("Browning/Fire",0,0.7); //A_SpawnItemEx("ConqBrowningSounder",0,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
+			A_PlaySound("Browning/Fire",0,0.7); //A_SpawnItemEx("ConqBrowningSounder",CHAN_AUTO,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
 			A_FireProjectile("BrowningBullet",0,0,14,0,FPF_NOAUTOAIM);
 			A_FireProjectile("GunsmokeSpawner_Small",0,0,26,-1,FPF_NOAUTOAIM);
 			A_FireProjectile("BuellerCasingSpawner",0,0,15,-3,FPF_NOAUTOAIM);
@@ -746,10 +746,10 @@ class Conqueror90mmProjectile : FastProjectile
 			{
 				A_SetDamageType("MasteringExplosions");
 			}
-			A_PlaySound("Explosion/Init",0,0.7);
-			A_PlaySound("Explosion/Main",0,0.7);
-			A_PlaySound("Explosion/Layer",0,0.7);
-			A_PlaySound("Explosion/Flavor",0,0.7);
+			A_PlaySound("Explosion/Init",CHAN_AUTO,0.7);
+			A_PlaySound("Explosion/Main",CHAN_AUTO,0.7);
+			A_PlaySound("Explosion/Layer",CHAN_AUTO,0.7);
+			A_PlaySound("Explosion/Flavor",CHAN_AUTO,0.7);
 			A_SpawnItemEx("Patriarch_Main",0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_Explode((120),148);
 		}
@@ -799,7 +799,7 @@ class ConquerorMortarUpward : FastProjectile
 	{
 	Spawn:
 		TNT1 A 43 NoDelay A_SpawnItemEx("ConquerorMortarLockdown",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION);
-		TNT1 A 25 A_PlaySound("Conqueror/MortarIncoming",0);
+		TNT1 A 25 A_PlaySound("Conqueror/MortarIncoming",CHAN_AUTO);
 		TNT1 A 0 A_SpawnItemEx("ConquerorMortarBombardment",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
 		Stop;
 	}
@@ -828,12 +828,12 @@ class ConquerorMortarStrikeSpawner : FastProjectile
 		Loop;
 	XDeath:
 		TNT1 A 43 A_SpawnItemEx("ConquerorMortarLockdown",6,0,0,0,0,0,0,SXF_NOCHECKPOSITION);
-		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",0);
+		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",CHAN_AUTO);
 		TNT1 A 0 A_SpawnItemEx("ConquerorMortarBombardment",6,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
 		Stop;
 	Death:
 		TNT1 A 43 A_SpawnItemEx("ConquerorMortarLockdown",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION);
-		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",0);
+		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",CHAN_AUTO);
 		TNT1 A 0 A_SpawnItemEx("ConquerorMortarBombardment",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
 		Stop;
 	}
@@ -962,9 +962,9 @@ class ConquerorMortarDownward : FastProjectile
 			A_Stop();
 			User_Lifespan = 14;
 			
-			A_PlaySound("Spikebomb/Explosion",0,0.9);
-			A_PlaySound("Conqueror/MortarExplosion",0);
-			A_PlaySound("Spikebomb/Far",0,0.8);
+			A_PlaySound("Spikebomb/Explosion",CHAN_AUTO,0.9);
+			A_PlaySound("Conqueror/MortarExplosion",CHAN_AUTO);
+			A_PlaySound("Spikebomb/Far",CHAN_AUTO,0.8);
 			
 			//A_SpawnItemEx("SpikebombBurst",0,0,5,0,0,0,0,SXF_TRANSFERPOINTERS);
 			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
@@ -1008,7 +1008,7 @@ class ConqShotgunSounder : Actor
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 35; A_PlaySound("Fleshrend/Fire",0); }
+		TNT1 A 0 NoDelay { timer = 35; A_PlaySound("Fleshrend/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1023,7 +1023,7 @@ class ConqJusticeSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("ChromeJustice/Fire",0); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("ChromeJustice/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1039,7 +1039,7 @@ class ConqMachinegunSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MachinegunFire",0); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MachinegunFire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1055,7 +1055,7 @@ class ConqGrenadeSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Patriarch/Fire",0,0.85); A_PlaySound("Patriarch/Add",0,0.85); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Patriarch/Fire",0,0.85); A_PlaySound("Patriarch/Add",CHAN_AUTO,0.85); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1070,7 +1070,7 @@ class ConqMagnumSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Magnum/Fire",0); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Magnum/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1086,7 +1086,7 @@ class ConqBrowningSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 55; A_PlaySound("Browning/Fire",0); }
+		TNT1 A 0 NoDelay { timer = 55; A_PlaySound("Browning/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1102,7 +1102,7 @@ class ConqMortarSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MortarFire",0); A_PlaySound("Conqueror/MortarFire",0); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MortarFire",0); A_PlaySound("Conqueror/MortarFire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;

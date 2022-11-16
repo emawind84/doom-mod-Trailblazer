@@ -100,8 +100,8 @@ class DoubleDeuce : Weapon
 		DEUF B 0 Bright;
 		"####" "#" 1 Bright {
 			A_TakeInventory("DoubleDeuceClip",1);
-			A_PlaySound("DoubleDeuce/Fire",1);
-			A_PlaySound("Nutcracker/Fire",0,0.4);
+			A_PlaySound("DoubleDeuce/Fire",CHAN_WEAPON);
+			A_PlaySound("Nutcracker/Fire",CHAN_AUTO,0.4);
 			if(GetCvar("TB_SmokeReduction") < 2) {
 			For(int Smokescreen = 0; Smokescreen < 10; Smokescreen++) {
 				A_FireProjectile("Gunsmoke_Large_Dark",frandom(-15.0,15.0),0,CountInv("DoubleDeuceClip") > 1 ? 6 : 13,-5,FPF_NOAUTOAIM,frandom(-10.0,10.0));
@@ -121,7 +121,7 @@ class DoubleDeuce : Weapon
 			}
 			A_SetBlend("Yellow",0.2,12);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.2,35);
 			}
 			A_QuakeEx(6,6,6,14,0,16,"none",QF_SCALEDOWN);
@@ -135,9 +135,9 @@ class DoubleDeuce : Weapon
 		Goto DryFire;
 		DEUF C 1 Bright {
 			A_TakeInventory("DoubleDeuceClip",2);
-			A_PlaySound("DoubleDeuce/Fire",0);
-			A_PlaySound("DoubleDeuce/FireTwo",1);
-			A_PlaySound("Nutcracker/Fire",0,0.8);
+			A_PlaySound("DoubleDeuce/Fire",CHAN_AUTO);
+			A_PlaySound("DoubleDeuce/FireTwo",CHAN_WEAPON);
+			A_PlaySound("Nutcracker/Fire",CHAN_AUTO,0.8);
 			if(GetCvar("TB_SmokeReduction") < 2) {
 			For(int Smokescreen = 0; Smokescreen < 10; Smokescreen++) {
 				A_FireProjectile("Gunsmoke_Large_Dark",frandom(-15.0,15.0),0,6,-5,FPF_NOAUTOAIM,frandom(-10.0,10.0));
@@ -160,7 +160,7 @@ class DoubleDeuce : Weapon
 			}
 			A_SetBlend("Yellow",0.2,16);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.2,35);
 			}
 			A_QuakeEx(8,8,8,25,0,16,"none",QF_SCALEDOWN);
@@ -171,7 +171,7 @@ class DoubleDeuce : Weapon
 		Goto ItsTheNutshack;
 	DryFire:
 		DEUG A 0 A_JumpIf(GetCvar("TB_ReloadMode"),"AutoReload");
-		DEUG A 0 A_PlaySound("ChromeJustice/Dry",0,0.7);
+		DEUG A 0 A_PlaySound("ChromeJustice/Dry",CHAN_AUTO,0.7);
 		DEUG A 1 A_WeaponOffset(1,33);
 		DEUG A 1 A_WeaponOffset(3,35);
 		DEUG A 1 A_WeaponOffset(2,34);
@@ -265,7 +265,7 @@ class DoubleDeuce : Weapon
 		DEUO D 1;
 		
 		DEUO D 0 {
-			A_PlaySound("DoubleDeuce/Open",0,0.8);
+			A_PlaySound("DoubleDeuce/Open",CHAN_AUTO,0.8);
 			A_QuakeEx(2,2,2,12,0,10,"none",QF_SCALEDOWN|QF_WAVE,1.0,1.0,-5.0);
 		}
 		DE1O A 0 A_JumpIf(CountInv("DoubleDeuceClip"),2);
@@ -302,7 +302,7 @@ class DoubleDeuce : Weapon
 		"####" J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
 		"####" K 1;
 		TNT1 A 1 {
-			A_PlaySound("DoubleDeuce/Load",0,0.8);
+			A_PlaySound("DoubleDeuce/Load",CHAN_AUTO,0.8);
 			A_QuakeEx(2,2,2,12,0,10,"none",QF_SCALEDOWN|QF_WAVE,1.0,1.0,5.0);
 		}
 		TNT1 A 0 A_JumpIf(CountInv("HexenCounter"),"HexenLoad");
@@ -352,7 +352,7 @@ class DoubleDeuce : Weapon
 		"####" ML 1;
 		"####" K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		"####" J 0 {
-			A_PlaySound("DoubleDeuce/Close",0,0.8);
+			A_PlaySound("DoubleDeuce/Close",CHAN_AUTO,0.8);
 			A_QuakeEx(2,2,2,12,0,10,"none",QF_SCALEDOWN|QF_WAVE,1.0,1.0,-5.0);
 		}
 		"####" JBA 1;
@@ -376,14 +376,14 @@ class DoubleDeuce : Weapon
 	PunchHoes:
 		QML1 A 0 {
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
-			A_PlaySound("Punch/Swing",0,1.0);
+			A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",0);
+			A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -417,7 +417,7 @@ class DoubleDeuce : Weapon
 	PunchFlash:
 		NTFG D 0 A_JumpIfInventory("NutterUpgrade",1,2);
 		NTCG D 0;
-		"####" D 1 A_PlaySound("Punch/Swing",0,1.0);
+		"####" D 1 A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 		
 		NTUM A 0 A_JumpIfInventory("NutterUpgrade",1,2);
 		NTCM A 0;
@@ -450,10 +450,10 @@ class DoubleDeuce : Weapon
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",0,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -524,7 +524,7 @@ class DoubleDeuceProjectile : Actor // FastProjectile
 	Spawn:
 		TRAC A 0 NoDelay {
 			A_ScaleVelocity(frandom(0.8,1.2));
-			A_ChangeVelocity(0, 0, 2, CVF_RELATIVE); //A_PlaySound("Nutcracker/Fly",0,0.4,1);
+			A_ChangeVelocity(0, 0, 2, CVF_RELATIVE); //A_PlaySound("Nutcracker/Fly",CHAN_AUTO,0.4,1);
 			if(CountInv("DeuceUpgrade",AAPTR_TARGET)) {
 				BounceCount = 8;
 				//WallBounceFactor = 0.85;
@@ -548,7 +548,7 @@ class DoubleDeuceProjectile : Actor // FastProjectile
 			bNOGRAVITY = 0;
 			bUSEBOUNCESTATE = 0; // All this just to make damn fucking sure it doesn't freak the fuck out.
 			A_Explode(30,64,0);
-			A_PlaySound("Nutcracker/Hit",0,0.5);
+			A_PlaySound("Nutcracker/Hit",CHAN_AUTO,0.5);
 			A_SpawnItemEx("NutcrackerPuff",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_QuakeEx(random(1,3),random(1,3),random(1,3),random(9,18),0,128,"none",QF_SCALEDOWN);
 		}

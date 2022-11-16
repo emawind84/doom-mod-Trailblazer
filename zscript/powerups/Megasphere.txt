@@ -149,7 +149,7 @@ class MegaspherePortable : TBPowerupPortableBase
 				A_GiveInventory("NicotineToken",5);
 			}
 			//Stuff.
-			A_PlaySound("Megasphere/Pickup",0);
+			A_PlaySound("Megasphere/Pickup",CHAN_AUTO);
 			A_SpawnItemEx("CigbuttHail",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_SpawnItemEx("MegasphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
 			A_GiveInventory("MegasphereArmor2",1);

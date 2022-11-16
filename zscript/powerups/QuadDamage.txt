@@ -28,7 +28,7 @@ class QuadDamageItem : TBPowerupBase
 		
 	Pickup:
 		TNT1 A 0 {
-			A_PlaySound("QuadDamage/Pickup",0);
+			A_PlaySound("QuadDamage/Pickup",CHAN_AUTO);
 			//Alchemist's Dream storing.
 			if(CountInv("AlchemistsDream") &&
 			  (CountInv("QuadDamagePortable") < 3) &&
@@ -154,7 +154,7 @@ class QuadDamagePortable : TBPowerupPortableBase
 	Use:
 		TNT1 A 0 {
 			A_SetMugshotState("Grin");
-			A_PlaySound("QuadDamage/Pickup",0);
+			A_PlaySound("QuadDamage/Pickup",CHAN_AUTO);
 			A_SpawnItemEx("SoulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
 			A_SpawnItemEx("QuadAnnounce",0,0,0,0,0,0,0,SXF_SETTARGET);
 			A_QuakeEx(1,1,1,45,0,192,"none",QF_SCALEDOWN);
@@ -193,10 +193,10 @@ class QuadAnnounce : Actor
 	{
 	Spawn:
 		TNT1 A 10 NoDelay {
-			A_PlaySound("Soulsphere/Pickup",0);
+			A_PlaySound("Soulsphere/Pickup",CHAN_AUTO);
 			A_QuakeEx(4,4,4,70,0,768,"none",QF_SCALEDOWN);
 		}
-		TNT1 A 0 A_PlaySound("QuadDamage/Announcer",0);
+		TNT1 A 0 A_PlaySound("QuadDamage/Announcer",CHAN_AUTO);
 	Looplet:
 		TNT1 A 1 {
 			A_Countdown();

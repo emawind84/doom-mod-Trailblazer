@@ -251,14 +251,14 @@ class Eliminator : Weapon
 	Punch:
 		QML1 A 0 {
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
-			A_PlaySound("Punch/Swing",0,1.0);
+			A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",0);
+			A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -305,10 +305,10 @@ class Eliminator : Weapon
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-			A_PlaySound("Machete1/Slash",1,0.9);
-			A_PlaySound("Machete2/Slash",0,0.2);
+			A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+			A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -350,8 +350,8 @@ class Eliminator : Weapon
 		}
 	SingleRMain:
 		LEVG A 0 {
-			A_PlaySound("Eliminator/Fire",1,0.5);
-			A_PlaySound("Eliminator/AddFire",0,0.7);
+			A_PlaySound("Eliminator/Fire",CHAN_WEAPON,0.5);
+			A_PlaySound("Eliminator/AddFire",CHAN_AUTO,0.7);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,7,1,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			A_Recoil(4.0);
@@ -380,7 +380,7 @@ class Eliminator : Weapon
 				}
 			}
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.1,15);
 			}
 		}
@@ -399,7 +399,7 @@ class Eliminator : Weapon
 		LEVG D 1;
 		LEVG E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		LEVG F 1;
-		LEVG F 0 A_PlaySound("Eliminator/Open",0,0.8);
+		LEVG F 0 A_PlaySound("Eliminator/Open",CHAN_AUTO,0.8);
 		LE2G A 0 A_JumpIf(invoker.BulletShotRight,2);
 		LEVG A 0;
 		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
@@ -411,7 +411,7 @@ class Eliminator : Weapon
 		}
 		LEVG K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		LEVG L 1;
-		LEVG F 0 A_PlaySound("Eliminator/Close",0,0.8);
+		LEVG F 0 A_PlaySound("Eliminator/Close",CHAN_AUTO,0.8);
 		LEVG M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
 		LEVG N 1;
 		LEVG O 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
@@ -428,7 +428,7 @@ class Eliminator : Weapon
 		//LEVG A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK), "SingleRFire");
 		Goto SingleRIdle;
 	SingleRNope:
-		LEVG A 0 A_PlaySound("Eliminator/DryFire",0,0.6);
+		LEVG A 0 A_PlaySound("Eliminator/DryFire",CHAN_AUTO,0.6);
 		LEVG A 1 A_OverlayOffset(OverlayID(),3,3);
 		LEVG A 1 A_OverlayOffset(OverlayID(),2,2);
 		LEVG A 1 A_OverlayOffset(OverlayID(),1,1);
@@ -447,14 +447,14 @@ class Eliminator : Weapon
 		QML1 A 0 {
 			A_OverlayFlags(OverlayID(),PSPF_FLIP|PSPF_MIRROR,0);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
-			A_PlaySound("Punch/Swing",0,1.0);
+			A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",0);
+			A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -497,8 +497,8 @@ class Eliminator : Weapon
 	LMain:
 		LEVG A 0 {
 			A_GiveInventory("LeftCycle",1);
-			A_PlaySound("Eliminator/Fire",1,0.5);
-			A_PlaySound("Eliminator/AddFire",0,0.7);
+			A_PlaySound("Eliminator/Fire",CHAN_WEAPON,0.5);
+			A_PlaySound("Eliminator/AddFire",CHAN_AUTO,0.7);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,-7,1,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			A_Recoil(4.0);
@@ -526,7 +526,7 @@ class Eliminator : Weapon
 				}
 			}
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.1,15);
 			}
 		}
@@ -545,7 +545,7 @@ class Eliminator : Weapon
 		LEVG D 1;
 		LEVG E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		LEVG F 1;
-		LEVG F 0 A_PlaySound("Eliminator/Open",0,0.8);
+		LEVG F 0 A_PlaySound("Eliminator/Open",CHAN_AUTO,0.8);
 		LE2G A 0 A_JumpIf(invoker.BulletShotLeft,2);
 		LEVG A 0;
 		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
@@ -557,7 +557,7 @@ class Eliminator : Weapon
 		}
 		LEVG K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		LEVG L 1;
-		LEVG F 0 A_PlaySound("Eliminator/Close",0,0.8);
+		LEVG F 0 A_PlaySound("Eliminator/Close",CHAN_AUTO,0.8);
 		LEVG M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
 		LEVG N 1;
 		LEVG O 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
@@ -586,7 +586,7 @@ class Eliminator : Weapon
 		TNT1 A 0 A_Light0;
 		Stop;
 	LNope:
-		LEVG A 0 A_PlaySound("Eliminator/DryFire",0,0.6);
+		LEVG A 0 A_PlaySound("Eliminator/DryFire",CHAN_AUTO,0.6);
 		LEVG A 1 A_OverlayOffset(OverlayID(),3,3);
 		LEVG A 1 A_OverlayOffset(OverlayID(),2,2);
 		LEVG A 1 A_OverlayOffset(OverlayID(),1,1);
@@ -613,10 +613,10 @@ class Eliminator : Weapon
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",0,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -657,8 +657,8 @@ class Eliminator : Weapon
 		}
 	RMain:
 		LEVG A 0 {
-			A_PlaySound("Eliminator/Fire",1,0.5);
-			A_PlaySound("Eliminator/AddFire",0,0.7);
+			A_PlaySound("Eliminator/Fire",CHAN_WEAPON,0.5);
+			A_PlaySound("Eliminator/AddFire",CHAN_AUTO,0.7);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,7,1,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			A_Recoil(4.0);
@@ -686,7 +686,7 @@ class Eliminator : Weapon
 				}
 			}
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 0);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.1,15);
 			}
 		}
@@ -705,7 +705,7 @@ class Eliminator : Weapon
 		LEVG D 1;
 		LEVG E 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		LEVG F 1;
-		LEVG F 0 A_PlaySound("Eliminator/Open",0,0.8);
+		LEVG F 0 A_PlaySound("Eliminator/Open",CHAN_AUTO,0.8);
 		LE2G A 0 A_JumpIf(invoker.BulletShotRight,2);
 		LEVG A 0;
 		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
@@ -717,7 +717,7 @@ class Eliminator : Weapon
 		}
 		LEVG K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		LEVG L 1;
-		LEVG F 0 A_PlaySound("Eliminator/Close",0,0.8);
+		LEVG F 0 A_PlaySound("Eliminator/Close",CHAN_AUTO,0.8);
 		LEVG M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
 		LEVG N 1;
 		LEVG O 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
@@ -749,7 +749,7 @@ class Eliminator : Weapon
 		TNT1 A 0 A_Light0;
 		Stop;
 	RNope:
-		LEVG A 0 A_PlaySound("Eliminator/DryFire",0,0.6);
+		LEVG A 0 A_PlaySound("Eliminator/DryFire",CHAN_AUTO,0.6);
 		LEVG A 1 A_OverlayOffset(OverlayID(),3,3);
 		LEVG A 1 A_OverlayOffset(OverlayID(),2,2);
 		LEVG A 1 A_OverlayOffset(OverlayID(),1,1);

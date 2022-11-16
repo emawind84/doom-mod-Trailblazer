@@ -35,7 +35,7 @@ class Blastsphere : TBPowerupBase
 			   GetPlayerInput(INPUT_BUTTONS) & BT_USE)
 			{
 				If(CountInv("PowerQuadDamage")) {
-					A_PlaySound("QuadDamage/Fire", 0);
+					A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				}
 				A_Print("$BLASTSPHERESTORED");
 				A_GiveInventory("BlastspherePortable",1);
@@ -109,10 +109,10 @@ class BlastspherePortable : TBPowerupPortableBase
 		TNT1 A 0 {
 			A_SetBlend("Orange",0.1,70);
 				If(CountInv("PowerQuadDamage")) {
-					A_PlaySound("QuadDamage/Fire", 0);
+					A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 					A_SetBlend("Blue",0.1,70);
 				}
-			A_PlaySound("Lucky/Strike",0);
+			A_PlaySound("Lucky/Strike",CHAN_AUTO);
 			A_SpawnItemEx("BlastsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
 			A_SpawnItemEx("BlastsphereBlast",0,0,0,0,0,0,0,SXF_SETTARGET);
 			
@@ -144,9 +144,9 @@ class BlastsphereBlast : Actor //Maslo maslane.
 		TNT1 A 0 NoDelay {
 			User_Blastspan = 14;
 			
-			A_PlaySound("Spikebomb/Explosion",0,0.9);
-			A_PlaySound("Spikebomb/Add",0);
-			A_PlaySound("Spikebomb/Far",0,0.8);
+			A_PlaySound("Spikebomb/Explosion",CHAN_AUTO,0.9);
+			A_PlaySound("Spikebomb/Add",CHAN_AUTO);
+			A_PlaySound("Spikebomb/Far",CHAN_AUTO,0.8);
 			
 			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
 			//A_SpawnItemEx("BlastsphereShatter",0,0,35,0,0,0,0,SXF_TRANSFERPOINTERS);
