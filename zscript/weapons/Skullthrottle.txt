@@ -100,7 +100,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 		CHNU DCBA 1;
 		TNT1 A 0 {
 			A_StopSound(1);
-			A_StopSound(5);
+			A_StopSound(0);
 			SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
 		}
 		TNT1 A 1 A_Lower(18);
@@ -116,7 +116,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 	Fire:
 		CHNG A 0 A_JumpIfInventory("ThrottleUpgrade",1,"ReadyMain2");
 		CHNG A 0 A_JumpIfInventory("ThrottleInstaspin",1,"ToastMcFire");
-		CHNG A 0 A_PlaySound("Throttle/WindUp",5,0.8);
+		CHNG A 0 A_PlaySound("Throttle/WindUp",0,0.8);
 		CHNG GFEDCBA 1 A_AlertMonsters();
 		CHNG A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),5);
 		CHNG GECA 1;
@@ -131,8 +131,8 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 		CHNG A 0 A_GiveInventory("SlowRideMinigun", 1);
 	ToastMcReFire:
 		CHNF A 0 {
-			A_PlaySound("Throttle/Fire",1,0.8,1);
-			A_PlaySound("Throttle/Add",5,0.9,1);
+			A_PlaySound("Throttle/Fire",1,0.8);
+			A_PlaySound("Throttle/Add",0,0.9);
 			if(GetCvar("TB_QuakeRecoil")) { A_QuakeEx(2,2,2,8,0,2,"none",QF_SCALEDOWN); }
 			If(CountInv("ThrottleCycle") >= 8) //If the animator had reached the full cycle at this moment, reset it.
 			{
@@ -238,7 +238,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 			A_PlaySound("Throttle/Dry",1,0.8,1);
 			A_TakeInventory("SlowRideMinigun", 1);
 			A_TakeInventory("ThrottleCycle", 8);
-			A_StopSound(5);
+			A_StopSound(0);
 		}
 		CHNG GECAGECAGECAGECA 1 A_AlertMonsters();
 		CHNG A 0 A_ReFire("ToastMcReFire");
@@ -248,7 +248,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 			A_ZoomFactor(1.0);
 			A_TakeInventory("SlowRideMinigun", 1);
 			A_TakeInventory("ThrottleCycle", 8);
-			A_StopSound(5);
+			A_StopSound(0);
 			A_PlaySound("Throttle/WindDown",1,0.8);
 		}
 		CHNE CBA 1 { A_FireProjectile("GunsmokeSpawner_Large",0,0,6,-1,FPF_NOAUTOAIM); A_ReFire("ToastMcFire"); }
@@ -261,7 +261,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 			A_ZoomFactor(1.0);
 			A_TakeInventory("SlowRideMinigun", 1);
 			A_TakeInventory("ThrottleCycle", 8);
-			A_StopSound(5);
+			A_StopSound(0);
 			A_PlaySound("Throttle/WindDown",1,0.8);
 		}
 		CHNG GECAGECAGECA 1 A_ReFire("ToastMcFire");
@@ -299,7 +299,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 		BRWF A 0 A_GiveInventory("SlowRideMinigun",1);
 	BrowningReFire:
 		BRWF A 0 {
-			A_PlaySound("Browning/Fire",6,0.9);
+			A_PlaySound("Browning/Fire",0,0.9);
 			if(GetCvar("TB_QuakeRecoil")) { A_QuakeEx(2,2,1,4,0,2,"none",QF_SCALEDOWN); }
 			A_AlertMonsters();
 			A_GiveInventory("BrowningCycle",1);
@@ -348,7 +348,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 		Loop;
 	ThrottleFire:
 		CH2G A 0 A_JumpIfInventory("ThrottleInstaspin",1,"ThrottleMcFire");
-		CH2G A 0 A_PlaySound("Throttle/WindUp",5,0.8);
+		CH2G A 0 A_PlaySound("Throttle/WindUp",0,0.8);
 		CH2G GFEDCBA 1 A_AlertMonsters();
 		CH2G A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),5);
 		CH2G GECA 1;
@@ -364,8 +364,8 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 	ThrottleMcReFire:
 		CH2F A 0 A_JumpIfNoAmmo("ThrottleNoMoreMangling");
 		CH2F A 0 {
-			A_PlaySound("Throttle/Fire",1,0.8,1);
-			A_PlaySound("Throttle/Add",5,0.9,1);
+			A_PlaySound("Throttle/Fire",1,0.8);
+			A_PlaySound("Throttle/Add",0,0.9);
 			if(GetCvar("TB_QuakeRecoil")) { A_QuakeEx(2,2,2,8,0,2,"none",QF_SCALEDOWN); }
 			If(CountInv("ThrottleCycle") >= 8) //If the animator had reached the full cycle at this moment, reset it.
 			{
@@ -471,7 +471,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 			A_PlaySound("Throttle/Dry",1,0.8,1);
 			A_TakeInventory("SlowRideMinigun", 1);
 			A_TakeInventory("ThrottleCycle", 8);
-			A_StopSound(5);
+			A_StopSound(0);
 		}
 		CH2G GECAGECAGECAGECA 1 A_AlertMonsters();
 		CH2G A 0 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & (BT_ALTATTACK), "ThrottleMcReFire");
@@ -481,7 +481,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 		A_ZoomFactor(1.0);
 		A_TakeInventory("SlowRideMinigun", 1);
 		A_TakeInventory("ThrottleCycle", 8);
-		A_StopSound(5);
+		A_StopSound(0);
 		A_PlaySound("Throttle/WindDown",1,0.8);
 	}
     CH2E CBA 1 { A_FireProjectile("GunsmokeSpawner_Large",0,0,6,-1,FPF_NOAUTOAIM); Return A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "ThrottleMcFire"); }
@@ -494,7 +494,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 		A_ZoomFactor(1.0);
 		A_TakeInventory("SlowRideMinigun", 1);
 		A_TakeInventory("ThrottleCycle", 8);
-		A_StopSound(5);
+		A_StopSound(0);
 		A_PlaySound("Throttle/WindDown",1,0.8);
 	}
     CH2G GECAGECAGECA 1 A_JumpIf(GetPlayerInput(INPUT_BUTTONS) & BT_ALTATTACK, "ThrottleMcFire");
@@ -517,12 +517,12 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 			If(CountInv("PowerQuadDamage")) {
 				A_StartSound("QuadDamage/Fire", 8);
 			}
-			A_PlaySound("Punch/Swing",6,1.0);
+			A_PlaySound("Punch/Swing",0,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",5);
+			A_PlaySound("Melee/Firepunch",0);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -583,7 +583,7 @@ class Skullthrottle : Weapon replaces PlasmaRifle
 		TNT1 A 1;
 		TNT1 A 0 {
 			A_PlaySound("Machete1/Slash",1,0.9);
-			A_PlaySound("Machete2/Slash",5,0.2);
+			A_PlaySound("Machete2/Slash",0,0.2);
 			If(CountInv("PowerQuadDamage")) {
 				A_StartSound("QuadDamage/Fire", 8);
 			}

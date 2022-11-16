@@ -55,14 +55,14 @@ class Paintrain : Weapon
 		RAIU ABCDE 1;
 		RAIG A 1;
 	ReadyMain:
-		RAIG A 0 A_PlaySound("Paintrain/Idle",5,0.5,1);
+		RAIG A 0 A_PlaySound("Paintrain/Idle",0,0.5,1);
 		RAIG AABBCCBB 1 {
 			A_WeaponReady(WRF_ALLOWRELOAD|WRF_ALLOWZOOM);
 			Return A_JumpIf(CountInv("MacheteGoesFast") && CountInv("MacheteAmmo"),"CaberToss");
 		}
 		Loop;
 	ZoomedReady:
-		RAIS B 0 A_PlaySound("Paintrain/Idle",5,0.5,1);
+		RAIS B 0 A_PlaySound("Paintrain/Idle",0,0.5,1);
 		RAIS B 1 A_WeaponReady();
 		Loop;
 		
@@ -77,7 +77,7 @@ class Paintrain : Weapon
 		}
 		RAIG A 1;
 		RAIU EDCBA 1;
-		TNT1 A 0 A_StopSound(5);
+		TNT1 A 0 A_StopSound(0);
 		TNT1 A 1 A_Lower(12);
 		Wait;
 		
@@ -93,7 +93,7 @@ class Paintrain : Weapon
 	Fire:
 		RAIG A 0 A_JumpIf(CountInv("PaintrainZoomed"),"ZoomedFire");
 		RAIC A 0 {
-			A_PlaySound("Paintrain/Charge",5,0.85);
+			A_PlaySound("Paintrain/Charge",0,0.85);
 			A_Light1();
 		}
 		//No interpolation so it fits with the rest of weapons.
@@ -105,9 +105,9 @@ class Paintrain : Weapon
 		RAIF ABC 2 Bright A_WeaponOffset(0,32);
 		RAIF D 1 Bright {
 			A_WeaponOffset(4,36);
-			A_PlaySound("Paintrain/MainFire",5,0.85);
+			A_PlaySound("Paintrain/MainFire",0,0.85);
 			A_PlaySound("Paintrain/Fire",1,0.85);
-			A_PlaySound("Paintrain/Add",6,0.45);
+			A_PlaySound("Paintrain/Add",0,0.45);
 			A_AlertMonsters();
 			A_GunFlash();
 			A_RailAttack((350) + (CountInv("PaintrainUpgrade") > 0 ? (75) : 0), 3, 1, "", "blue", RGF_NORANDOMPUFFZ|RGF_SILENT/*|RGF_NOPIERCING*/, 0, "PaintrainPuff", 0, 0, 0, 35, 64.0, 0.5, "PaintrainCore", 2, 0, 0);
@@ -116,7 +116,7 @@ class Paintrain : Weapon
 			A_SetPitch(pitch-1.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 			A_SetPitch(pitch-1.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire",4);
+				A_PlaySound("QuadDamage/Fire",0);
 				A_SetBlend("Blue",0.075,25);
 			}
 		}
@@ -189,7 +189,7 @@ class Paintrain : Weapon
 		
 	ZoomedFire:
 		RAIS B 0 {
-			A_PlaySound("Paintrain/Charge",5,0.85);
+			A_PlaySound("Paintrain/Charge",0,0.85);
 			A_Light1();
 		}
 		//No interpolation so it fits with the rest of weapons.
@@ -200,9 +200,9 @@ class Paintrain : Weapon
 		RAIS B 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		RAIS B 6 A_WeaponOffset(0,32);
 		RAIS B 1 {
-			A_PlaySound("Paintrain/MainFire",5,0.85);
+			A_PlaySound("Paintrain/MainFire",0,0.85);
 			A_PlaySound("Paintrain/Fire",1,0.85);
-			A_PlaySound("Paintrain/Add",6,0.55);
+			A_PlaySound("Paintrain/Add",0,0.55);
 			A_AlertMonsters();
 			A_GunFlash();
 			A_ZoomFactor(4.9);
@@ -212,7 +212,7 @@ class Paintrain : Weapon
 			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 			A_SetPitch(pitch-0.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire",4);
+				A_PlaySound("QuadDamage/Fire",0);
 				A_SetBlend("Blue",0.075,25);
 			}
 		}
@@ -280,7 +280,7 @@ class Paintrain : Weapon
 	//Zoom in/out.
 	Altfire:
 		"####" "#" 0 {
-			A_PlaySound("Sights/Weapon",4,0.8);
+			A_PlaySound("Sights/Weapon",0,0.8);
 			if(!CountInv("PaintrainZoomed")) {
 				A_GiveInventory("PaintrainZoomed");
 				A_ZoomFactor(5.0);
@@ -346,14 +346,14 @@ class Paintrain : Weapon
 	PunchSkulls:
 		QML1 A 0 {
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
-			A_PlaySound("Punch/Swing",6,1.0);
+			A_PlaySound("Punch/Swing",0,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",5);
+			A_PlaySound("Melee/Firepunch",0);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -415,9 +415,9 @@ class Paintrain : Weapon
 		TNT1 A 1;
 		TNT1 A 0 {
 				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete2/Slash",0,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
 		}
 		MCHT ABC 1;
@@ -472,7 +472,7 @@ class PaintrainPuff : Actor
 	Spawn:
 	Crash:
 		TNT1 A 0 NoDelay {
-			A_PlaySound("Paintrain/Hit",5,0.7);
+			A_PlaySound("Paintrain/Hit",0,0.7);
 			A_SpawnItemEx("PaintrainShock",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 		}
 		TNT1 AAAAAAAAAAAAAAA 1 {
@@ -507,7 +507,7 @@ class PaintrainPuff : Actor
 	Spawn:
 	Crash:
 		TNT1 A 0 NoDelay {
-			A_PlaySound("Paintrain/Hit",5,0.7);
+			A_PlaySound("Paintrain/Hit",0,0.7);
 			A_SpawnItemEx("PaintrainShock",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			//A_SpawnItemEx("PaintrainDecaler",0,0,-15,0,0,0,0,SXF_CLIENTSIDE); //The offset is messed up for lord knows what reason, and I can't move puff origin, so... HAX TIME.
 		}
@@ -530,7 +530,7 @@ class PaintrainPuff2 : PaintrainPuff
 	Spawn:
 	Crash:
 		TNT1 A 0 NoDelay {
-			A_PlaySound("Paintrain/Hit",5,0.7);
+			A_PlaySound("Paintrain/Hit",0,0.7);
 			A_SpawnItemEx("PaintrainShock",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_SpawnItemEx("PaintrainDecaler",0,0,-15,0,0,0,0,SXF_CLIENTSIDE); //The offset is messed up for lord knows what reason, and I can't move puff origin, so... HAX TIME.
 		}

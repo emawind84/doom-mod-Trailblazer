@@ -106,7 +106,7 @@ class Nutcracker : Weapon //replaces BFG9000
 			A_FireProjectile("NutcrackerBullet",0,1,6,-5,FPF_NOAUTOAIM);
 			A_SetBlend("Yellow",0.2,12);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 5);
+				A_PlaySound("QuadDamage/Fire", 0);
 				A_SetBlend("Blue",0.2,35);
 			}
 			A_QuakeEx(6,6,6,14,0,16,"none",QF_SCALEDOWN);
@@ -172,7 +172,7 @@ class Nutcracker : Weapon //replaces BFG9000
 		"####" FGH 1;
 		"####" I 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		"####" JKL 1;
-		"####" M 0 A_PlaySound("Nutcracker/Load",4,0.8);
+		"####" M 0 A_PlaySound("Nutcracker/Load",0,0.8);
 		"####" M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" NOP 1;
 		"####" Q 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
@@ -185,7 +185,7 @@ class Nutcracker : Weapon //replaces BFG9000
 		"####" DEF 1;
 		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" HIK 1;
-		"####" A 0 A_PlaySound("Nutcracker/Pull",6,1.0);
+		"####" A 0 A_PlaySound("Nutcracker/Pull",0,1.0);
 		"####" L 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" MNO 1;
 		"####" P 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),4);
@@ -226,7 +226,7 @@ class Nutcracker : Weapon //replaces BFG9000
 			A_AlertMonsters();
 			A_GunFlash();
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 5|CHAN_NOPAUSE);
+				A_PlaySound("QuadDamage/Fire", 0|CHAN_NOPAUSE);
 			}
 		}
 		NTCG A 0 A_JumpIfInventory("NutForceOne",1,"HereComesFreedomination");
@@ -306,7 +306,7 @@ class Nutcracker : Weapon //replaces BFG9000
 		"####" FGH 1;
 		"####" I 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		"####" JKL 1;
-		"####" M 0 A_PlaySound("Nutcracker/Load",4,0.8);
+		"####" M 0 A_PlaySound("Nutcracker/Load",0,0.8);
 		"####" M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" NOP 1;
 		"####" Q 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
@@ -319,7 +319,7 @@ class Nutcracker : Weapon //replaces BFG9000
 		"####" DEF 1;
 		"####" G 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" HIK 1;
-		"####" L 0 A_PlaySound("Nutcracker/Pull",6,1.0);
+		"####" L 0 A_PlaySound("Nutcracker/Pull",0,1.0);
 		"####" L 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" MNO 1;
 		"####" P 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),4);
@@ -352,14 +352,14 @@ class Nutcracker : Weapon //replaces BFG9000
 		QML1 A 0 {
 			A_Overlay(2,"PunchFlash");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
-			A_PlaySound("Punch/Swing",6,1.0);
+			A_PlaySound("Punch/Swing",0,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",5);
+			A_PlaySound("Melee/Firepunch",0);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -396,7 +396,7 @@ class Nutcracker : Weapon //replaces BFG9000
 	PunchFlash:
 		NTFG D 0 A_JumpIfInventory("NutterUpgrade",1,2);
 		NTCG D 0;
-		"####" D 1 A_PlaySound("Punch/Swing",6,1.0);
+		"####" D 1 A_PlaySound("Punch/Swing",0,1.0);
 		
 		NTUM A 0 A_JumpIfInventory("NutterUpgrade",1,2);
 		NTCM A 0;
@@ -430,9 +430,9 @@ class Nutcracker : Weapon //replaces BFG9000
 		TNT1 A 1;
 		TNT1 A 0 {
 				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete2/Slash",0,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
 		}
 		MCHT ABC 1;
@@ -497,7 +497,7 @@ class NutcrackerBullet : FastProjectile
 	States
 	{
 	Spawn:
-		TRAC A 0 NoDelay A_PlaySound("Nutcracker/Fly",5,0.8,1);
+		TRAC A 0 NoDelay A_PlaySound("Nutcracker/Fly",0,0.8,1);
 		TRAC A 1 Bright A_ChangeVelocity(0, 0, -0.15, CVF_RELATIVE);
 		Wait;
 	Death:
@@ -505,7 +505,7 @@ class NutcrackerBullet : FastProjectile
 			for(int Swagolino = 0; Swagolino < 40; Swagolino++) {
 				A_SpawnItemEx("NutcrackerShatterBullet",0,0,0,frandom(125.0,100.0),0,-frandom(12.0,-12.0),frandom(0.0,360.0),SXF_TRANSFERPOINTERS,0);
 			}
-			A_PlaySound("Nutcracker/Hit",5,0.8);
+			A_PlaySound("Nutcracker/Hit",0,0.8);
 			A_SpawnItemEx("NutcrackerPuff",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_QuakeEx(4,4,4,25,0,384,"none",QF_SCALEDOWN);
 		}
@@ -565,7 +565,7 @@ class NutcrackerMinorBullet : NutcrackerBullet
 	States
 	{
 	Spawn:
-		TRAC A 0 NoDelay A_PlaySound("Nutcracker/Fly",5,0.8,1);
+		TRAC A 0 NoDelay A_PlaySound("Nutcracker/Fly",0,0.8,1);
 		TRAC A 1 Bright A_ChangeVelocity(0, 0, -0.15, CVF_RELATIVE);
 		Wait;
 	Death:
@@ -573,7 +573,7 @@ class NutcrackerMinorBullet : NutcrackerBullet
 			For(int BukkakeJones = 0; BukkakeJones < 10; BukkakeJones++) {
 				A_SpawnItemEx("NutcrackerShatterBullet",0,0,0,frandom(125.0,100.0),0,-frandom(12.0,-12.0),frandom(0.0,360.0),SXF_TRANSFERPOINTERS);
 			}
-			A_PlaySound("Nutcracker/Hit",5,0.5);
+			A_PlaySound("Nutcracker/Hit",0,0.5);
 			A_SpawnItemEx("NutcrackerPuff",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_QuakeEx(3,3,3,25,0,256,"none",QF_SCALEDOWN);
 		}
@@ -688,16 +688,16 @@ class NutcrackerGloryShot : NutcrackerBullet
 		TNT1 A 0 {
 			A_GiveToTarget("GloryShotTimer",30);
 			A_GiveToTarget("GloryTimer");
-			A_StopSound(5);
+			A_StopSound(0);
 			for(User_Counter = 80; User_Counter > 0; User_Counter--) {
 				A_SpawnItemEx("NutcrackerShatterBullet",0,0,0,frandom(125.0,100.0),0,frandom(16.0,-16.0),frandom(0.0,360.0),SXF_TRANSFERPOINTERS);
 			}
 			A_TakeFromTarget("PowerTimeFreezer",1);
 			ACS_NamedExecuteAlways("GloryEnd");
 			User_Counter = 14;
-			A_PlaySound("Spikebomb/Explosion",5|CHAN_NOPAUSE,0.9);
-			A_PlaySound("Spikebomb/Add",7|CHAN_NOPAUSE);
-			A_PlaySound("Spikebomb/Far",6|CHAN_NOPAUSE,0.8);
+			A_PlaySound("Spikebomb/Explosion",0|CHAN_NOPAUSE,0.9);
+			A_PlaySound("Spikebomb/Add",0|CHAN_NOPAUSE);
+			A_PlaySound("Spikebomb/Far",0|CHAN_NOPAUSE,0.8);
 			A_SpawnItemEx("FreedomMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_Quake(3,55,0,768,"none");
 			A_Quake(7,55,0,384,"none");
@@ -757,7 +757,7 @@ class NutcrackerSlowBullet : NutcrackerBullet
 			for(int AyayayyyaaaAztecMuscleGods = 0; AyayayyyaaaAztecMuscleGods < 40; AyayayyyaaaAztecMuscleGods++) {
 				A_SpawnItemEx("NutcrackerShatterBullet",0,0,0,frandom(125.0,100.0),0,-frandom(12.0,-12.0),frandom(0.0,360.0),SXF_TRANSFERPOINTERS);
 			}
-			A_PlaySound("Nutcracker/Hit",5,0.8);
+			A_PlaySound("Nutcracker/Hit",0,0.8);
 			A_SpawnItemEx("NutcrackerPuff",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_QuakeEx(4,4,4,25,0,384,"none",QF_SCALEDOWN);
 		}
@@ -996,10 +996,10 @@ class GloryShotBlast : Actor
 	Spawn:
 		TNT1 B random(2,10); //So you won't see GLDEF going off during timefreeze. :V
 		TNT1 A 28 {
-			A_PlaySound("Explosion/Init",5,0.8);
-			A_PlaySound("Explosion/Main",6,0.8);
-			A_PlaySound("Explosion/Layer",4,0.8);
-			A_PlaySound("Explosion/Flavor",7,0.8);
+			A_PlaySound("Explosion/Init",0,0.8);
+			A_PlaySound("Explosion/Main",0,0.8);
+			A_PlaySound("Explosion/Layer",0,0.8);
+			A_PlaySound("Explosion/Flavor",0,0.8);
 			A_SpawnItemEx("Patriarch_Blast",0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_Explode(175,148,0);
 			A_QuakeEx(3,3,3,12,0,512,"none",QF_SCALEDOWN);

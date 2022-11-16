@@ -38,7 +38,7 @@ class EliminatorUraniumPuff : EliminatorPuff
 	{
 	Spawn:
 		TNT1 A 0 NoDelay {
-			A_PlaySound("Uranium/Hit",5,0.25);
+			A_PlaySound("Uranium/Hit",0,0.25);
 			A_Explode(18,32,0);
 			A_QuakeEx(1,1,1,10,0,52,"none",QF_SCALEDOWN);
 		}
@@ -100,7 +100,7 @@ class EliminatorUraniumPuffRail : EliminatorUraniumPuff
 	Spawn:
 		TNT1 A 1 NoDelay {
 			//if(Target) { LineAttack(0, 8, target.pitch, 0, "Normal", "NukellerPuff"); }
-			A_PlaySound("Uranium/Hit",5,0.35);
+			A_PlaySound("Uranium/Hit",0,0.35);
 			A_Explode(32,32,0);
 			A_QuakeEx(1,1,1,10,0,52,"none",QF_SCALEDOWN);
 		}

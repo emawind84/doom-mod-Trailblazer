@@ -28,7 +28,7 @@ class PipeRiftToggler : CustomInventory
 		Stop;
 	Use:
 		TNT1 A 0 {
-			A_PlaySound("Tinker/Tink",4,0.7);
+			A_PlaySound("Tinker/Tink",0,0.7);
 			If(!CountInv("RiftbombActive")) {
 				A_Print("\c[white]Riftbomb\n\c[green]Engaged.",2);
 				A_GiveInventory("RiftbombActive",1);
@@ -208,7 +208,7 @@ class PipeQuickToss : CustomInventory
 			ACS_NamedExecuteAlways("Pipe Blockade");
 			A_PlaySound("Flechette/Throw");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 5);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
 		}
 		TNT1 A 0 A_GiveInventory("TossPower",3);
@@ -258,9 +258,9 @@ class SpikebombTossWeapon : Weapon
 	Ready:
 		TNT1 A 0 {
 			A_PlaySound("General/Toss",1,0.9);
-			A_PlaySound("Machete2/Slash",5,0.2);
+			A_PlaySound("Machete2/Slash",0,0.2);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
 		}
 		MCHT ABC 1;
@@ -458,7 +458,7 @@ class SpikebombWeapon : Weapon
 		"####" A 0 A_JumpIfInventory("PipeUpgrade",1,1);
 		Goto ReadyMain;
 		"####" A 20 {
-			A_PlaySound("Tinker/Tink",4,0.7);
+			A_PlaySound("Tinker/Tink",0,0.7);
 			If(!CountInv("PipeMode")) {
 				A_Print("\c[white]Vacuum Imploder\n\c[green]Engaged.",1);
 				A_GiveInventory("PipeMode",1);
@@ -559,9 +559,9 @@ class SpikebombWeapon : Weapon
 		TNT1 A 1;
 		TNT1 A 0 {
 			A_PlaySound("General/Toss",1,0.9);
-			A_PlaySound("Machete2/Slash",5,0.2);
+			A_PlaySound("Machete2/Slash",0,0.2);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
 		}
 		MCHT ABC 1;
@@ -609,9 +609,9 @@ class SpikebombWeapon : Weapon
 		TNT1 A 1;
 		TNT1 A 0 {
 				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete2/Slash",0,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
 		}
 		MCHT ABC 1;
@@ -681,10 +681,10 @@ class SpikebombWeapon : Weapon
 		DETC H 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
 		DETC I 1;
 		DETC I 0 {
-			A_PlaySound("Spikebomb/Detonate",5);
+			A_PlaySound("Spikebomb/Detonate",0);
 			A_GiveInventory("SpikebombTrigger");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
 		}
 		DETC J 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
@@ -710,14 +710,14 @@ class SpikebombWeapon : Weapon
 	PunchLoop:
 		QML1 A 0 {
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", 0);
 			}
-			A_PlaySound("Punch/Swing",6,1.0);
+			A_PlaySound("Punch/Swing",0,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",5);
+			A_PlaySound("Melee/Firepunch",0);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing")  || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3, SPF_INTERPOLATE);
@@ -791,9 +791,9 @@ class RiftbombProjectile : FastProjectile
 		TNT1 A 0 {
 			User_Blastspan = 14;
 			
-			A_PlaySound("Spikebomb/Explosion",5,0.9);
-			A_PlaySound("Spikebomb/Add",7);
-			A_PlaySound("Spikebomb/Far",6,0.8);
+			A_PlaySound("Spikebomb/Explosion",0,0.9);
+			A_PlaySound("Spikebomb/Add",0);
+			A_PlaySound("Spikebomb/Far",0,0.8);
 			
 			A_SpawnItemEx("SpikebombBurst",0,0,5,0,0,0,0,SXF_TRANSFERPOINTERS);
 			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
@@ -919,9 +919,9 @@ class SpikebombProjectile : Actor // : SpikebombAmmo
 		TNT1 A 0 {
 			User_Blastspan = 14;
 			
-			A_PlaySound("Spikebomb/Explosion",5,0.9);
-			A_PlaySound("Spikebomb/Add",7);
-			A_PlaySound("Spikebomb/Far",6,0.8);
+			A_PlaySound("Spikebomb/Explosion",0,0.9);
+			A_PlaySound("Spikebomb/Add",0);
+			A_PlaySound("Spikebomb/Far",0,0.8);
 			
 			A_SpawnItemEx("SpikebombBurst",0,0,5,0,0,0,0,SXF_TRANSFERPOINTERS);
 			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
@@ -1037,10 +1037,10 @@ class SpikebombBomb : Actor
 			{
 				A_SetDamageType("MasteringExplosions");
 			}
-			A_PlaySound("Explosion/Init",5,0.6);
-			A_PlaySound("Explosion/Main",6,0.6);
-			A_PlaySound("Explosion/Layer",4,0.6);
-			A_PlaySound("Explosion/Flavor",7,0.6);
+			A_PlaySound("Explosion/Init",0,0.6);
+			A_PlaySound("Explosion/Main",0,0.6);
+			A_PlaySound("Explosion/Layer",0,0.6);
+			A_PlaySound("Explosion/Flavor",0,0.6);
 			A_SpawnItemEx("Patriarch_Main",0,0,0,0,0,0,SXF_CLIENTSIDE|SXF_TRANSFERPOINTERS,0);
 			A_Explode(175,148);
 			A_QuakeEx(3,3,3,12,0,512,"none",QF_SCALEDOWN);
