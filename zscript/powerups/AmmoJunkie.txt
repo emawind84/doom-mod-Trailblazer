@@ -147,7 +147,7 @@ class AmmoJunkiePortable : TBPowerupPortableBase
 			//Stuff.
 			A_SetMugshotState("Grin");
 			A_SetBlend("Yellow",0.3,70);
-			A_PlaySound("AmmoJunkie/Pickup",3);
+			A_PlaySound("AmmoJunkie/Pickup",CHAN_AUTO);
 			A_SpawnItemEx("AmmoJunkieEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
 			A_GiveInventory("AmmoJunkie");
 

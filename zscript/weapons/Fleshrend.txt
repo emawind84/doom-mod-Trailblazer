@@ -137,8 +137,8 @@ class Fleshrend : TrailblazerWeapon
 		"####" EF 1;
 		"####" G 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		"####" H 1;
-		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(-3,"LIdle"); } Else { A_Overlay(-3,"SingleLIdle"); } }
-		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(2,"RIdle"); } Else { A_Overlay(2,"SingleRIdle"); } }
+		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(12,"LIdle"); } Else { A_Overlay(12,"SingleLIdle"); } }
+		TNT1 A 0 { If(CountInv("FleshrendPickupCounter") >= 2) { A_Overlay(14,"RIdle"); } Else { A_Overlay(14,"SingleRIdle"); } }
 	ReadyMain:
 		TNT1 A 1 A_WeaponReady();
 		Loop;
@@ -157,8 +157,8 @@ class Fleshrend : TrailblazerWeapon
 			A_TakeInventory("RendSelected");
 			A_TakeInventory("PowerCrafterTimer");
 			SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
-			A_Overlay(2,"none");
-			A_Overlay(-3,"none");
+			A_Overlay(14,"none");
+			A_Overlay(12,"none");
 		}
 		TNT1 A 0 A_JumpIfInventory("FleshrendPickupCounter",2,"TwinDeselect");
 		3NDN A 0 A_JumpIfInventory("RendUpgrade",1,"DeselectMain");
@@ -201,10 +201,10 @@ class Fleshrend : TrailblazerWeapon
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-			A_PlaySound("Machete1/Slash",1,0.9);
-			A_PlaySound("Machete2/Slash",5,0.2);
+			A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+			A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -249,10 +249,10 @@ class Fleshrend : TrailblazerWeapon
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -291,14 +291,14 @@ class Fleshrend : TrailblazerWeapon
 		Goto SingleRNope;
 	SingleRMain:
 		"####" A 0 {
-			A_PlaySound("Fleshrend/Fire",1);
+			A_PlaySound("Fleshrend/Fire",CHAN_WEAPON);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,12,-5,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			A_Recoil(2.0);
-			A_Overlay(3,"RGunflash");
+			A_Overlay(15,"RGunflash");
 			A_FireBullets(8.0, 2.0, 16 + (CountInv("RendUpgrade") ? 8 : 0) + (CountInv("TricorneShot") ? 8 : 0), 5, "ChainsmokerPuff");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 5);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.1,15);
 			}
 		}
@@ -315,14 +315,14 @@ class Fleshrend : TrailblazerWeapon
 		"####" H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		"####" I 1;
 		"####" I 0 {
-			A_PlaySound("Fleshrend/Out",4,0.6);
+			A_PlaySound("Fleshrend/Out",CHAN_AUTO,0.6);
 			for(int swiggityswag = 0; swiggityswag < 2; swiggityswag++) { A_FireProjectile("FleshyCasingSpawner",0,0,-1,-3,FPF_NOAUTOAIM); }
 			If(CountInv("RendUpgrade")) { A_FireProjectile("FleshyCasingSpawner",0,0,-1,-3,FPF_NOAUTOAIM); }
 			If(CountInv("TricorneShot")) { A_FireProjectile("FleshyCasingSpawner",0,0,-1,-3,FPF_NOAUTOAIM); }
 		}
 		"####" J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" KL 1;
-		"####" O 0 A_PlaySound("Fleshrend/In",4,0.5);
+		"####" O 0 A_PlaySound("Fleshrend/In",CHAN_AUTO,0.5);
 		"####" P 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
 		"####" QRST 1;
 		"####" U 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),4);
@@ -332,7 +332,7 @@ class Fleshrend : TrailblazerWeapon
 		"####" A 0 A_JumpIfAttack("SingleRFire");
 		Goto SingleRIdle;
 	SingleRNope:
-		"####" A 0 A_PlaySound("Fleshrend/Dry",4,0.8);
+		"####" A 0 A_PlaySound("Fleshrend/Dry",CHAN_AUTO,0.8);
 		3NDT A 0 A_JumpIfInventory("RendUpgrade",1,2);
 		RNDT A 0;
 		"####" ABC 1;
@@ -343,13 +343,13 @@ class Fleshrend : TrailblazerWeapon
 	
   Punch:
 		FML1 A 0 {
-				A_PlaySound("Punch/Swing",6,1.0);
+				A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 				If(CountInv("PowerQuadDamage")) {
-					A_PlaySound("QuadDamage/Fire", 4);
+					A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				}
 				If(CountInv("PowerStrength2")) {
 					A_SetBlend("Orange",0.05,10);
-					A_PlaySound("Melee/Firepunch",5);
+					A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 					Return A_Jump(256,2);
 				}
 				Return ResolveState(Null);
@@ -389,13 +389,13 @@ class Fleshrend : TrailblazerWeapon
 		"####" CBA 1;
 	PunchFleshAndBlood:		
 		FML1 A 0 {
-				A_PlaySound("Punch/Swing",6,1.0);
+				A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 				If(CountInv("PowerQuadDamage")) {
-					A_PlaySound("QuadDamage/Fire", 4);
+					A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				}
 				If(CountInv("PowerStrength2")) {
 					A_SetBlend("Orange",0.05,10);
-					A_PlaySound("Melee/Firepunch",5);
+					A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 					Return A_Jump(256,2);
 				}
 				Return ResolveState(Null);
@@ -445,14 +445,14 @@ class Fleshrend : TrailblazerWeapon
 		Goto LNope;
 	LMain:
 		"####" A 0 {
-			A_PlaySound("Fleshrend/Fire",1);
+			A_PlaySound("Fleshrend/Fire",CHAN_WEAPON);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,-14,-5,FPF_NOAUTOAIM);
-			A_Overlay(-2,"LGunflash");
+			A_Overlay(13,"LGunflash");
 			A_AlertMonsters();
 			A_Recoil(2.0);
 			A_FireBullets(8.0, 2.0, 16 + (CountInv("RendUpgrade") ? 8 : 0) + (CountInv("TricorneShot") ? 8 : 0), 5, "ChainsmokerPuff");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 5);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.1,15);
 			}
 		}
@@ -473,14 +473,14 @@ class Fleshrend : TrailblazerWeapon
 			}
 		}
 		"####" I 0 {
-			A_PlaySound("Fleshrend/Out",6,0.6);
+			A_PlaySound("Fleshrend/Out",CHAN_AUTO,0.6);
 			for(int swaggityswig = 0; swaggityswig < 2; swaggityswig++) { A_FireProjectile("FleshyCasingSpawnerReversed",0,0,-1,-3,FPF_NOAUTOAIM); }
 			If(CountInv("RendUpgrade")) { A_FireProjectile("FleshyCasingSpawnerReversed",0,0,-1,-3,FPF_NOAUTOAIM); }
 			If(CountInv("TricorneShot")) { A_FireProjectile("FleshyCasingSpawnerReversed",0,0,-1,-3,FPF_NOAUTOAIM); }
 		}
 		"####" J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" KL 1;
-		"####" O 0 A_PlaySound("Fleshrend/In",6,0.5);
+		"####" O 0 A_PlaySound("Fleshrend/In",CHAN_AUTO,0.5);
 		"####" MNO 1;
 		"####" P 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
 		"####" QRST 1;
@@ -499,7 +499,7 @@ class Fleshrend : TrailblazerWeapon
 	LNope:
 		3NDT A 0 A_JumpIfInventory("RendUpgrade",1,2);
 		RNDT A 0;
-		"####" A 0 A_PlaySound("Fleshrend/Dry",4,0.8);
+		"####" A 0 A_PlaySound("Fleshrend/Dry",CHAN_AUTO,0.8);
 		"####" DEF 1;
 		3NDG A 0 A_JumpIfInventory("RendUpgrade",1,2);
 		RNDG A 0;
@@ -523,14 +523,14 @@ class Fleshrend : TrailblazerWeapon
 		Goto RNope;
 	RMain:
 		"####" A 0 {
-			A_PlaySound("Fleshrend/Fire",1);
+			A_PlaySound("Fleshrend/Fire",CHAN_WEAPON);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,14,-5,FPF_NOAUTOAIM);
-			A_Overlay(3,"RGunflash");
+			A_Overlay(15,"RGunflash");
 			A_AlertMonsters();
 			A_Recoil(2.0);
 			A_FireBullets(8.0, 2.0, 16 + (CountInv("RendUpgrade") ? 8 : 0) + (CountInv("TricorneShot") ? 8 : 0), 5, "ChainsmokerPuff");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 5);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.1,15);
 			}
 		}
@@ -547,14 +547,14 @@ class Fleshrend : TrailblazerWeapon
 		"####" H 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		"####" I 1;
 		"####" I 0 {
-			A_PlaySound("Fleshrend/Out",4,0.6);
+			A_PlaySound("Fleshrend/Out",CHAN_AUTO,0.6);
 			for(int swiggityswag = 0; swiggityswag < 2; swiggityswag++) { A_FireProjectile("FleshyCasingSpawner",0,0,-1,-3,FPF_NOAUTOAIM); }
 			If(CountInv("RendUpgrade")) { A_FireProjectile("FleshyCasingSpawner",0,0,-1,-3,FPF_NOAUTOAIM); }
 			If(CountInv("TricorneShot")) { A_FireProjectile("FleshyCasingSpawner",0,0,-1,-3,FPF_NOAUTOAIM); }
 		}
 		"####" J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" KL 1;
-		"####" A 0 A_PlaySound("Fleshrend/In",4,0.5);
+		"####" A 0 A_PlaySound("Fleshrend/In",CHAN_AUTO,0.5);
 		"####" MNO 1 ;
 		"####" P 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
 		"####" QRST 1;
@@ -576,7 +576,7 @@ class Fleshrend : TrailblazerWeapon
 	RNope:
 		3NDT A 0 A_JumpIfInventory("RendUpgrade",1,2);
 		RNDT A 0;
-		"####" A 0 A_PlaySound("Fleshrend/Dry",4,0.8);
+		"####" A 0 A_PlaySound("Fleshrend/Dry",CHAN_AUTO,0.8);
 		"####" ABC 1;
 		3NDG A 0 A_JumpIfInventory("RendUpgrade",1,2);
 		RNDG A 0;

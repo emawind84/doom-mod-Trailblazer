@@ -129,7 +129,7 @@ class SoulspherePortable : TBPowerupPortableBase
 		TNT1 A 0 {
 			//Stuff.
 			A_SetBlend("Blue",0.3,70);
-			A_PlaySound("Soulsphere/Pickup",3);
+			A_PlaySound("Soulsphere/Pickup",CHAN_AUTO);
 			A_GiveInventory("Soulsphere2");
 			A_SpawnItemEx("SoulsphereEffect",0,0,0,0,0,0,0,SXF_SETTARGET);
 			

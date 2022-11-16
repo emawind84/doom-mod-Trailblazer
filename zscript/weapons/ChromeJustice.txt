@@ -95,7 +95,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		"####" A 0 A_JumpIf(GetCvar("TB_ReloadMode"),"AutoReload");
 		SPST A 0 A_JumpIfInventory("ChromeUpgrade",1,2);
 		PCFT A 0;
-		"####" A 0 A_PlaySound("ChromeJustice/Dry",6,0.7);
+		"####" A 0 A_PlaySound("ChromeJustice/Dry",CHAN_AUTO,0.7);
 		"####" ABCDCBA 1;
 		SPSG A 0 A_JumpIfInventory("ChromeUpgrade",1,2);
 		PCFG A 0;
@@ -128,15 +128,15 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		PC2F A 0 A_JumpIfInventory("ChromeJusticeClip",1,1);
 		Goto DryFire;
 		PC2F A 0 {
-			A_PlaySound("ChromeJustice/Fire",1,0.9);
-			A_PlaySound("ChromeJustice/Alt",5,0.75);
+			A_PlaySound("ChromeJustice/Fire",CHAN_WEAPON,0.9);
+			A_PlaySound("ChromeJustice/Alt",CHAN_AUTO,0.75);
 			A_FireProjectile("GunsmokeSpawner_Medium_Dark",0,0,10,-1,FPF_NOAUTOAIM);
 			A_TakeInventory("ChromeJusticeClip",1,TIF_NOTAKEINFINITE);
 			A_AlertMonsters();
 			A_GunFlash();
 			A_Recoil(6.0);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.15,15);
 			}
 			For(int KebabRemoval = 0; KebabRemoval < 7; KebabRemoval++) {
@@ -162,7 +162,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		PC2P F 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(0.995); } }
 		PC2P G 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(1.0); } }
 		PC2P HI 1;
-		PC2P A 0 A_PlaySound("ChromeJustice/Pump",6,0.6);
+		PC2P A 0 A_PlaySound("ChromeJustice/Pump",CHAN_AUTO,0.6);
 		PC2P J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		PC2P K 1;
 		PCFP L 1;
@@ -187,15 +187,15 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		SPSG A 0 A_JumpIfInventory("ChromeJusticeClip",1,1);
 		Goto DryFire;
 		SPSF A 0 {
-			A_PlaySound("AutoJustice/Fire",1,0.5);
-			A_PlaySound("ChromeJustice/Alt",5,0.75);
+			A_PlaySound("AutoJustice/Fire",CHAN_WEAPON,0.5);
+			A_PlaySound("ChromeJustice/Alt",CHAN_AUTO,0.75);
 			A_FireProjectile("GunsmokeSpawner_Medium_Dark",0,0,10,-1,FPF_NOAUTOAIM);
 			A_TakeInventory("ChromeJusticeClip",1,TIF_NOTAKEINFINITE);
 			A_AlertMonsters();
 			A_GunFlash();
 			A_Recoil(6.0);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.15,15);
 			}
 			For(int KebabRemoval = 0; KebabRemoval < 7; KebabRemoval++) {
@@ -241,7 +241,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		"####" A 0 A_JumpIfInventory("ChromeJusticeClip",1,1);
 		Goto DryFire;
 		PCFF A 0 {
-			A_PlaySound("ChromeJustice/Fire",1);
+			A_PlaySound("ChromeJustice/Fire",CHAN_WEAPON);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,10,-1,FPF_NOAUTOAIM);
 			A_FireBullets(2.2, 2.2, 30, 5, "ChainsmokerPuff",0);
 			A_TakeInventory("ChromeJusticeClip",1,TIF_NOTAKEINFINITE);
@@ -249,7 +249,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 			A_GunFlash();
 			A_Recoil(1.0);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.15,15);
 			}
 		}
@@ -270,7 +270,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		PCFP E 1 { if(GetCvar("TB_ZoomRecoil")) { A_ZoomFactor(1.0); } }
 		PCFP F 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		PCFP GHI 1;
-		PCFP A 0 A_PlaySound("ChromeJustice/Pump",6,0.6);
+		PCFP A 0 A_PlaySound("ChromeJustice/Pump",CHAN_AUTO,0.6);
 
 		PCFP J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		PCFP KL 1;
@@ -295,7 +295,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		SPSG A 0 A_JumpIfInventory("ChromeJusticeClip",1,1);
 		Goto DryFire;
 		SPSG A 0 {
-			A_PlaySound("AutoJustice/Fire",1,0.5);
+			A_PlaySound("AutoJustice/Fire",CHAN_WEAPON,0.5);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,10,-1,FPF_NOAUTOAIM);
 			A_FireBullets(2.2, 2.2, 30, 5, "ChainsmokerPuff",0);
 			A_TakeInventory("ChromeJusticeClip",1,TIF_NOTAKEINFINITE);
@@ -303,7 +303,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 			A_GunFlash();
 			A_Recoil(1.0);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.15,15);
 			}
 		}
@@ -366,7 +366,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		"####" A 0 A_JumpIfInventory("JusticeStriploader", 1, "Stripload");
 	ReloadWorking:
 		"####" A 0 A_JumpIfInventory("HexenCounter",1,"HexenReloadWorking");
-		"####" A 0 A_PlaySound("ChromeJustice/Load",6);
+		"####" A 0 A_PlaySound("ChromeJustice/Load",CHAN_AUTO);
 		"####" J 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
 		"####" KLM 1;
 		"####" A 0 {
@@ -395,7 +395,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		"####" A 0 A_JumpIfInventory("DemShellsAmmo",1,"ReloadWorking");
 		Goto ReloadFinish;
 	HexenReloadWorking:
-		"####" A 0 A_PlaySound("ChromeJustice/Load",6);
+		"####" A 0 A_PlaySound("ChromeJustice/Load",CHAN_AUTO);
 		"####" J 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
 		"####" KLM 1;
 		"####" A 0 {
@@ -444,7 +444,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		PCFP DE 1;
 		PCFP F 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		PCFP GHI 1;
-		PCFP A 0 A_PlaySound("ChromeJustice/Pump",6,0.6);
+		PCFP A 0 A_PlaySound("ChromeJustice/Pump",CHAN_AUTO,0.6);
 		PCFP J 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		PCFP KL 1;
 		PCFP M 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
@@ -469,7 +469,7 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		SP2R A 0 A_JumpIfInventory("ChromeUpgrade",1,2);
 		PC2R A 0;
 		"####" JK 1;
-		"####" A 0 A_PlaySound("Shells/Ammo",6);
+		"####" A 0 A_PlaySound("Shells/Ammo",CHAN_AUTO);
 		"####" L 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),2);
 		"####" MN 1;
 	StriploadWorking:
@@ -515,16 +515,16 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		"####" GHI 1;
 	PunchCriminalScums:
 		QML1 A 0 {
-			A_Overlay(2,"PunchFlash");
+			A_Overlay(60,"PunchFlash");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
-			A_PlaySound("Punch/Swing",6,1.0);
+			A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",5);
+			A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -594,10 +594,10 @@ class ChromeJustice : Weapon //replaces SuperShotgun //Random spawner-replaced.
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-			A_PlaySound("Machete1/Slash",1,0.9);
-			A_PlaySound("Machete2/Slash",5,0.2);
+			A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+			A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -662,16 +662,15 @@ class ChromeJusticeSonicfire : FastProjectile
 	{
 	Spawn:
 		TNT1 A 0 NoDelay {
-			A_PlaySound("ChromeJustice/Fly1",5,0.6,1);
-			A_PlaySound("ChromeJustice/Fly2",5,0.4,1);
+			A_PlaySound("ChromeJustice/Fly1",CHAN_AUTO,0.6,1);
+			A_PlaySound("ChromeJustice/Fly2",CHAN_AUTO,0.4,1);
 		}
 		TNT1 A 1 A_Countdown();
 		Wait;
 	Death:
 		TNT1 A 0 {
 			A_SpawnItemEx("ChromeImpact",0,0,0,0,0,0,0,SXF_CLIENTSIDE);
-			A_StopSound(5);
-			A_StopSound(6);
+			A_StopSound(CHAN_AUTO);
 		}
 		Stop;
 	}

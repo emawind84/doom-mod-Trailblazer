@@ -32,7 +32,7 @@ class PatriarchToggler : CustomInventory
 		Stop;
 	Use:
 		TNT1 A 0 {
-			A_PlaySound("Tinker/Tink",4,0.7);
+			A_PlaySound("Tinker/Tink",CHAN_AUTO,0.7);
 			If(!CountInv("HomingGrenades")) {
 				A_Print("\c[white]Homing Grenades\n\c[green]Engaged.",2);
 				A_GiveInventory("HomingGrenades",1);
@@ -141,7 +141,7 @@ class Patriarch : Weapon
 			If (CountInv("PattyUpgrade"))
 			{
 				A_FireProjectile("PatriarchProjectile2",0,1,6,-5);
-				A_PlaySound("Patriarch/Cannon",5);
+				A_PlaySound("Patriarch/Cannon",CHAN_AUTO);
 				A_Recoil(0.5);
 			}
 			Else
@@ -154,13 +154,13 @@ class Patriarch : Weapon
 		PTUF A 0 A_JumpIfInventory("PattyUpgrade",1,2);
 		PTRF A 0;
 		"####" A 0 {
-			A_PlaySound("Patriarch/Fire",1,0.7);
-			A_PlaySound("Patriarch/Add",5,0.7);
+			A_PlaySound("Patriarch/Fire",CHAN_WEAPON,0.7);
+			A_PlaySound("Patriarch/Add",CHAN_AUTO,0.7);
 			A_FireProjectile("GunsmokeSpawner_Medium2",0,0,4,0,FPF_NOAUTOAIM);
 			A_AlertMonsters();
 			A_GunFlash();
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 				A_SetBlend("Blue",0.15,15);
 			}
 		}
@@ -249,7 +249,7 @@ class Patriarch : Weapon
 			{
 				A_FireProjectile("PatriarchBounceProjectile2",0,0,6,-5);
 				A_TakeInventory("PatriarchClip", 1, TIF_NOTAKEINFINITE);
-				A_PlaySound("Patriarch/Cannon",5);
+				A_PlaySound("Patriarch/Cannon",CHAN_AUTO);
 				A_Recoil(0.5);
 			}
 			Else
@@ -264,7 +264,7 @@ class Patriarch : Weapon
 		"####" A 0 A_JumpIf(GetCvar("TB_ReloadMode"), "AutoReload");
 		PTUD A 0 A_JumpIfInventory("PattyUpgrade",1,2);
 		PTRD A 0;
-		"####" A 0 A_PlaySound("Patriarch/Dry",4,0.9);
+		"####" A 0 A_PlaySound("Patriarch/Dry",CHAN_AUTO,0.9);
 		"####" ABCDCBA 1;
 		PTUG A 0 A_JumpIfInventory("PattyUpgrade",1,2);
 		PTRG A 0;
@@ -301,7 +301,7 @@ class Patriarch : Weapon
 		"####" BC 1;
 		"####" D 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),1);
 		"####" EF 1 ;
-		"####" G 0 A_PlaySound("Patriarch/Out",6);
+		"####" G 0 A_PlaySound("Patriarch/Out",CHAN_AUTO);
 		"####" G 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
 		"####" HIJ 1;
 		"####" K 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
@@ -317,7 +317,7 @@ class Patriarch : Weapon
 		"####" BCD 1;
 		"####" E 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
 		"####" FG 1;
-		"####" G 0 A_PlaySound("Patriarch/In",6);
+		"####" G 0 A_PlaySound("Patriarch/In",CHAN_AUTO);
 		"####" H 1;
 		"####" I 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		"####" JK 1;
@@ -337,7 +337,7 @@ class Patriarch : Weapon
 		"####" M 1;
 		"####" N 1 A_JumpIf(Health <= 50 || CountInv("PowerBlazing"),1);
 		"####" O 1;
-		"####" P 0 A_PlaySound("Patriarch/In2",6);
+		"####" P 0 A_PlaySound("Patriarch/In2",CHAN_AUTO);
 		"####" P 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		"####" Q 1;
 		"####" R 1;
@@ -388,7 +388,7 @@ class Patriarch : Weapon
 		"####" FGH 1;
 		"####" I 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),2);
 		"####" J 1;
-		"####" A 0 A_PlaySound("Patriarch/Pull1",5,0.9);
+		"####" A 0 A_PlaySound("Patriarch/Pull1",CHAN_AUTO,0.9);
 		"####" KL 1;
 		"####" M 1 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" NOP 1;
@@ -415,16 +415,16 @@ class Patriarch : Weapon
 		"####" A 0 A_GiveInventory("ZoomReFire",1);
 	PunchDescendants:
 		QML1 A 0 {
-			A_Overlay(2,"PunchFlash");
+			A_Overlay(4,"PunchFlash");
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
-			A_PlaySound("Punch/Swing",6,1.0);
+			A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 			Return A_JumpIf(!CountInv("PowerStrength2"),2);
 		}
 		FML1 A 0 {
 			A_SetBlend("Orange",0.05,10);
-			A_PlaySound("Melee/Firepunch",5);
+			A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 		}
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -461,7 +461,7 @@ class Patriarch : Weapon
 	PunchFlash:
 		PTUH A 0 A_JumpIfInventory("PattyUpgrade",1,2);
 		PTRH A 0;
-		"####" G 1 A_PlaySound("Punch/Swing",6,1.0);
+		"####" G 1 A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 		PTUM A 0 A_JumpIfInventory("PattyUpgrade",1,2);
 		PTRM A 0;
 		"####" ABC 1;
@@ -494,10 +494,10 @@ class Patriarch : Weapon
 		TNT1 A 1 A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1);
 		TNT1 A 1;
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -599,10 +599,10 @@ class PatriarchProjectile : Actor
 				A_SetDamageType("MasteringExplosions");
 			}
 			A_NoGravity();
-			A_PlaySound("Explosion/Init",5,0.8);
-			A_PlaySound("Explosion/Main",6,0.8);
-			A_PlaySound("Explosion/Layer",4,0.8);
-			A_PlaySound("Explosion/Flavor",7,0.8);
+			A_PlaySound("Explosion/Init",CHAN_AUTO,0.8);
+			A_PlaySound("Explosion/Main",CHAN_AUTO,0.8);
+			A_PlaySound("Explosion/Layer",CHAN_AUTO,0.8);
+			A_PlaySound("Explosion/Flavor",CHAN_AUTO,0.8);
 			A_SpawnItemEx("Patriarch_Main",0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_Explode(175,148);
 			A_QuakeEx(3,3,3,12,0,512,"none",QF_SCALEDOWN);

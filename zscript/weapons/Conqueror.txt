@@ -145,21 +145,6 @@ class Conqueror : Weapon
 		Wait;
 		
 	DeadLowered:
-		TNT1 A 0 {
-			A_Overlay(-44,"none");
-			A_Overlay(-21,"none");
-			A_Overlay(-25,"none");
-			
-			A_Overlay(-12,"none");
-			A_Overlay(-11,"none");
-			A_Overlay(-10,"none");
-			A_Overlay(-6,"none");
-			A_Overlay(-5,"none");
-			A_Overlay(-4,"none");
-			A_Overlay(-3,"none");
-			
-			A_Overlay(2,"none");
-		}
 		TNT1 A -1;
 		Stop;
 		
@@ -170,20 +155,20 @@ class Conqueror : Weapon
 			invoker.GrenadeBuffer = 0;
 			invoker.gibberish = 0;
 			
-			A_Overlay(-44,"ExtraSound");	// Extra sound handler.
-			A_Overlay(-21,"QuadLol");		// Quad damage sounder.
-			A_Overlay(-25,"Underlay");		// Lil' fix for the furthermost sides. The rest is pretty self-explanatory.
+			A_Overlay(20,"ExtraSound");	// Extra sound handler.
+			A_Overlay(21,"QuadLol");		// Quad damage sounder.
+			A_Overlay(22,"Underlay");		// Lil' fix for the furthermost sides. The rest is pretty self-explanatory.
 			
 			// 14 is reserved for mortar.
-			A_Overlay(-12,"BrowningBlasters"); // 12-13 is blasters.
-			A_Overlay(-11,"GrenadeLauncherRight");
-			A_Overlay(-10,"GrenadeLauncherLeft");
-			A_Overlay(-6,"Machineguns"); 	// 6-9 is reserved for quad cannon machineguns.
-			A_Overlay(-5,"ShotgunRight");
-			A_Overlay(-4,"ShotgunLeft");
-			A_Overlay(-3,"MainCannon");
+			A_Overlay(23,"BrowningBlasters"); // 12-13 is blasters.
+			A_Overlay(24,"GrenadeLauncherRight");
+			A_Overlay(25,"GrenadeLauncherLeft");
+			A_Overlay(26,"Machineguns"); 	// 6-9 is reserved for quad cannon machineguns.
+			A_Overlay(27,"ShotgunRight");
+			A_Overlay(28,"ShotgunLeft");
+			A_Overlay(29,"MainCannon");
 			
-			A_Overlay(2,"MachinegunBelts");
+			A_Overlay(30,"MachinegunBelts");
 			
 			A_GiveInventory("ConquerorSelected");
 		}
@@ -220,7 +205,7 @@ class Conqueror : Weapon
 					}
 				}
 			}
-			if(GetCvar("TB_MinigunMode") == 2) { A_StopSound(5); }
+			if(GetCvar("TB_MinigunMode") == 2) { A_StopSound(CHAN_AUTO); }
 			Return ResolveState(Null);
 		}
 		Loop;
@@ -233,7 +218,7 @@ class Conqueror : Weapon
 		CNQG A 0 A_JumpIf(CountInv("ConquerorUpgrade"),1);
 		Goto Ready;
 		CNQG A 0 {
-			A_PlaySound("Conqueror/Mode",1,CHANF_OVERLAP);
+			A_PlaySound("Conqueror/Mode",CHAN_WEAPON,CHANF_OVERLAP);
 			if(CountInv("ConquerorMode")) {
 				A_TakeInventory("ConquerorMode",1);
 				A_Print("\c[white]Grenades + Classic shells loaded.",2);
@@ -266,9 +251,9 @@ class Conqueror : Weapon
 				A_StartSound("QuadDamage/Fire",1,CHANF_OVERLAP);
 				A_SetBlend("Blue",0.075,25);
 			}
-			A_Overlay(14,"MortarFlash");
-			A_OverlayFlags(14,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(14,STYLE_Add);
+			A_Overlay(42,"MortarFlash");
+			A_OverlayFlags(42,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(42,STYLE_Add);
 			A_TakeInventory("ConquerorAmmo",8,TIF_NOTAKEINFINITE);
 			A_GiveInventory("ConquerorMortarCooldown",105);
 			//A_FireBullets(0, 0, 1, 0, "ConquerorMortarStrikeSpawner");
@@ -308,7 +293,7 @@ class Conqueror : Weapon
 	QuadLol:
 		TNT1 A 1 {
 			if(CountInv("PowerQuadDamage") && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK|BT_OFFHANDATTACK|BT_ALTATTACK)) {
-				A_PlaySound("QuadDamage/Fire",0);
+				A_PlaySound("QuadDamage/Fire",CHAN_AUTO);
 				A_SetBlend("Blue",0.075,25);
 				Return ResolveState("QuadBanana");
 			}
@@ -329,14 +314,14 @@ class Conqueror : Weapon
 	FireMainCannon:
 		CNQG C 2 {
 			A_AlertMonsters();
-			A_Overlay(3,"MainCannonFlash");
-			A_OverlayFlags(3,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(3,STYLE_Add);
+			A_Overlay(31,"MainCannonFlash");
+			A_OverlayFlags(31,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(31,STYLE_Add);
 			A_QuakeEx(2,2,2,7,0,256,"none",QF_SCALEDOWN);
 			A_QuakeEx(2,2,2,7,0,256,"none",QF_SCALEDOWN|QF_WAVE,1.0,1.0,1.5);
 			A_TakeInventory("ConquerorAmmo",1,TIF_NOTAKEINFINITE);
-			A_StartSound("Patriarch/Cannon",1,CHANF_OVERLAP); //A_PlaySound("Patriarch/Cannon",5);
-			A_StartSound("Patriarch/Add",1,CHANF_OVERLAP,0.7); //A_PlaySound("Patriarch/Add",1,0.7);
+			A_StartSound("Patriarch/Cannon",1,CHANF_OVERLAP); //A_PlaySound("Patriarch/Cannon",CHAN_AUTO);
+			A_StartSound("Patriarch/Add",1,CHANF_OVERLAP,0.7); //A_PlaySound("Patriarch/Add",CHAN_WEAPON,0.7);
 			A_FireProjectile("Conqueror90mmProjectile",0,0,0,-5);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,0,-7,FPF_NOAUTOAIM);
 			A_SetPitch(pitch-2.5 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -373,9 +358,9 @@ class Conqueror : Weapon
 		CNQG F 2 {
 			A_AlertMonsters();
 			invoker.ShotgunBuffer = 0;
-			A_Overlay(4,"ShotgunLeftFlash");
-			A_OverlayFlags(4,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(4,STYLE_Add);
+			A_Overlay(32,"ShotgunLeftFlash");
+			A_OverlayFlags(32,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(32,STYLE_Add);
 			If(CountInv("ConquerorMode")) {
 				if(CountInv("HexenCounter")) { A_TakeInventory("GreenMana",8,TIF_NOTAKEINFINITE); }
 				else 						 { A_TakeInventory("DemShellsAmmo",1,TIF_NOTAKEINFINITE); }
@@ -409,8 +394,8 @@ class Conqueror : Weapon
 		CNQG F 1   A_OverlayOffset(OverlayID(),-12,10);
 		CNQG F 1 {
 			A_OverlayOffset(OverlayID(),-7,8);
-			if( CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("GreenMana") >= 8) || (!CountInv("ConquerorMode") && CountInv("BlueMana") >= 4)) && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK|BT_OFFHANDATTACK)) { A_Overlay(-5,"FireShotgunRight"); }
-			if(!CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("DemShellsAmmo")) || (!CountInv("ConquerorMode") && CountInv("ShellsAmmo") >= 2)) && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK|BT_OFFHANDATTACK)) { A_Overlay(-5,"FireShotgunRight"); }
+			if( CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("GreenMana") >= 8) || (!CountInv("ConquerorMode") && CountInv("BlueMana") >= 4)) && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK|BT_OFFHANDATTACK)) { A_Overlay(27,"FireShotgunRight"); }
+			if(!CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("DemShellsAmmo")) || (!CountInv("ConquerorMode") && CountInv("ShellsAmmo") >= 2)) && GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK|BT_OFFHANDATTACK)) { A_Overlay(27,"FireShotgunRight"); }
 		}
 		CNQG F 1 { A_OverlayOffset(OverlayID(),-5,6); Return A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1); }
 		CNQG F 1   A_OverlayOffset(OverlayID(),-3,2);
@@ -427,9 +412,9 @@ class Conqueror : Weapon
 	FireShotgunRight:
 		CNQG G 2 {
 			A_AlertMonsters();
-			A_Overlay(5,"ShotgunRightFlash");
-			A_OverlayFlags(5,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(5,STYLE_Add);
+			A_Overlay(33,"ShotgunRightFlash");
+			A_OverlayFlags(33,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(33,STYLE_Add);
 			If(CountInv("ConquerorMode")) {
 				if(CountInv("HexenCounter")) { A_TakeInventory("GreenMana",8,TIF_NOTAKEINFINITE); }
 				else 						 { A_TakeInventory("DemShellsAmmo",1,TIF_NOTAKEINFINITE); }
@@ -495,10 +480,10 @@ class Conqueror : Weapon
 						if(CountInv("HexenCounter")) { A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE); }
 						else 						 { A_TakeInventory("BulletAmmo",1,TIF_NOTAKEINFINITE); }
 					}
-					if(invoker.MachinegunBuffer == 1) { A_Overlay(6,"MachinegunFire1"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-16,-9,FPF_NOAUTOAIM); A_OverlayFlags(6,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(6,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 2) { A_Overlay(7,"MachinegunFire2"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-17,-12,FPF_NOAUTOAIM); A_OverlayFlags(7,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(7,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 3) { A_Overlay(8,"MachinegunFire3"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 18,-12,FPF_NOAUTOAIM); A_OverlayFlags(8,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(8,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 4) { A_Overlay(9,"MachinegunFire4"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 17,-9,FPF_NOAUTOAIM); A_OverlayFlags(9,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(9,STYLE_Add); invoker.MachinegunBuffer = 0; }
+					if(invoker.MachinegunBuffer == 1) { A_Overlay(34,"MachinegunFire1"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-16,-9,FPF_NOAUTOAIM); A_OverlayFlags(34,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(34,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 2) { A_Overlay(35,"MachinegunFire2"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-17,-12,FPF_NOAUTOAIM); A_OverlayFlags(35,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(35,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 3) { A_Overlay(36,"MachinegunFire3"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 18,-12,FPF_NOAUTOAIM); A_OverlayFlags(36,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(36,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 4) { A_Overlay(37,"MachinegunFire4"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 17,-9,FPF_NOAUTOAIM); A_OverlayFlags(37,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(37,STYLE_Add); invoker.MachinegunBuffer = 0; }
 				}
 				else if(Health <= 60 || CountInv("PowerBlazing")) {
 					if(invoker.MachinegunBuffer % 2 == 0) {
@@ -507,10 +492,10 @@ class Conqueror : Weapon
 						if(CountInv("HexenCounter")) { A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE); }
 						else 						 { A_TakeInventory("BulletAmmo",1,TIF_NOTAKEINFINITE); }
 					}
-					if(invoker.MachinegunBuffer == 2) { A_Overlay(6,"MachinegunFire1"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-16,-9,FPF_NOAUTOAIM); A_OverlayFlags(6,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(6,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 4) { A_Overlay(7,"MachinegunFire2"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-17,-12,FPF_NOAUTOAIM); A_OverlayFlags(7,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(7,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 6) { A_Overlay(8,"MachinegunFire3"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 18,-12,FPF_NOAUTOAIM); A_OverlayFlags(8,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(8,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 8) { A_Overlay(9,"MachinegunFire4"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 17,-9,FPF_NOAUTOAIM); A_OverlayFlags(9,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(9,STYLE_Add); invoker.MachinegunBuffer = 0; }
+					if(invoker.MachinegunBuffer == 2) { A_Overlay(34,"MachinegunFire1"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-16,-9,FPF_NOAUTOAIM); A_OverlayFlags(34,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(34,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 4) { A_Overlay(35,"MachinegunFire2"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-17,-12,FPF_NOAUTOAIM); A_OverlayFlags(35,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(35,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 6) { A_Overlay(36,"MachinegunFire3"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 18,-12,FPF_NOAUTOAIM); A_OverlayFlags(36,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(36,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 8) { A_Overlay(37,"MachinegunFire4"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 17,-9,FPF_NOAUTOAIM); A_OverlayFlags(37,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(37,STYLE_Add); invoker.MachinegunBuffer = 0; }
 				}
 				else if(Health >= 60 || CountInv("PowerBlazing")) {
 					if(invoker.MachinegunBuffer % 3 == 0) {
@@ -519,10 +504,10 @@ class Conqueror : Weapon
 						if(CountInv("HexenCounter")) { A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE); }
 						else 						 { A_TakeInventory("BulletAmmo",1,TIF_NOTAKEINFINITE); }
 					}
-					if(invoker.MachinegunBuffer == 3) { A_Overlay(6,"MachinegunFire1"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-16,-9,FPF_NOAUTOAIM); A_OverlayFlags(6,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(6,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 6) { A_Overlay(7,"MachinegunFire2"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-17,-12,FPF_NOAUTOAIM); A_OverlayFlags(7,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(7,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 9) { A_Overlay(8,"MachinegunFire3"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 18,-12,FPF_NOAUTOAIM); A_OverlayFlags(8,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(8,STYLE_Add); }
-					if(invoker.MachinegunBuffer == 12){ A_Overlay(9,"MachinegunFire4"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 17,-9,FPF_NOAUTOAIM); A_OverlayFlags(9,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(9,STYLE_Add); invoker.MachinegunBuffer = 0; }
+					if(invoker.MachinegunBuffer == 3) { A_Overlay(34,"MachinegunFire1"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-16,-9,FPF_NOAUTOAIM); A_OverlayFlags(34,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(34,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 6) { A_Overlay(35,"MachinegunFire2"); A_FireProjectile("GunsmokeSpawner_Small",0,0,-17,-12,FPF_NOAUTOAIM); A_OverlayFlags(35,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(35,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 9) { A_Overlay(36,"MachinegunFire3"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 18,-12,FPF_NOAUTOAIM); A_OverlayFlags(36,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(36,STYLE_Add); }
+					if(invoker.MachinegunBuffer == 12){ A_Overlay(37,"MachinegunFire4"); A_FireProjectile("GunsmokeSpawner_Small",0,0, 17,-9,FPF_NOAUTOAIM); A_OverlayFlags(37,PSPF_RENDERSTYLE,1); A_OverlayRenderstyle(37,STYLE_Add); invoker.MachinegunBuffer = 0; }
 				}
 			} else {
 				invoker.MachinegunBuffer = 0;
@@ -556,9 +541,9 @@ class Conqueror : Weapon
 		CNQG E 2 {
 			A_AlertMonsters();
 			invoker.GrenadeBuffer = 0;
-			A_Overlay(10,"GrenadeLauncherLeftFlash");
-			A_OverlayFlags(10,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(10,STYLE_Add);
+			A_Overlay(38,"GrenadeLauncherLeftFlash");
+			A_OverlayFlags(38,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(38,STYLE_Add);
 			A_QuakeEx(2,2,2,10,0,256,"none",QF_SCALEDOWN);
 			A_QuakeEx(2,2,2,10,0,256,"none",QF_SCALEDOWN|QF_WAVE,1.0,1.0,1.5);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,-8,-9,FPF_NOAUTOAIM);
@@ -598,8 +583,8 @@ class Conqueror : Weapon
 		CNQG E 1 {
 			A_OverlayOffset(OverlayID(),-1,1);
 			if(GetPlayerInput(INPUT_BUTTONS) & (BT_ATTACK|BT_OFFHANDATTACK)) {
-				if( CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("GreenMana") >= 12) || (!CountInv("ConquerorMode") && CountInv("GreenMana") >= 10))) { A_Overlay(-11,"FireGrenadeLauncherRight"); }
-				if(!CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("HellraiserAmmo")) || (!CountInv("ConquerorMode") && CountInv("GrenadeAmmo")))) { A_Overlay(-11,"FireGrenadeLauncherRight"); }
+				if( CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("GreenMana") >= 12) || (!CountInv("ConquerorMode") && CountInv("GreenMana") >= 10))) { A_Overlay(24,"FireGrenadeLauncherRight"); }
+				if(!CountInv("HexenCounter") && ((CountInv("ConquerorMode") && CountInv("HellraiserAmmo")) || (!CountInv("ConquerorMode") && CountInv("GrenadeAmmo")))) { A_Overlay(24,"FireGrenadeLauncherRight"); }
 			}
 		}
 		CNQG E 1 { A_OverlayOffset(OverlayID(),-0.5,0.5); Return A_JumpIf(Health <= 25 || CountInv("PowerBlazing"),1); }
@@ -615,9 +600,9 @@ class Conqueror : Weapon
 	FireGrenadeLauncherRight:
 		CNQG D 2 {
 			A_AlertMonsters();
-			A_Overlay(11,"GrenadeLauncherRightFlash");
-			A_OverlayFlags(11,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(11,STYLE_Add);
+			A_Overlay(39,"GrenadeLauncherRightFlash");
+			A_OverlayFlags(39,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(39,STYLE_Add);
 			A_QuakeEx(2,2,2,10,0,256,"none",QF_SCALEDOWN);
 			A_QuakeEx(2,2,2,10,0,256,"none",QF_SCALEDOWN|QF_WAVE,1.0,1.0,1.5);
 			A_FireProjectile("GunsmokeSpawner_Medium",0,0,8,-9,FPF_NOAUTOAIM);
@@ -674,12 +659,12 @@ class Conqueror : Weapon
 		Loop;
 		CNQG H 2 {
 			A_AlertMonsters();
-			A_Overlay(12,"BrowningLeftFlash");
-			A_OverlayFlags(12,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(12,STYLE_Add);
+			A_Overlay(40,"BrowningLeftFlash");
+			A_OverlayFlags(40,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(40,STYLE_Add);
 			if(CountInv("HexenCounter")) { A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE); A_TakeInventory("GreenMana",1,TIF_NOTAKEINFINITE); }
 			else 						 { A_TakeInventory("ThrottleAmmo",1,TIF_NOTAKEINFINITE); }
-			A_PlaySound("Browning/Fire",6,0.7); //A_SpawnItemEx("ConqBrowningSounder",0,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
+			A_PlaySound("Browning/Fire",0,0.7); //A_SpawnItemEx("ConqBrowningSounder",CHAN_AUTO,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
 			A_FireProjectile("BrowningBullet",0,0,-14,0,FPF_NOAUTOAIM);
 			A_FireProjectile("GunsmokeSpawner_Small",0,0,-26,-1,FPF_NOAUTOAIM);
 			A_FireProjectile("BuellerCasingSpawnerMirror",0,0,-15,-3,FPF_NOAUTOAIM);
@@ -695,12 +680,12 @@ class Conqueror : Weapon
 		Loop;
 		CNQG H 2 {
 			A_AlertMonsters();
-			A_Overlay(13,"BrowningRightFlash");
-			A_OverlayFlags(13,PSPF_RENDERSTYLE,1);
-			A_OverlayRenderstyle(13,STYLE_Add);
+			A_Overlay(41,"BrowningRightFlash");
+			A_OverlayFlags(41,PSPF_RENDERSTYLE,1);
+			A_OverlayRenderstyle(41,STYLE_Add);
 			if(CountInv("HexenCounter")) { A_TakeInventory("BlueMana",1,TIF_NOTAKEINFINITE); A_TakeInventory("GreenMana",1,TIF_NOTAKEINFINITE); }
 			else 						 { A_TakeInventory("ThrottleAmmo",1,TIF_NOTAKEINFINITE); }
-			A_PlaySound("Browning/Fire",6,0.7); //A_SpawnItemEx("ConqBrowningSounder",0,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
+			A_PlaySound("Browning/Fire",0,0.7); //A_SpawnItemEx("ConqBrowningSounder",CHAN_AUTO,0,Invoker.Height * 0.5,0,0,0,0,SXF_SETTARGET);
 			A_FireProjectile("BrowningBullet",0,0,14,0,FPF_NOAUTOAIM);
 			A_FireProjectile("GunsmokeSpawner_Small",0,0,26,-1,FPF_NOAUTOAIM);
 			A_FireProjectile("BuellerCasingSpawner",0,0,15,-3,FPF_NOAUTOAIM);
@@ -747,10 +732,10 @@ class Conqueror90mmProjectile : FastProjectile
 			{
 				A_SetDamageType("MasteringExplosions");
 			}
-			A_PlaySound("Explosion/Init",5,0.7);
-			A_PlaySound("Explosion/Main",6,0.7);
-			A_PlaySound("Explosion/Layer",4,0.7);
-			A_PlaySound("Explosion/Flavor",7,0.7);
+			A_PlaySound("Explosion/Init",CHAN_AUTO,0.7);
+			A_PlaySound("Explosion/Main",CHAN_AUTO,0.7);
+			A_PlaySound("Explosion/Layer",CHAN_AUTO,0.7);
+			A_PlaySound("Explosion/Flavor",CHAN_AUTO,0.7);
 			A_SpawnItemEx("Patriarch_Main",0,0,0,0,0,0,SXF_CLIENTSIDE);
 			A_Explode((120),148);
 		}
@@ -800,7 +785,7 @@ class ConquerorMortarUpward : FastProjectile
 	{
 	Spawn:
 		TNT1 A 43 NoDelay A_SpawnItemEx("ConquerorMortarLockdown",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION);
-		TNT1 A 25 A_PlaySound("Conqueror/MortarIncoming",5);
+		TNT1 A 25 A_PlaySound("Conqueror/MortarIncoming",CHAN_AUTO);
 		TNT1 A 0 A_SpawnItemEx("ConquerorMortarBombardment",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
 		Stop;
 	}
@@ -829,12 +814,12 @@ class ConquerorMortarStrikeSpawner : FastProjectile
 		Loop;
 	XDeath:
 		TNT1 A 43 A_SpawnItemEx("ConquerorMortarLockdown",6,0,0,0,0,0,0,SXF_NOCHECKPOSITION);
-		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",5);
+		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",CHAN_AUTO);
 		TNT1 A 0 A_SpawnItemEx("ConquerorMortarBombardment",6,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
 		Stop;
 	Death:
 		TNT1 A 43 A_SpawnItemEx("ConquerorMortarLockdown",0,0,0,0,0,0,0,SXF_NOCHECKPOSITION);
-		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",5);
+		TNT1 A 27 A_PlaySound("Conqueror/MortarIncoming",CHAN_AUTO);
 		TNT1 A 0 A_SpawnItemEx("ConquerorMortarBombardment",0,0,0,0,0,0,0,SXF_TRANSFERPOINTERS);
 		Stop;
 	}
@@ -963,9 +948,9 @@ class ConquerorMortarDownward : FastProjectile
 			A_Stop();
 			User_Lifespan = 14;
 			
-			A_PlaySound("Spikebomb/Explosion",5,0.9);
-			A_PlaySound("Conqueror/MortarExplosion",7);
-			A_PlaySound("Spikebomb/Far",6,0.8);
+			A_PlaySound("Spikebomb/Explosion",CHAN_AUTO,0.9);
+			A_PlaySound("Conqueror/MortarExplosion",CHAN_AUTO);
+			A_PlaySound("Spikebomb/Far",CHAN_AUTO,0.8);
 			
 			//A_SpawnItemEx("SpikebombBurst",0,0,5,0,0,0,0,SXF_TRANSFERPOINTERS);
 			A_SpawnItemEx("SpipeMain",0,0,0,0,0,0,0,SXF_CLIENTSIDE,0);
@@ -1009,7 +994,7 @@ class ConqShotgunSounder : Actor
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 35; A_PlaySound("Fleshrend/Fire",5); }
+		TNT1 A 0 NoDelay { timer = 35; A_PlaySound("Fleshrend/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1024,7 +1009,7 @@ class ConqJusticeSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("ChromeJustice/Fire",5); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("ChromeJustice/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1040,7 +1025,7 @@ class ConqMachinegunSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MachinegunFire",5); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MachinegunFire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1056,7 +1041,7 @@ class ConqGrenadeSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Patriarch/Fire",5,0.85); A_PlaySound("Patriarch/Add",6,0.85); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Patriarch/Fire",0,0.85); A_PlaySound("Patriarch/Add",CHAN_AUTO,0.85); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1071,7 +1056,7 @@ class ConqMagnumSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Magnum/Fire",5); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Magnum/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1087,7 +1072,7 @@ class ConqBrowningSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 55; A_PlaySound("Browning/Fire",5); }
+		TNT1 A 0 NoDelay { timer = 55; A_PlaySound("Browning/Fire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;
@@ -1103,7 +1088,7 @@ class ConqMortarSounder : ConqShotgunSounder
 	States
 	{
 	Spawn:
-		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MortarFire",5); A_PlaySound("Conqueror/MortarFire",6); }
+		TNT1 A 0 NoDelay { timer = 45; A_PlaySound("Conqueror/MortarFire",0); A_PlaySound("Conqueror/MortarFire",CHAN_AUTO); }
 		TNT1 A 1 {
 			if(target) { Warp(target,2,0,target.height * 0.5,0,WARPF_NOCHECKPOSITION|WARPF_COPYVELOCITY); }
 			timer--;

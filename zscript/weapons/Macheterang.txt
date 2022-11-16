@@ -67,10 +67,10 @@ class Macheterang : Weapon
 	Fire:
 		TNT1 A 0 A_JumpIfInventory("MacheteFirstSlash",1,"HackitySlashSlash");
 		TNT1 A 0 {
-			A_PlaySound("Machete1/Slash",1,0.9);
-			A_PlaySound("Machete2/Slash",5,0.2);
+			A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+			A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MC1S F 1;
@@ -110,8 +110,8 @@ class Macheterang : Weapon
 		TNT1 A 0 A_Jump(256,"Slash3","Slash4","Slash5","Slash6");
 		Loop;
 	/*Slash1: //Right
-		TNT1 A 0 A_PlaySound("Machete1/Slash",1,0.9)
-		TNT1 A 0 A_PlaySound("Machete2/Slash",5,0.2)
+		TNT1 A 0 A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9)
+		TNT1 A 0 A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2)
 		MC1S ABCDE 1
 		MC1S H 0 A_CustomPunch(50, 1, CPF_PULLIN, "MacheteImpactRight", 100)
 		MC1S FGHIJ 1
@@ -119,8 +119,8 @@ class Macheterang : Weapon
 		TNT1 A 0 A_TakeInventory("MacheteFirstSlash",1)
 		Goto Ready
 	Slash2: //Left
-		TNT1 A 0 A_PlaySound("Machete1/Slash",1,0.9)
-		TNT1 A 0 A_PlaySound("Machete2/Slash",5,0.2)
+		TNT1 A 0 A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9)
+		TNT1 A 0 A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2)
 		MC2S ABCDE 1
 		TNT1 A 0 A_JumpIfInventory("PowerStrength2",1,4)
 		TNT1 A 0 A_CustomPunch(40, 1, CPF_PULLIN, "MacheteInvisPuff", 100)
@@ -134,10 +134,10 @@ class Macheterang : Weapon
 		Goto Ready*/
 	Slash3: //Left
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MC3S AB 1;
@@ -174,10 +174,10 @@ class Macheterang : Weapon
 		Goto Ready;
 	Slash4: //Right
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MC4S AB 1;
@@ -215,10 +215,10 @@ class Macheterang : Weapon
 		Goto Ready;
 	Slash5: //Right
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MC4S ABCD 1;
@@ -254,10 +254,10 @@ class Macheterang : Weapon
 		Goto Ready;
 	Slash6: //Left
 		TNT1 A 0 {
-				A_PlaySound("Machete1/Slash",1,0.9);
-				A_PlaySound("Machete2/Slash",5,0.2);
+				A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+				A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MC3S ABCD 1;
@@ -298,10 +298,10 @@ class Macheterang : Weapon
 		MCHB F 1;
 
 		TNT1 A 0 {
-			A_PlaySound("Machete1/Slash",1,0.9);
-			A_PlaySound("Machete2/Slash",5,0.2);
+			A_PlaySound("Machete1/Slash",CHAN_WEAPON,0.9);
+			A_PlaySound("Machete2/Slash",CHAN_AUTO,0.2);
 			If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
 		MCHT ABC 1;
@@ -335,14 +335,14 @@ class Macheterang : Weapon
 	Zoom:
 		"####" A 0 {
 				If(CountInv("PowerQuadDamage")) {
-				A_PlaySound("QuadDamage/Fire", 4);
+				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
-		QML1 A 0 A_Overlay(2,"PunchFlash");
+		QML1 A 0 A_Overlay(6,"PunchFlash");
 		QML1 A 0 A_JumpIfInventory("PowerStrength2",1,2);
 		QML1 A 0 A_Jump(256,3);
 		FML1 A 0 A_SetBlend("Orange",0.05,10);
-		FML1 A 0 A_PlaySound("Melee/Firepunch",5);
+		FML1 A 0 A_PlaySound("Melee/Firepunch",CHAN_AUTO);
 		"####" A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		"####" A 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" B 1 A_SetPitch(pitch-0.3 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
@@ -377,7 +377,7 @@ class Macheterang : Weapon
 		TNT1 A 0 A_Light0();
 		Stop;
 	PunchFlash:
-		MCHG A 1 A_PlaySound("Punch/Swing",6,1.0);
+		MCHG A 1 A_PlaySound("Punch/Swing",CHAN_AUTO,1.0);
 		MCHN ABC 1;
 		TNT1 A 0 A_JumpIf(Health <= 75 || CountInv("PowerBlazing") || CountInv("BlazingBooster"),2);
 		MCHN DE 1;
@@ -431,7 +431,7 @@ class MacheterangProjectile : Actor
 		MCHP A 0 NoDelay {
 			User_Counter = 4;
 			if(!CountInv("PowerAmmoJunkie",AAPTR_TARGET)) { A_GiveToTarget("MacheteTossed",1); }
-			A_PlaySound("Machete/Fly",5,1.0,1);
+			A_PlaySound("Machete/Fly",CHAN_AUTO,1.0,1);
 		}
 	SpawnLoop:
 		MCHP HGFEDCBA 1 {
@@ -450,7 +450,7 @@ class MacheterangProjectile : Actor
 	Spawn2:
 		MCHP A 0 { 
 			A_RearrangePointers(AAPTR_DEFAULT, AAPTR_DEFAULT, AAPTR_TARGET);
-			A_PlaySound("Machete/Fly",5,1.0,1);
+			A_PlaySound("Machete/Fly",CHAN_AUTO,1.0,1);
 		}
 	SpawnLoop2:
 		MCHP HGFEDCBA 1 { 
@@ -465,7 +465,7 @@ class MacheterangProjectile : Actor
 	Death:
 	Crush:
 		TNT1 A 0 { 
-			A_StopSound(5);
+			A_StopSound(CHAN_AUTO);
 			if(!CountInv("MacheteTossed",AAPTR_TARGET))
 			{
 				Return ResolveState(Null);
@@ -489,14 +489,14 @@ class MacheterangProjectileJunkie : MacheterangProjectile
 	Spawn:
 		MCHP A 0 NoDelay {
 			User_Counter = 4;
-			A_PlaySound("Machete/Fly",5,1.0,1);
+			A_PlaySound("Machete/Fly",CHAN_AUTO,1.0,1);
 		}
 		Goto Super::SpawnLoop;
 	Death:
 	Crush:
 		TNT1 A 0 { 
 			A_GiveToTarget("Macheterang",1);
-			A_StopSound(5);
+			A_StopSound(CHAN_AUTO);
 		}
 		Stop;
 	}
@@ -518,7 +518,7 @@ class GotItBack : CustomInventory
 		Stop;
 	Use:
 		TNT1 A 0 A_SetBlend("Gray",0.05,10);
-		//TNT1 A 0 A_PlaySound("Machete/Up",4,0.5);
+		//TNT1 A 0 A_PlaySound("Machete/Up",CHAN_AUTO,0.5);
 		Stop;
 	}
 }
@@ -531,7 +531,7 @@ class MacheterangBerserkProjectile : MacheterangProjectile
 		MCHP A 0 NoDelay {
 			User_Counter = 4;
 			A_GiveToTarget("MacheteTossed",1);
-			A_PlaySound("Machete/Fly",5,1.0,1);
+			A_PlaySound("Machete/Fly",CHAN_AUTO,1.0,1);
 		}
 	SpawnLoop:
 		MCHP HGFEDCBA 1 {
@@ -550,7 +550,7 @@ class MacheterangBerserkProjectile : MacheterangProjectile
 	Spawn2:
 		MCHP A 0 {
 			A_RearrangePointers(AAPTR_DEFAULT, AAPTR_DEFAULT, AAPTR_TARGET);
-			A_PlaySound("Machete/Fly",5,1.0,1);
+			A_PlaySound("Machete/Fly",CHAN_AUTO,1.0,1);
 		}
 	SpawnLoop2:
 		MCHP HGFEDCBA 1 {
@@ -574,7 +574,7 @@ class MacheterangBerserkProjectileJunkie : MacheterangBerserkProjectile
 	Crush:
 		TNT1 A 0 { 
 			A_GiveToTarget("Macheterang",1);
-			A_StopSound(5);
+			A_StopSound(CHAN_AUTO);
 		}
 		Stop;
 	}
