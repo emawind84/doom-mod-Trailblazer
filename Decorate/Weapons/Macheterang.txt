@@ -395,7 +395,7 @@ Actor Macheterang : Weapon
 
 Actor MacheterangProjectile
 {
-	Speed 25
+	Speed 35
 	Height 16
 	Radius 12
 	Damage 0
