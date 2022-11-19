@@ -1,51 +1,4 @@
-class FMGSelected : Inventory { Default { Inventory.MaxAmount 1; } }
-class FMGUpgrade : FMGSelected {}
-class FMGSniperMode : FMGSelected {}
-class FMGFireToken : FMGSelected {}
-class FMGEmptiedToken : FMGSelected {}
-class FMGZoomed : FMGSelected {}
-class FMGZoomReload : FMGSelected {}
-
-class FMGClip : Ammo
-{
-	Default {
-		Inventory.MaxAmount 70;
-		Inventory.Icon "FMGGX0";
-		+INVENTORY.IGNORESKILL
-	}
-}
-
-//You know what's also fucked in this gun?
-
-
-//THE FUCKING CODE.
-
-
-//Maybe will rewrite it from scratch. Maybe. Someday.
-
-class FMGPickup : CustomInventory
-{
-	Default
-	{
-		Inventory.PickupSound "misc/w_pkup";
-		//Inventory.PickupMessage "Obtained a really damn stylish ''Fleshrend'' sawed-off! Peeling off the skins - multiple enemies at a time! (3)";
-	}
-	
-	States
-	{
-	Spawn:
-		FMGG X -1;
-		Stop;
-	Pickup:
-		TNT1 A 0 {
-			if (FindInventory("FMG") == NULL) A_GiveInventory("FMG");
-			else A_GiveInventory("FMG2");
-		}
-		Stop;
-	}
-}
-
-class FMG : Weapon
+class FMG2 : Weapon
 {
 	Default
 	{
@@ -851,7 +804,7 @@ class FMG : Weapon
 				A_PlaySound("QuadDamage/Fire", CHAN_AUTO);
 			}
 		}
-		QML1 A 0 A_Overlay(11,"PunchFlash");
+		QML1 A 0 A_Overlay(68,"PunchFlash");
 		QML1 A 0 A_JumpIfInventory("PowerStrength2",1,2);
 		QML1 A 0 A_Jump(256,3);
 		FML1 A 0 A_SetBlend("Orange",0.05,10);
@@ -965,44 +918,5 @@ class FMG : Weapon
 	Spawn:
 		FMGG X -1;
 		Stop;
-	}
-}
-
-//Used for tracer effect in upgraded FMG.
-class FMGBullet : FastProjectile
-{
-	Default
-	{
-		Radius 7;
-		Height 5;
-		MissileHeight 8;
-		Speed 200;
-		Damage 0;
-		Projectile;
-		Renderstyle "Add";
-		Scale 0.35;
-		//Decal "BulletChip2";
-		+NOGRAVITY
-	}
-	
-	States
-	{
-	Spawn:
-		TRAC A 1 Bright A_ChangeVelocity(0, 0, -0.25, CVF_RELATIVE);
-		Loop;
-	Death:
-		TNT1 A 1; //A_SpawnItemEx("BuellerPuff");
-		Stop;
-	XDeath:
-		TNT1 A 0;
-		Stop;
-	}
-}
-
-class FMGSniperBullet : FMGBullet
-{
-	Default
-	{
-		MissileType "ThrottleTrail";
 	}
 }
