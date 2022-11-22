@@ -226,7 +226,7 @@ class PipeQuickToss : CustomInventory
 	}
 }
 
-class SpikebombTossWeapon : Weapon
+class SpikebombTossWeapon : TrailblazerWeapon
 {
 	Default
 	{
@@ -399,7 +399,7 @@ class SpikebombTossWeapon : Weapon
 	}
 }
 
-class SpikebombWeapon : Weapon
+class SpikebombWeapon : TrailblazerWeapon
 {
 	Default
 	{
@@ -608,15 +608,15 @@ class SpikebombWeapon : Weapon
 			A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE);
 			if(CountInv("PowerStrength2")) {
 				if(CountInv("PowerAmmoJunkie")) {
-					A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				} Else {
-					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				}
 			} Else {
 				if(CountInv("PowerAmmoJunkie")) {
-					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				} Else {
-					A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangProjectile",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				}
 			}
 		}

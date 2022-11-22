@@ -37,7 +37,7 @@ class ConquerorAmmo : Ammo
 	}
 }
 
-class Conqueror : Weapon
+class Conqueror : TrailblazerWeapon
 {
 	Default
 	{

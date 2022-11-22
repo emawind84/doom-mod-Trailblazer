@@ -46,7 +46,7 @@ class DoubleDeucePickup : CustomInventory
 
 //class DoubleDeuce2 : DoubleDeuce {}
 
-class DoubleDeuce : Weapon
+class DoubleDeuce : TrailblazerWeapon
 {
 	Default
 	{
@@ -485,15 +485,15 @@ class DoubleDeuce : Weapon
 			A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE);
 			If(CountInv("PowerStrength2")) {
 				If(CountInv("PowerAmmoJunkie")) {
-				A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+				A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				} Else {
-					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				}
 			} Else {
 				If(CountInv("PowerAmmoJunkie")) {
-					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				} Else {
-					A_SpawnItemEx("MacheterangProjectile",cos(-pitch)*48,0,32+(sin(-pitch)*48),cos(-pitch)*35,0,sin(-pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangProjectile",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
 				}
 			}
 		}
