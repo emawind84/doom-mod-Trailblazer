@@ -1,10 +1,11 @@
 class TrailblazerWeapon : Weapon
 {
+    private double Angle;
+    private double Pitch;
+
     action state A_JumpIfAttack(statelabel state)
     {
-        // if (!player) return null;
-        // let weap = invoker == player.OffhandWeapon ? player.OffhandWeapon : player.ReadyWeapon;
-        // if (!weap) return null;
+        if (!player || !invoker) return;
 
         int button = invoker.bOffhandWeapon ? BT_OFFHANDATTACK : BT_ATTACK;
         return GetPlayerInput(INPUT_BUTTONS) & button? ResolveState(state) : null;
@@ -12,11 +13,28 @@ class TrailblazerWeapon : Weapon
 
     action state A_JumpIfAltAttack(statelabel state)
     {
-        // if (!player) return null;
-        // let weap = invoker == player.OffhandWeapon ? player.OffhandWeapon : player.ReadyWeapon;
-        // if (!weap) return null;
+        if (!player || !invoker) return;
 
         int button = invoker.bOffhandWeapon ? BT_OFFHANDALTATTACK : BT_ALTATTACK;
         return GetPlayerInput(INPUT_BUTTONS) & button? ResolveState(state) : null;
+    }
+
+    override void Tick()
+    {
+        Super.Tick();
+        
+        if (!owner) return;
+
+        let dir;
+        if (self.bOffhandWeapon)
+        {
+            dir = owner.OffhandDir(owner, owner.Angle, owner.Pitch);
+        }
+        else
+        {
+            dir = owner.AttackDir(owner, owner.Angle, owner.Pitch);
+        }
+        Angle = dir.x;
+        Pitch = dir.y;
     }
 }
