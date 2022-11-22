@@ -29,7 +29,7 @@ class Skullthrottle : TrailblazerWeapon replaces PlasmaRifle
 		Weapon.BobRangeX 1.1;
 		Scale 1.1;
 		+WEAPON.NOALERT
-		//+WEAPON.TWOHANDED
+		+WEAPON.TWOHANDED
 	}
 	
 	int gibberish;

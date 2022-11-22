@@ -232,7 +232,7 @@ class SpikebombTossWeapon : TrailblazerWeapon
 	{
 			Weapon.SelectionOrder 9;
 	+WEAPON.CHEATNOTWEAPON
-	//+WEAPON.TWOHANDED
+	+WEAPON.TWOHANDED
 	}
 	
 	States
@@ -420,6 +420,7 @@ class SpikebombWeapon : TrailblazerWeapon
 		Tag "Master Exploder";
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_OPTIONAL
+		+WEAPON.TWOHANDED
 		+INVENTORY.UNDROPPABLE
 	}
 	

@@ -47,7 +47,7 @@ class Colts : TrailblazerWeapon
 		Weapon.BobRangeX 0.8;
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_CHECKBOTH
-		//+WEAPON.TWOHANDED
+		+WEAPON.TWOHANDED
 		//+WEAPON.NOAUTOAIM
 	}
 	
