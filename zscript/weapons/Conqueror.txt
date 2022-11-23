@@ -156,8 +156,8 @@ class Conqueror : TrailblazerWeapon
 			invoker.gibberish = 0;
 			
 			A_Overlay(20,"ExtraSound");	// Extra sound handler.
-			A_Overlay(21,"QuadLol");		// Quad damage sounder.
-			A_Overlay(22,"Underlay");		// Lil' fix for the furthermost sides. The rest is pretty self-explanatory.
+			A_Overlay(22,"QuadLol");		// Quad damage sounder.
+			A_Overlay(21,"Underlay");		// Lil' fix for the furthermost sides. The rest is pretty self-explanatory.
 			
 			// 14 is reserved for mortar.
 			A_Overlay(23,"BrowningBlasters"); // 12-13 is blasters.
