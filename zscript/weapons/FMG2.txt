@@ -889,15 +889,15 @@ class FMG2 : TrailblazerWeapon
 			A_TakeInventory("MacheteAmmo",1,TIF_NOTAKEINFINITE);
 			If(CountInv("PowerStrength2")) {
 				If(CountInv("PowerAmmoJunkie")) {
-					A_SpawnItemEx("MacheterangBerserkProjectileJunkie",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangBerserkProjectileJunkie", 48, 0, 0, 35, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH|SXF_RELATIVETOWEAPON);
 				} Else {
-					A_SpawnItemEx("MacheterangBerserkProjectile",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangBerserkProjectile", 48, 0, 0, 35, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH|SXF_RELATIVETOWEAPON);
 				}
 			} Else {
 				If(CountInv("PowerAmmoJunkie")) {
-					A_SpawnItemEx("MacheterangProjectileJunkie",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangProjectileJunkie", 48, 0, 0, 35, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH|SXF_RELATIVETOWEAPON);
 				} Else {
-					A_SpawnItemEx("MacheterangProjectile",cos(-invoker.pitch)*48,0,32+(sin(-invoker.pitch)*48),cos(-invoker.pitch)*35,0,sin(-invoker.pitch)*35,0,SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH);
+					A_SpawnItemEx("MacheterangProjectile", 48, 0, 0, 35, 0, 0, 0, SXF_NOCHECKPOSITION|SXF_TRANSFERPITCH|SXF_RELATIVETOWEAPON);
 				}
 			}
 		}
