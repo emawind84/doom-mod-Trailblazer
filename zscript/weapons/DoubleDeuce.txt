@@ -136,7 +136,7 @@ class DoubleDeuce : TrailblazerWeapon
 				A_FireProjectile("Gunsmoke_Large_Dark",frandom(-15.0,15.0),0,CountInv("DoubleDeuceClip") > 1 ? 6 : 13,-5,FPF_NOAUTOAIM,frandom(-10.0,10.0));
 			}
 			}
-			A_ChangeVelocity (Cos(Pitch) * -39, 0, Sin(Pitch) * 39, CVF_RELATIVE);
+			A_ChangeVelocity (-39, 0, 0, CVF_RELATIVETOWEAPON);
 			A_Recoil(20.0);
 			A_AlertMonsters();
 			A_GunFlash();
@@ -174,7 +174,7 @@ class DoubleDeuce : TrailblazerWeapon
 				A_FireProjectile("Gunsmoke_Large_Dark",frandom(-15.0,15.0),0,13,-5,FPF_NOAUTOAIM,frandom(-10.0,10.0));
 			}
 			}
-			A_ChangeVelocity (Cos(Pitch) * -54, 0, Sin(Pitch) * 54, CVF_RELATIVE);
+			A_ChangeVelocity (-54, 0, 0, CVF_RELATIVETOWEAPON);
 			A_Recoil(25.0);
 			A_AlertMonsters();
 			A_GunFlash();
