@@ -28,6 +28,12 @@ class Eliminator2 : TrailblazerWeapon
 			AmmoType1 = "GreenMana";
 			AmmoUse1 = 8;
 		}
+		Inventory inv = FindInventory("Eliminator");
+		if (inv)
+		{
+			A_SelectWeapon("Eliminator");
+			bOffhandWeapon = 1 - Weapon(inv).bOffhandWeapon;
+		}
 		Super.AttachToOwner(user);
 	}
 	

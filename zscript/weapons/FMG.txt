@@ -76,6 +76,12 @@ class FMG : TrailblazerWeapon
 			AmmoGive2 = 70;
 			AmmoType2 = "BlueMana";
 		}
+		Inventory inv = FindInventory("FMG2");
+		if (inv)
+		{
+			A_SelectWeapon("FMG2");
+			bOffhandWeapon = 1 - Weapon(inv).bOffhandWeapon;
+		}
 		Super.AttachToOwner(user);
 	}
 	
