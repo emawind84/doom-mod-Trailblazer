@@ -18,6 +18,7 @@ class Fleshrend2 : TrailblazerWeapon
 		Weapon.BobSpeed 2.0;
 		Weapon.BobRangeY 0.5;
 		Weapon.BobRangeX 0.7;
+		TrailblazerWeapon.SecondWeapon "Fleshrend";
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_CHECKBOTH
 		//+WEAPON.NOAUTOAIM
@@ -30,12 +31,6 @@ class Fleshrend2 : TrailblazerWeapon
 			AmmoGive1 = 24;
 			AmmoType1 = "BlueMana";
 			AmmoType2 = "BlueMana";
-		}
-		Inventory inv = FindInventory("Fleshrend");
-		if (inv)
-		{
-			A_SelectWeapon("Fleshrend");
-			bOffhandWeapon = 1 - Weapon(inv).bOffhandWeapon;
 		}
 		Super.AttachToOwner(user);
 	}

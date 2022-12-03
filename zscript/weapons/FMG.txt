@@ -65,6 +65,7 @@ class FMG : TrailblazerWeapon
 		Weapon.BobSpeed 2.0;
 		Weapon.BobRangeY 0.4;
 		Weapon.BobRangeX 0.7;
+		TrailblazerWeapon.SecondWeapon "FMG2";
 		+WEAPON.AMMO_CHECKBOTH
 		+WEAPON.NOALERT
 		//+WEAPON.NOAUTOAIM
@@ -75,12 +76,6 @@ class FMG : TrailblazerWeapon
 		if(gameinfo.gametype == Game_HEXEN) {
 			AmmoGive2 = 70;
 			AmmoType2 = "BlueMana";
-		}
-		Inventory inv = FindInventory("FMG2");
-		if (inv)
-		{
-			A_SelectWeapon("FMG2");
-			bOffhandWeapon = 1 - Weapon(inv).bOffhandWeapon;
 		}
 		Super.AttachToOwner(user);
 	}

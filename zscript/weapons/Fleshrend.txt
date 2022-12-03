@@ -82,8 +82,6 @@ class FleshrendPickupCounter : Inventory
 	}
 }
 
-//class Fleshrend2 : Fleshrend {}
-
 class Fleshrend : TrailblazerWeapon
 {
 	Default
@@ -104,6 +102,7 @@ class Fleshrend : TrailblazerWeapon
 		Weapon.BobSpeed 2.0;
 		Weapon.BobRangeY 0.5;
 		Weapon.BobRangeX 0.7;
+		TrailblazerWeapon.SecondWeapon "Fleshrend2";
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_CHECKBOTH
 		//+WEAPON.NOAUTOAIM
@@ -116,12 +115,6 @@ class Fleshrend : TrailblazerWeapon
 			AmmoGive1 = 24;
 			AmmoType1 = "BlueMana";
 			AmmoType2 = "BlueMana";
-		}
-		Inventory inv = FindInventory("Fleshrend2");
-		if (inv)
-		{
-			A_SelectWeapon("Fleshrend2");
-			bOffhandWeapon = 1 - Weapon(inv).bOffhandWeapon;
 		}
 		Super.AttachToOwner(user);
 	}

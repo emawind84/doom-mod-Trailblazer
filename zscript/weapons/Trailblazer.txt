@@ -3,6 +3,9 @@ class TrailblazerWeapon : Weapon
     double Angle;
     double Pitch;
 
+    string SecondWeapon;
+    property SecondWeapon : SecondWeapon;
+
     action state A_JumpIfAttack(statelabel state)
     {
         if (!player || !invoker) return null;
@@ -36,5 +39,29 @@ class TrailblazerWeapon : Weapon
             Pitch = -owner.AttackPitch;
         }
         //Console.Printf("%f %f", Angle, Pitch);
+    }
+
+    override Void AttachToOwner (actor user) {
+        Super.AttachToOwner(user);
+        
+        if (!owner || !owner.player)
+            return;
+
+        if (Owner.player.PendingWeapon == self)
+        {
+            if (Owner.player.ReadyWeapon != NULL 
+            && Owner.player.ReadyWeapon.GetTag() == SecondWeapon)
+            {
+                bOffhandWeapon = 1;
+                //Console.Printf("rweap:%s", Owner.player.ReadyWeapon.GetTag());
+            }
+
+            Weapon secweap = Weapon(FindInventory(SecondWeapon));
+            if (secweap)
+            {
+                bOffhandWeapon = 1 - secweap.bOffhandWeapon;
+            }
+            //Console.Printf("pweap:%s", Owner.player.PendingWeapon.GetTag());
+        }
     }
 }

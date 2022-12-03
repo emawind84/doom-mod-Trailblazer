@@ -16,6 +16,7 @@ class Eliminator2 : TrailblazerWeapon
 		Weapon.BobSpeed 1.6;
 		Weapon.BobRangeY 0.5;
 		Weapon.BobRangeX 0.9;
+		TrailblazerWeapon.SecondWeapon "Eliminator";
 		+WEAPON.NOALERT
 		//+WEAPON.AMMO_CHECKBOTH
 		//+NOAUTOAIM
@@ -27,12 +28,6 @@ class Eliminator2 : TrailblazerWeapon
 			AmmoGive1 = 64;
 			AmmoType1 = "GreenMana";
 			AmmoUse1 = 8;
-		}
-		Inventory inv = FindInventory("Eliminator");
-		if (inv)
-		{
-			A_SelectWeapon("Eliminator");
-			bOffhandWeapon = 1 - Weapon(inv).bOffhandWeapon;
 		}
 		Super.AttachToOwner(user);
 	}

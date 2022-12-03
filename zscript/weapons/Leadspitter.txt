@@ -88,6 +88,7 @@ class Leadspitter : TrailblazerWeapon
 		Weapon.BobSpeed 2.0;
 		Weapon.BobRangeY 0.6;
 		Weapon.BobRangeX 0.8;
+		TrailblazerWeapon.SecondWeapon "Leadspitter2";
 		Scale 0.85;
 		+WEAPON.NOALERT
 		+WEAPON.AMMO_CHECKBOTH
@@ -99,12 +100,6 @@ class Leadspitter : TrailblazerWeapon
 		if(gameinfo.gametype == Game_HEXEN) {
 			AmmoGive2 = 60;
 			AmmoType2 = "BlueMana";
-		}
-		Inventory inv = FindInventory("Leadspitter2");
-		if (inv)
-		{
-			A_SelectWeapon("Leadspitter2");
-			bOffhandWeapon = 1 - Weapon(inv).bOffhandWeapon;
 		}
 		Super.AttachToOwner(user);
 	}
