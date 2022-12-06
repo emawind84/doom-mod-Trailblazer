@@ -47,8 +47,8 @@ class Leadspitter2 : TrailblazerWeapon
 		UZ3U A 0;
 	ReadyAnim:
 		"####" ABC 1;
-		TNT1 A 0 { If(CountInv("LeadspitPickupCounter") >= 2) { A_Overlay(7,"LIdle"); } Else { A_Overlay(7,"SingleLIdle"); } }
-		TNT1 A 0 { If(CountInv("LeadspitPickupCounter") >= 2) { A_Overlay(9,"RIdle"); } Else { A_Overlay(9,"SingleRIdle"); } }
+		TNT1 A 0 { If(CountInv("LeadspitPickupCounter") >= 2) { A_Overlay(80,"LIdle"); } Else { A_Overlay(80,"SingleLIdle"); } }
+		TNT1 A 0 { If(CountInv("LeadspitPickupCounter") >= 2) { A_Overlay(82,"RIdle"); } Else { A_Overlay(82,"SingleRIdle"); } }
 	ReadyMain:
 		TNT1 A 1 A_WeaponReady();
 		Loop;
@@ -66,8 +66,8 @@ class Leadspitter2 : TrailblazerWeapon
 			A_TakeInventory("LeadSelected");
 			A_TakeInventory("PowerCrafterTimer");
 			SetPlayerProperty(0, 0, PROP_INSTANTWEAPONSWITCH);
-			A_Overlay(7,"none");
-			A_Overlay(9,"none");
+			A_Overlay(80,"none");
+			A_Overlay(82,"none");
 			Return A_JumpIfInventory("LeadspitPickupCounter",2,"TwinDeselect");
 		}
 		TIKU A 0 A_JumpIfInventory("LeadUpgrade",1,2);
@@ -176,7 +176,7 @@ class Leadspitter2 : TrailblazerWeapon
 			}
 		}
 		"####" A 0 A_AlertMonsters();
-		"####" A 0 A_Overlay(8,"SingleGunflash");
+		"####" A 0 A_Overlay(81,"SingleGunflash");
 		"####" A 1 Bright A_SetPitch(pitch-0.15 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" B 1 Bright A_SetPitch(pitch-0.1 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" A 0 A_FireProjectile("BuellerCasingSpawner2",0,0,5,0,FPF_NOAUTOAIM);
@@ -561,7 +561,7 @@ class Leadspitter2 : TrailblazerWeapon
 			}
 		}
 		"####" A 0 A_AlertMonsters();
-		"####" A 0 A_Overlay(8,"LGunflash");
+		"####" A 0 A_Overlay(81,"LGunflash");
 		"####" A 1 Bright A_SetPitch(pitch-0.15 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" B 1 Bright A_SetPitch(pitch-0.1 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" A 0 { if(GetCvar("TB_SequentialShot")) {
@@ -755,7 +755,7 @@ class Leadspitter2 : TrailblazerWeapon
 			}
 		}
 		"####" A 0 A_AlertMonsters();
-		"####" A 0 A_Overlay(10,"RGunflash");
+		"####" A 0 A_Overlay(83,"RGunflash");
 		"####" A 1 Bright A_SetPitch(pitch-0.15 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" B 1 Bright A_SetPitch(pitch-0.1 * GetCvar("TB_WeaponRecoil"), SPF_INTERPOLATE);
 		"####" A 0 A_FireProjectile("BuellerCasingSpawner2",0,0,5,0,FPF_NOAUTOAIM);
